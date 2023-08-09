@@ -16,3 +16,5 @@ The DAP usses  EAS  attestations combined with IPFS, and simple onchain smart co
 # github
 https://github.com/xunorus/iurisnaturalis
 
+# Demo gh-pages
+https://xunorus.github.io/iurisnaturalis/
