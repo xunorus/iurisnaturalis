@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IURIS NATURALIS</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="js/jquery-3.2.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
+    <script src="https://kit.fontawesome.com/1f8bc9fc91.js" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10.16.0/dist/sweetalert2.all.min.js"></script>
+      <!-- TABLE -->
+      <link href="https://unpkg.com/bootstrap-table@1.21.4/dist/bootstrap-table.min.css" rel="stylesheet">
+      <script src="https://unpkg.com/bootstrap-table@1.21.4/dist/bootstrap-table.min.js"></script>
+      <script src="https://unpkg.com/bootstrap-table@1.21.0/dist/extensions/reorder-rows/bootstrap-table-reorder-rows.min.js"></script>
+      <script src="https://cdn.jsdelivr.net/npm/tablednd@1.0.5/dist/jquery.tablednd.min.js"></script>
+        
+    <link rel="stylesheet" href="style.css">
+      
+
+</head>
+<body>
+    
+<nav  id='navbar' class="  ">
+    <span id="usrAddr" class="left"></span>
+    <div  class="center"> 
+      <button  type="submit" id='walletOptCreate' onclick="event.stopPropagation();openModal('#walletOptions')" class="btn btn-outline-primary btn-lg" >Connect</button>
+      <button  type="submit" id='walletDisconnect' onclick="event.stopPropagation();walletDisconnect()" class="btn btn-outline-primary btn-lg" style="display: none;" >Disconnect</button>
+      <button  id='albumCreate' onclick="event.stopPropagation();createAlbum('#walletOptions')" style="display: none;">Create</button>
+    </div> 
+    <span  id="mode" class="right badge rounded-pill notmobile">v1.0</span>
+    <select class="right translation" id="langswitch"> <option value="en">en</option> <option value="fr">fr</option> <option value="es">es</option> </select>
+    <svg class="right darklight " style="width: 25px; height: 25px;" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5" fill="none" stroke-linecap="round" stroke-linejoin="round"> <path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"></path> </svg>
+    <button id="" class="right hamburger hamburger--elastic" type="button" aria-label="Menu" aria-controls="navigation"> <span class="hamburger-box"> <span class="hamburger-inner"></span> </span> </button>
+  </nav>
+  
+</body>
+</html>
