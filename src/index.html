@@ -5,10 +5,17 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>IURIS NATURALIS</title>
 </head>
+
+<style>
+    body{
+        background-color: black;
+        color: green;
+    }
+</style>
 <body>
     <h1>IURIS NATURALIS EAS test</h1>
+<button id="runattest">ATTEST</button>
     
-
     <script type="module">
         import { EAS } from "@ethereum-attestation-service/eas-sdk";
         import { EAS, Offchain, SchemaEncoder, SchemaRegistry } from "@ethereum-attestation-service/eas-sdk";
@@ -18,6 +25,7 @@
     </script>
 
     <script>
+  document.getElementById('runattest').onclick = attest;
 
 async function init() {
         // Initialize the sdk with the address of the EAS Schema contract address
@@ -38,7 +46,9 @@ async function init() {
     async function attest() {
     const uid = "0xff08bbf3d3e6e0992fc70ab9b9370416be59e87897c3d42b20549901d2cccc3e";
     const attestation = await eas.getAttestation(uid);
+
     console.log(attestation);
+    y= attestation;
 }
 
 
