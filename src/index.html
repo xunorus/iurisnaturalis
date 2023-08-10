@@ -4,113 +4,368 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>IURIS NATURALIS</title>
-    contrato 0x4bF546fC1A24F24c1F88e315B0ED96BF853C3D1a
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="js/jquery-3.2.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
+    <script src="https://kit.fontawesome.com/1f8bc9fc91.js" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10.16.0/dist/sweetalert2.all.min.js"></script>
+      <!-- TABLE -->
+      <link href="https://unpkg.com/bootstrap-table@1.21.4/dist/bootstrap-table.min.css" rel="stylesheet">
+      <script src="https://unpkg.com/bootstrap-table@1.21.4/dist/bootstrap-table.min.js"></script>
+      <script src="https://unpkg.com/bootstrap-table@1.21.0/dist/extensions/reorder-rows/bootstrap-table-reorder-rows.min.js"></script>
+      <script src="https://cdn.jsdelivr.net/npm/tablednd@1.0.5/dist/jquery.tablednd.min.js"></script>
+        
+    <link rel="stylesheet" href="style.css">
+      
+
+
 </head>
-
-
-<script src="js/ethers-5.2.umd.min.js" type="application/javascript"></script>
-
 <body>
-    <h1>IURIS NATURALIS EAS test</h1>
-<button id="runattest">GET ATTEST</button>
-<button id="runoffchain">OFFCHAIN</button>
-<button id="runtimestamp">TIMESTAMP</button>
-<button id="runcreatewallet">CREATE WALLET</button>
     
-    <script type="module">
-        import { EAS, Offchain, SchemaEncoder, SchemaRegistry } from "@ethereum-attestation-service/eas-sdk";
-        window.EAS = EAS
-        window.Offchain = Offchain
-        window.SchemaEncoder = SchemaEncoder
-    </script>
 
-    <script>
 
-  document.getElementById('runattest').onclick = attest;
-  document.getElementById('runoffchain').onclick = offchain;
-  document.getElementById('runtimestamp').onclick = timestamp;
-  document.getElementById('runcreatewallet').onclick = createWallet;
+<!-----------------------------
+  HEADER 
+--------------------------->
+<nav  id='navbar' class="  ">
+    <span id="usrAddr" class="left"></span>
+    <div  class="center"> 
+      <button  type="submit" id='walletOptCreate' onclick="event.stopPropagation();openModalId('#walletOptions')" class="btn btn-outline-primary btn-lg" >Connect</button>
+      <button  type="submit" id='walletDisconnect' onclick="event.stopPropagation();walletDisconnect()" class="btn btn-outline-primary btn-lg" style="display: none;" >Disconnect</button>
+      <button  id='albumCreate' onclick="event.stopPropagation();createAlbum('#walletOptions')" style="display: none;">Create</button>
+    </div> 
+    <span  id="mode" class="right badge rounded-pill notmobile">v1.0</span>
+    <select class="right translation" id="langswitch"> <option value="en">en</option> <option value="fr">fr</option> <option value="es">es</option> </select>
+    <svg class="right darklight " style="width: 25px; height: 25px;" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5" fill="none" stroke-linecap="round" stroke-linejoin="round"> <path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"></path> </svg>
+    <button id="" class="right hamburger hamburger--elastic" type="button" aria-label="Menu" aria-controls="navigation"> <span class="hamburger-box"> <span class="hamburger-inner"></span> </span> </button>
+  </nav>
   
-//   const EASContractAddress = "0xC2679fBD37d54388Ce493F1DB75320D236e1815e"; // Sepolia v0.26
-  const EASContractAddress = "0x4200000000000000000000000000000000000021"; // Optimism Goerli v1.0.1
+
+<!-----------------------------
+  SIDEBAR 
+--------------------------->
+
+<div class='sidebar'>
+    <a class='closeonclick' href="/"> <div class='title '>IURIS-NATURALIS </div> </a>
   
-  const provider = new ethers.providers.JsonRpcProvider("https://goerli.optimism.io");
-//   const provider = new ethers.providers.JsonRpcProvider("https://sepolia.publicgoods.network");
-//   const provider = new ethers.JsonRpcProvider("https://goerli.optimism.io");
-
-
+    <ul class='nav'>
+      <!-- <li> <a href="./qr.html" target="_blank">QR creator</a> </li> -->
+      <li> <a href="https://oppt.one/docs-ES/index.html" target="_blank">Documentacion (castellano)</a> </li>
+      <li> <a href="https://oppt.one/docs/index.html" target="_blank">Documentation (english)</a> </li>
+      <li> <a href="https://oppt.one/docs-FR/index.html" target="_blank">Documentation (Français)</a> </li>
    
-    async function attest() {
-    const uid = "0xff08bbf3d3e6e0992fc70ab9b9370416be59e87897c3d42b20549901d2cccc3e";
-    const attestation = await eas.getAttestation(uid);
-    console.log(attestation);
-}
- 
+      <li> <a href="https://oppt1776.fr" target="_blank">oppt1776 <i class="fa-solid fa-arrow-up-right-from-square"></i></a> </li>
+      <li> <a href="https://n-prdgm.com/" target="_blank">n-prdgm <i class="fa-solid fa-arrow-up-right-from-square"></i> </a> </li>
+      <li> <a href="https://i-uv.com/" target="_blank">i-uv <i class="fa-solid fa-arrow-up-right-from-square"></i></a> </li>
+      
+      <li> <button   id='deleteLocalwallet' class="btn btn-outline-primary btn-lg"  onclick="event.stopPropagation();deleteWallet()" disabled >Delete localwallet</button> </li>
+      <li> <button   id='configButton' class="btn btn-outline-primary btn-lg"  onclick="event.stopPropagation();config()"  >Config</button> </li>
+      
+    </ul>
+  </div>
+
+
+  <main id="main"  class="">
+    <div id="headMessages"> </div>
     
-    async function offchain() {
-        console.log('running offchain()')
-            const offchain = await eas.getOffchain();
-            const schemaEncoder = new SchemaEncoder("uint256 eventId, uint8 voteIndex");
-            const encodedData = schemaEncoder.encodeData([
-            { name: "eventId", value: 1, type: "uint256" },
-            { name: "voteIndex", value: 1, type: "uint8" },
-            ]);
-            const offchainAttestation = await offchain.signOffchainAttestation({
-            recipient: '0xFD50b031E778fAb33DfD2Fc3Ca66a1EeF0652165',
-            expirationTime: 0,
-            time: 1671219636,
-            revocable: true,
-            version: 1,
-            nonce: 0,
-            schema: "0xb16fa048b0d597f5a821747eba64efa4762ee5143e9a80600d0005386edfc995",
-            refUID: '0x0000000000000000000000000000000000000000000000000000000000000000',
-            data: encodedData,
-            }, signer);
+    <div class="loadercontainer">
+      <div class="text-center" id="loader">
+        <div class="spinner-border" role="status"></div>
+      </div>
+    </div>
+  
+  
+    <!-- PROTOMINT -->
+    <div id="edit" style="display: none;">
+      <h1 class="heading" data-translate='createIAM'>CREATE IAM CODE </h1>
+      <div id="IAMform">
+        <div class="left-column">
+          <h1 id="iamCode">IAM-<span id="iamCodeNom">n</span><span id="iamCodePrenom">p</span>-<span
+            id="iamCodemmjjaaaa">mmjjaaaa</span>
+          <div id="editButtons">
+          </div>
+        </h1>
+  
+        <form autocomplete="off">
+              <div class="mb-3 mt-3">
+                <label for="iamname" class="form-label" data-translate='names'  autocomplete="false" >name/s:</label>
+                <input type="text" class="form-control" id='iamname' placeholder="nom" name="nom"   autocomplete="false" 
+                  required>
+                <div data-translate='filloutfield' class="invalid-feedback">Please fill out this field.</div>
+              </div>
+              <div class="mb-3 mt-3">
+                <label for="iamsurname" class="form-label" data-translate='surnames'>surname/s:</label>
+                <input type="text" class="form-control" id='iamsurname' placeholder="prenom" name="prenom"
+                  autocomplete="off" required>
+                <div class="invalid-feedback" data-translate='filloutfield' >Please fill out this field.</div>
+              </div>
+              <div class="mb-3 mt-3">
+                <label for="iamdate" class="form-label" data-translate='enterDate'>(your date of birth):</label>
+                <input type="date" class="form-control" id='iamdate' placeholder="prenom" name="date" autocomplete="false"
+                  required>
+                <div class="invalid-feedback" data-translate='filloutfield' >Please fill out this field.</div>
+              </div>
+              <div style="display: none;" class="mb-3 mt-3">
+                <label for="iamplaceofbirth" class="form-label" data-translate='placeofbirth'>Lieu de naissance</label>
+                <input type="text" class="form-control" id='iamplaceofbirth' placeholder="city, province, country"
+                  autocomplete="false" required>
+                <div class="invalid-feedback" data-translate='filloutfield' >Please fill out this field.</div>
+              </div>
+              <div style="display: none;" class="mb-3 mt-3">
+                <label for="iamaddress" class="form-label" data-translate='address'>Address</label>
+                <input type="text" class="form-control" id='iamaddress'
+                  placeholder="street, number, city, cp, province, country" autocomplete="off" required>
+                <div class="invalid-feedback" data-translate='filloutfield' >Please fill out this field.</div>
+              </div>
+    
+    
+              <div style="display: none;" class="mb-3 mt-3">
+                <label for="iamcontact" class="form-label" data-translate='econtact'>Electronic Contact</label>
+                <input type="text" class="form-control" id='iamcontact'
+                  placeholder="street, number, city, cp, province, country" autocomplete="off" required>
+                <div class="invalid-feedback" data-translate='filloutfield' >Please fill out this field.</div>
+              </div>
+    
+    
+              <div style="display: none;" class="mb-3 mt-3">
+                <label for="iamdid" class="form-label" data-translate='did'>DID</label>
+                <input type="text" class="form-control" id='iamdid' placeholder="decentralized identifier"
+                  autocomplete="off" required>
+                <div class="invalid-feedback" data-translate='filloutfield' >Please fill out this field.</div>
+              </div>
+            </form>
+     
+        </div>
+        <div class="right-column">
+        <label for="fileCreateItemFile" id="labelItemImgMINT">
+          <input name="inputItemImgMINT" id="fileCreateItemFile" type="file" style="display:none" accept="image/*" />
+          <img id="itemImgMINT"  class="rounded float-end" src="img/512x512.svg">
+          <div class="invalid-feedback" data-translate='filloutfield' >Please fill out this field.</div>
+          <div id='iamImgLoader' class="lds-dual-ring" style="display:none ;"></div>
+          <div id="alertMessage"></div>
+        </label>
+  
+        </div>
+        
+      </div>
+  
+  
+  
+      
+             <button class="btn btn-primary btn-lg"  onclick="event.stopPropagation();createIAMCODE((this.parentElement))"> CREATE IAM CODE<i class="fas fa-pencil" aria-hidden="true"></i>
+             </button>
+  
+    
+    </div>
+  <!-- FIN EDIT -->
+  
+  <div id="soveraindocspremint" style="display: none;"></div>
+  <div id="soveraindocs" style="display: none;"></div>
+  
+  
+  </main> 
 
-    } 
 
 
+<!-----------------------------
+  MODALS 
+--------------------------->
 
-async function timestamp() {
-    const eas = await new EAS(EASContractAddress);
-    eas.connect(provider);
-    const data = ethers.utils.formatBytes32String('0x1234');
-    const transaction = await eas.timestamp(data);
-    await transaction.wait();
-}
+		<!-- Modal WALLET -->
+		<div class="modal fade" data-bs-backdrop="static"   id="walletHidden" tabindex="-1" role="dialog" aria-labelledby="" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered" role="document">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h5 class="modal-title" data-translate="walletCreation" id="">WALLET CREATION</h5>
+                </div>
+                <div class="modal-body" id="walletHiddenContent">
+                            <div id="displayPubKey"></div>
+                            <div id="displayPK"></div>
+                            <div id="displayMnemonic"></div>
+                            <div id="displayDecrypt"></div>
+                  <div id="success_message2" class="alert alert-success" role="alert" style="display: none;"></div>
+                </div>
+                <div class="modal-footer">
+              <div class="form-check">
+                <input class="form-check-input" type="checkbox" value="" id="mnemonicBackedup">
+                <label class="form-check-label" for="defaultCheck1">
+                  I wrote down the mnemonic phrase
+                </label>
+              </div>
+                  <button type="button" class="btn btn-outline-secondary closeWalletBkp" id="closeWalletBkp" data-bs-dismiss="modal" data-translate="close" disabled>Close</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        <!-- fin MODAL WALLET-->
 
 
-async function createWallet() {
-const address = wallet.address;
-const balance =  await provider.getBalance(address);
-console.log('address and balance:', address,  parseInt( balance, 16))
-signer = wallet.connect(provider);
-    try {
-    const network = await provider.getNetwork();
-    console.log('Chain Name:', network.name);
-    console.log('Chain ID:', network.chainId);
-    } catch (error) {
-    console.error('Error fetching chain info:', error);
-    }
-}
+    		<!-- Modal wallet RESTORE -->
+            <div class="modal fade" data-bs-backdrop="static"   id="walletRestore" tabindex="-1" role="dialog" aria-labelledby="" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered" role="document">
+                  <div class="modal-content">
+                    <div class="modal-header">
+                      <h5 class="modal-title" data-translate="walletrestore" id="">WALLET RESTORE</h5>
+                    </div>
+                    <div class="modal-body">
+                                    <!-- SEED -->
+                                    <div id="seedData">
+                                    <div class="mb-3">
+                                      <label for="seedTextarea" class="form-label">Paste your seed</label>
+                                      <textarea class="form-control" id="seedTextarea" rows="3"></textarea>
+                                    </div>
+                                    <!-- PASSWORD -->
+                                    <div class="row g-3 align-items-center">
+                                      <div class="col-auto">
+                                        <label for="seedPassword" class="col-form-label">Password</label>
+                                      </div>
+                                      <div class="col-auto">
+                                        <input type="password" id="seedPassword" class="form-control" aria-describedby="passwordHelpInline">
+                                        <div class="valid-feedback">Valid.</div>
+                                        <div class="invalid-feedback">Please set a password.</div>
+                                      </div>
+          
+                                    </div>
+                                    </div>
+                                    <div id="displayRestoreProgress"></div>
+                      <div id="success_message3" class="alert alert-success" role="alert" style="display: none;"></div>
+                    </div>
+                    <div class="modal-footer">
+                      <button type="button" class="btn btn-outline-secondary closeWalletBkp" id="closeWalletRestore" data-bs-dismiss="modal" data-translate="close" >Cancel</button>
+                      <button type="button" class="btn btn-outline-secondary closeWalletBkp" id="setWalletRestore"  data-translate="restore"  onclick="event.stopPropagation(); restoreSeed()"  disabled>Restore</button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <!-- fin walelt RESTORE WALLET-->
+
+              		<!-- PROGRESSBAR WALLET -->
+		<div class="modal fade" data-bs-backdrop="static"   id="walletProgress" tabindex="-1" role="dialog" aria-labelledby="" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered" role="document">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h5 class="modal-title" data-translate="decryptingwallet" id="">DECRYPTING WALLET</h5>
+                </div>
+                <div class="modal-body" id="walletProgressContent">
+  
+              <div id="walletProgress_success_message" class="alert alert-success" role="alert" style="display: none;"></div>
+                </div>
+                <div class="modal-footer">
+            
+                  <button type="button" class="btn btn-outline-secondary closeWalletBkp" id="closeWalletProgress" data-bs-dismiss="modal" data-translate="close" disabled>Close</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        <!-- fin MODAL WALLET-->
 
 
-async function revokeOffchainAttestation (){
-    const eas = new EAS(EASContractAddress);
-    eas.connect(provider);
-    const data = ethers.utils.formatBytes32String('0x6776de8122c352b4d671003e58ca112aedb99f34c629a1d1fe3b332504e2943a');
-    const transaction = await eas.revokeOffchain(data);
-    await transaction.wait();
-}
+		<!-- Modal SELECT WALLET CREATION -->
+		<div class="modal fade" data-bs-backdrop="static"   id="walletOptions" tabindex="-1" role="dialog" aria-labelledby="connect2iurisnaturalis" aria-hidden="true" data-bs-dismiss="modal" >
+            <div class="modal-dialog modal-dialog-centered" role="document">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h5 class="modal-title" data-translate="connect" id="connect2iurisnaturalis">CONNECT TO IURIS NATURALIS
+                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                  </button>
+                </div>
+                <div class="modal-body">
+                  <div id=""></div>
+              <div class="d-grid gap-2">
+                <button class="btn btn-primary boton" type="button" id="createWalletBtn" onclick="event.stopPropagation(); writepassword()" data-translate="createwallet">CREATE WALLET</button>
+                <button class="btn btn-primary boton" type="button" id="restoreWalletBtn"  onclick="event.stopPropagation(); restoreWallet()" data-translate="restorewallet">RESTORE WALLET</button>
+                <button class="btn btn-primary boton" type="button" style="display: none;" id="localwalletBtn" onclick="event.stopPropagation(); useLocalWallet()">LOCALWALLET</button>
+                <button class="btn btn-primary boton" type="button" style="display: none;" id="metamaskBtn" onclick="event.stopPropagation(); useMetamaskWallet()">METAMASK</button>
+              </div>
+                  <div id="success_message0" class="alert alert-success" role="alert" style="display: none;"></div>
+                </div>
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-outline-secondary  " data-bs-dismiss="modal" data-translate="close">Close</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        <!-- fin MODAL -->
+  
+  
+        <!-- Modal WALLET PASSWORD -->
+          <div class="modal fade" data-bs-backdrop="static"   id="walletPassword" tabindex="-1" role="dialog" aria-labelledby="setWalletPassword" aria-hidden="true" data-bs-dismiss="modal" >
+              <div class="modal-dialog modal-dialog-centered" role="document">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <h5 class="modal-title" data-translate="setpassword" id="">SET WALLET'S PASSWORD</h5>
+                  </div>
+                  <div class="modal-body">
+                    <div id=""></div>
+     
+                    <div class="row g-3 align-items-center">
+                      <div class="col-auto">
+                        <label for="inputPassword6" class="col-form-label">Password</label>
+                      </div>
+                      <div class="col-auto">
+                        <input type="password" id="inputPassword6" class="form-control" aria-describedby="passwordHelpInline" formnovalidate>
+                      </div>
+                      <div class="col-auto">
+                        <span id="passwordHelpInline" class="form-text">
+                          Must be 8-20 characters long.
+                        </span>
+                      </div>
+                    </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- fin MODAL -->
+  
+  
+  
+          <!-- Modal WALLETOPEN -->
+          <div class="modal fade" data-bs-backdrop="static"   id="walletOpen" tabindex="-1" role="dialog" aria-labelledby="walletopn" aria-hidden="true" data-bs-dismiss="modal" >
+            <div class="modal-dialog modal-dialog-centered" role="document">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h5 class="modal-title" data-translate="wallet" id="">WALLET</h5>
+                  <button type="button" class="close closeWalletSaved" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                  </button>
+                </div>
+                <div class="modal-body">
+                  <div id="walletheadModal"></div>
+  
+              <div class="d-grid gap-2">
+                <div class="btn-group" >
+                <button class="btn btn-primary boton btn-lg   " type="button" onclick="event.stopPropagation(); writepassword('open')">OPEN LOCAL WALLET</button>
+                <button class="btn  float-end  " onclick="event.stopPropagation(); deleteWallet()"  ><i class="fa fa-trash" ></i></button>
+              </div>
+  
+                <button class="btn btn-primary boton" type="button">METAMASK</button>
+              </div>
+                  <div id="success_message1" class="alert alert-success" role="alert" style="display: none;"></div>
+                </div>
+                <div class="modal-footer">
+                  <button id="closeWalletSaved" type="button" class="btn btn-outline-secondary closeWalletSaved " data-bs-dismiss="modal" data-translate="close">Close</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        <!-- fin MODAL -->
+<!-----------------------------
+  SCRIPTS 
+--------------------------->
 
-async function init() {
-        eas = new EAS(EASContractAddress);
-        console.log('provider: ', provider)
-        eas.connect(provider);
-    }
-
-    init()
-
-    </script>
+  <script src="js/ethers-5.2.umd.min.js" type="application/javascript"></script>
+<script src="js/texteffects.js"></script>
+<script src="js/qr-code-styling.js"></script>
+  
+  
+  <script src="js/base.js" type="application/javascript"></script>
+  <script src="js/wallet.js" type="application/javascript"></script>
+  <script src="js/dictionary.js" type="application/javascript"></script>
+  <script src="js/toasts.js" type="application/javascript"></script>
+  <script src="js/init.js" type="application/javascript"></script>
+  
 </body>
 </html>
