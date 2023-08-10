@@ -181,17 +181,12 @@
         </div>
         
       </div>
-  
-  
-  
-      
              <button class="btn btn-primary btn-lg"  onclick="event.stopPropagation();createIAMCODE((this.parentElement))"> CREATE IAM CODE<i class="fas fa-pencil" aria-hidden="true"></i>
              </button>
-  
-    
     </div>
   <!-- FIN IAM -->
   
+  <div id="attesttionUI" style="display: none;"></div>
   <div id="soveraindocspremint" style="display: none;"></div>
   <div id="soveraindocs" style="display: none;"></div>
   
@@ -205,7 +200,7 @@
 --------------------------->
 
 		<!-- Modal WALLET -->
-		<div class="modal fade" data-bs-backdrop="static"   id="walletHidden" tabindex="-1" role="dialog" aria-labelledby="" aria-hidden="true">
+		<div class="modal fade" data-bs-backdrop="static" id="walletHidden" tabindex="-1" role="dialog" aria-labelledby="" aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered" role="document">
               <div class="modal-content">
                 <div class="modal-header">
@@ -386,6 +381,12 @@
 <!-----------------------------
   SCRIPTS 
 --------------------------->
+<script type="module">
+  import { EAS, Offchain, SchemaEncoder, SchemaRegistry } from "@ethereum-attestation-service/eas-sdk";
+  window.EAS = EAS
+  window.Offchain = Offchain
+  window.SchemaEncoder = SchemaEncoder
+</script>
 
 <!-- external -->
 <script src="js/ethers-5.2.umd.min.js" type="application/javascript"></script>
@@ -397,6 +398,8 @@
   <script src="js/wallet.js" type="application/javascript"></script>
   <script src="js/dictionary.js" type="application/javascript"></script>
   <script src="js/toasts.js" type="application/javascript"></script>
+  <script src="js/docs.js" type="application/javascript"></script>
+  <script src="js/attestations.js" type="application/javascript"></script>
   <script src="js/init.js" type="application/javascript"></script>
   
 </body>

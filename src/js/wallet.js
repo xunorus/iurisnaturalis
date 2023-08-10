@@ -202,30 +202,21 @@ function writepassword (f){
           console.log(formattedAddress);
           userAddress  = formattedAddress;
   
-  
-  
         // SWEETALERT SUCCESS
         Toast.fire({ icon: 'success', title: 'Logged in!' })
   
-        // SUCCESS ALERT
-        //SET ADDRESS
         var shortAddr = userAddress.substring(0, 6) + "..."+ userAddress.substring(38, 42);
-        // document.getElementById('usrAddr').innerHTML = `<div id="" onclick="event.stopPropagation();copyItem(event,'${userAddress}')">${shortAddr}</div>`;
     console.log('ADDED ADDRESS')
         // FIX TEXTEFFECT
-        if (/Mobi|Android/i.test(navigator.userAgent)) {
-          // User is accessing the website from a mobile device
-          // Don't run the script
-          console.log('textEffect avoided')
-        } else {
-          // User is not accessing the website from a mobile device
-          // Run the script
-          $("#usrAddr").textEffect();
-  
-          setTimeout(() => {
-            document.getElementById('usrAddr').innerHTML = `<div id="" onclick="event.stopPropagation();copy2clipboard('${userAddress}')">${shortAddr}</div>`;
+        
+        setTimeout(() => {
+          document.getElementById('usrAddr').innerHTML = `<div id="" onclick="event.stopPropagation();copy2clipboard('${userAddress}')">${shortAddr}</div>`;
+          if (/Mobi|Android/i.test(navigator.userAgent)) {
+            console.log('textEffect avoided')
+          } else {
+            $("#usrAddr").textEffect();
+          }
           }, 900);
-        }
         document.getElementById('usrAddr').classList.add("glow");
          
         // REORGANICE CONNECT BUTTONS
@@ -233,8 +224,6 @@ function writepassword (f){
           document.getElementById('walletDisconnect').style.display = 'block';
   
           // SHOW ACTION BUTTONS AND UPDATE UI
-          // document.getElementById('createUP').style.visibility ='visible';
-          document.getElementById('main').style.display = 'block';
   
   
         // SET WALLET CHOICE TO LOCALSTORAGE
@@ -242,80 +231,47 @@ function writepassword (f){
   
   
             //   -------------------------------------------------------------
-                 //   -------------------------------------------------------------
                     // 0- CHECK OWNERSHIP (check if is no owner already)
                     let prefIndex = 0;
                     let tAddress = optionsList[prefIndex].TOKEN_ADDRESS;
                     let tAbi =ABIs[optionsList[prefIndex].TOKEN_ABI]
   
-                    // console.log('call contract for TIds:', tAddress, tAbi, provider)
-  
                       contract = new ethers.Contract(tAddress, tAbi, provider)
-                      // console.log('CONTRACT IN INITV3: ', contract)
-                      // console.log('uAddress: ', userAddress)
-                     
                       
                       // CALL TIds
                       try { tokenIdbyAddr = await contract.TIds(userAddress) }
                       catch (error) { console.log('error:', error); return; }
-                      // console.log('tokenIdbyAddr', tokenIdbyAddr)
                       tid = parseInt( tokenIdbyAddr, 16)
-                      // let  tid = parseInt( tokenIdbyAddr, 16)
-                      // console.log('tid', tid)
-                      
-                      // console.log('OWNER?: tokenIdbyAddr: ',tokenIdbyAddr )
                       // A- IF USER DOESNT OWN A TOKEN
                       if(tid == 0) {
                         console.log('YOU DONT HAVE A UNIVERSAL PASS ')
                       } else {
                         console.log('YOUR ARE OWNER OF UP TOKEN',tid )
-                        // Toastnoclose.fire('', `YOUR ARE OWNER OF UP TOKEN ${tid}`, "info");
                         headMessages.innerHTML = `<div class="alert alert-primary alert-dismissible fade show" > <span data-translate="youareowneroftoken">YOUR ARE OWNER OF UP TOKEN </span><strong>${tid}</strong> </div>`
-  
-                        // <button type="button" class="btn-trash" onclick="event.stopPropagation();editIAMcode()" >
-                        // </button> 
                         console.log('CARGAR MANUALMENTE LA PRIMER VEZ con tokenid + version y recibe ipfs link,desde blockchain. guarda todo en localstorage para no cargar todo cada vez.')
                         console.log('PRIMERO seriallamar al contracto para obtener la ultima version de ipfs para este token (public)')
   
-                        // reloadTranslations()
-                        // CALL universalPass(tokid)
                         try { universalPassData = await contract.universalPass(tid) }
                         catch (error) { console.log('error:', error); return; }
-  
-  
   
                         console.log('universalPassData', universalPassData)
                         console.log('URI: ', universalPassData.uri)
                         console.log('LAST UPDATED' ,parseInt(universalPassData.dateUpdated,16))
                         console.log('SEGUNDO cargar solo el json de la uri')
-                        // fetch("https://api.example.com/data")
-  
-  
   
                        let cidcid =  await fetch(universalPassData.uri)
                         .then(function(response) { if (response.ok) { return response.json(); } else { throw new Error("Error: " + response.status); } })
                         .then(async function(data) { 
-                          // console.log('Processed data',data);
-                          // console.log('Processed image',data);
-                        // return [data.external_url ,data.image ]
-                      //   return data.external_url 
   
                       return { url: data.external_url, img: data.image };
   
                       })
                         .catch(function(error) { console.log(error); });
-                        // console.log('CID RESULT:', cidcid)
-                        // console.log('CID URL:', cidcid.url)
-                        // console.log('CID IMG:', cidcid.img)
-  
-  
                         // GET LAST UPDATED
                         let lastUpdated = parseInt(universalPassData.dateUpdated,16);
   
                         // FORM LINK
                       let link = `${ipfsGateway}${cidcid.url}`;
-                      // console.log('link:',link)
-                      // console.log('6493 cidcid:',cidcid.url)
                       // FETCH CIDCID
                       fetch(cidcid.url)
                       .then(response => response.text())
@@ -328,25 +284,13 @@ function writepassword (f){
                         let uplink = cidcid.url;
                         let img= cidcid.img;
                        await nftIpfsDistro(signed,tid,universalPassData,uplink,img)
-                        
-  
                       })
                       .catch(error => {
                         console.error('Error:', error);
                       });
   
-  
-  
-  
-  
-  
-  
                         return
                       }
-  
-  
-  
-  
   
           //1. CHECK IF USER HAS PUBLISHED ON IPFS (signedJson)
           let ipfsDistros = JSON.parse(window.localStorage.getItem('IPFSdistributions'));
@@ -365,16 +309,8 @@ function writepassword (f){
               // UPDATE UI
               document.getElementById('main').setAttribute('style', 'display:block !important');
               document.getElementById('loader').style.display='none'
-  
               document.getElementById('splash').setAttribute('style', 'display:flex !important');
-            //   document.getElementById('iam').setAttribute('style', 'display:flex !important');
-            //   document.getElementById('soveraindocs').setAttribute('style', 'display:none !important');
-            //   document.getElementById('mint').setAttribute('style', 'display:none !important');
-  
-            // document.getElementById('actionButtons').innerHTML =`
-            // <button  type="submit" id='createIAMcode' onclick="event.stopPropagation();createUP()" class="btn btn-outline-secondary btn-lg" data-translate="start" >START</button>
-            
-            // `
+        
 
             headMessages.innerHTML =`  <div class="alert alert-warning alert-dismissible fade show">
             <button type="button" class="btn btn-warning" onclick="event.stopPropagation();createIAMcode();">CREATE IAM CODE</button>
@@ -406,34 +342,24 @@ function writepassword (f){
   
               document.getElementById('iam').setAttribute('style', 'display:none !important');
               document.getElementById('soveraindocs').setAttribute('style', 'display:block !important');
-            //   document.getElementById('mint').setAttribute('style', 'display:none !important');
   
               // LOAD TABLE WITH SOVERAIN DOCS
-              addProtomintDOCSTEMPLATE()
-              loadDocs()
+            addAttestIAMcode()
+            // addEditDocumentsUI()
+              // loadDocs()
               reloadTranslations()
+              document.getElementById('loader').style.display='none'
+
   
   
   
       }
-              
-  
-           
-              // 1. NOW check if there are documents
-              // edit.style.display = 'block'
-              // main.style.display = 'none'
-  
-  
-              
-  
-  
-  
+               
               // INIT
               console.log('CALLING loadIAMinfo ')
             loadIAMinfo()
             loadOnchangeEvents()
-  
-          //   checkIfIAMCode()
+            checkIfIAMCode()
   return
             
             } else {
@@ -454,19 +380,14 @@ function writepassword (f){
   
       // CONNECT METAMASK
         async function useMetamaskWallet(){
-            console.log('TRYING TO USE METAMASK WALLET:')
-  
+            // console.log('TRYING TO USE METAMASK WALLET:')
             const provider = new ethers.providers.Web3Provider(window.ethereum)
             let psend = await provider.send("eth_requestAccounts", [])
             const signer = provider.getSigner()
             const account = await signer.getAddress()
             userAddress = account;//set global
-            console.log(account)
+            console.log(' METAMASK WALLET ADDRESS:', account)
   
-  
-  
-          //   return
-                 // INIT
         loadIAMinfo()
         loadOnchangeEvents()
         checkIfIAMCode()
@@ -475,34 +396,31 @@ function writepassword (f){
         Toast.fire({ icon: 'success', title: 'Logged in!' })
   
   
-            // SET ADDRESS
-            var shortAddr = account.substring(0, 6) + "..."+ account.substring(38, 42);
-            if (/Mobi|Android/i.test(navigator.userAgent)) {
-              // User is accessing the website from a mobile device
-              // Don't run the script
-              console.log('textEffect avoided')
-            } else {
-              // User is not accessing the website from a mobile device
-              // Run the script
-              $("#usrAddr").textEffect();
-            }
-            document.getElementById('usrAddr').classList.add("glow");
-            
-            
-            setTimeout(() => {
-              document.getElementById('usrAddr').innerHTML = `<div id="" onclick="event.stopPropagation();copy2clipboard('${account}')">${shortAddr}</div>`;
-              
+          
+          // SET ADDRESS
+          var shortAddr = account.substring(0, 6) + "..."+ account.substring(38, 42);
+         
+
+          setTimeout(() => {
+            document.getElementById('usrAddr').innerHTML = `<div id="" onclick="event.stopPropagation();copy2clipboard('${account}')">${shortAddr}</div>`;
+
+              if (/Mobi|Android/i.test(navigator.userAgent)) {
+                console.log('textEffect avoided')
+              } else {
+                $("#usrAddr").textEffect();
+              }
+
             }, 900);
-  
+            
+            document.getElementById('usrAddr').classList.add("glow");
+
               // REORGANICE CONNECT BUTTONS
               walletOptCreate.style.display = 'none';// boton CONNECT
               document.getElementById('walletDisconnect').style.display = 'block';
   
               // SHOW ACTION BUTTONS
-              document.getElementById('createUP').style.visibility ='visible'
+              // document.getElementById('createUP').style.visibility ='visible'
               
-              // SET GLOBAL ADDRESS
-              userAddres = account;
   
               // SET WALLET CHOICE TO LOCALSTORAGE
               localStorage.setItem('wallet', 'METAMASK');
@@ -516,6 +434,13 @@ function writepassword (f){
               // return signer
               let chainId= await signer.getChainId()
               console.log('chainId:', chainId)
+
+
+            addAttestIAMcode()
+
+              reloadTranslations()
+              document.getElementById('loader').style.display='none'
+
   }
   
 
@@ -536,32 +461,130 @@ async function walletDisconnect(){
     localStorage.removeItem('wallet');
 
     // hide main
-    // document.getElementById('main').style.display = 'none';
     document.getElementById('splash').setAttribute('style', 'display:flex !important');
+    document.getElementById('iam').setAttribute('style', 'display:none !important');
+    document.getElementById('attesttionUI').setAttribute('style', 'display:none !important');
 
     // DELETE ADDRESS RESTORE  BANNER
     usrAddr.innerHTML = 'IURIS-NATURALIS'
-    // $("#usrAddr").textEffect();
   
       // UNSET GLOBAL ADDRESS
       userAddres = '';
 
-   
-
-
-      // HIDE ACTION BUTTONS
-    //   document.getElementById('createUP').style.visibility ='hidden'
-
-      // SHOW SPLASHSCREEN
-    //   document.getElementById('splash').setAttribute('style', 'display:none !important');
-    //   document.getElementById('iam').setAttribute('style', 'display:none !important');
-    //   document.getElementById('edit').setAttribute('style', 'display:none !important');
-    //   document.getElementById('mint').setAttribute('style', 'display:flex !important');
-    //   document.getElementById('soveraindocs').setAttribute('style', 'display:none !important');
-
-    
           headMessages.innerHTML=''    
   
   }
   
+  function countWords(str) {
+    let lngth =str.trim().split(/\s+/).length;
+    console.log(lngth)
+    return lngth;
+  }
+
+async function restoreWallet(){
+      console.log('RESTORE WALLET: (IN PROGRESS...Ill bix this ASAP...)')
+  openModalId('#walletRestore')
+
+  seedTextarea.addEventListener('input', function (evt) {
+    console.log(this.value);
     
+        let cntwrds = countWords(this.value)
+        if(cntwrds >= 12 ){
+          setWalletRestore.disabled = false;
+        } else{
+          setWalletRestore.disabled = true;
+        }
+
+        });
+
+    }
+
+       // SHOW DECRYPT PROGRESS 
+       const progressCallback = (percent) => {
+        // Update the progress bar
+        console.log(`Decrypting... ${percent*100}%`);
+        displayRestoreProgress.innerHTML =`<div ;class="progress">
+        <div class="progress-bar" role="progressbar" style="width:  ${percent*100}%;" aria-valuenow="${percent*100}" aria-valuemin="0" aria-valuemax="100">${ Math.round(percent * 100)}%</div>
+      </div>`
+        };
+
+        // SHOW DECRYPT PROGRESS 
+       const progressCallbackCW = (percent) => {
+        // Update the progress bar
+        console.log(`Decrypting... ${percent*100}%`);
+        displayCWProgress.innerHTML =`<div ;class="progress">
+        <div class="progress-bar" role="progressbar" style="width:  ${percent*100}%;" aria-valuenow="${percent*100}" aria-valuemin="0" aria-valuemax="100">${ Math.round(percent * 100)}%</div>
+      </div>`
+        };
+
+        const burndecryptProgress = (percent) => {
+          // console.log(`Decrypting... ${percent*100}%`);
+          burnstep0Progress.innerHTML =`<div ;class="progress">Decrypting ...
+          <div class="progress-bar" role="progressbar" style="width:  ${percent*100}%;" aria-valuenow="${percent*100}" aria-valuemin="0" aria-valuemax="100">${ Math.round(percent * 100)}%</div>
+        </div>`
+          };
+
+
+        const decryptProgress = (percent) => {
+        console.log(`Decrypting... ${percent*100}%`);
+        step0Progress.innerHTML =`<div ;class="progress">Decrypting ...
+        <div class="progress-bar" role="progressbar" style="width:  ${percent*100}%;" aria-valuenow="${percent*100}" aria-valuemin="0" aria-valuemax="100">${ Math.round(percent * 100)}%</div>
+      </div>`
+        };
+
+        
+
+        async function restoreSeed(seed){
+          console.log('RESTORE WALLET: (SEED)',seedTextarea.value.trimStart().trimEnd())
+
+          // check is password is set
+          
+          if(!seedPassword.value){
+            seedPassword.classList.add("is-invalid");
+            return
+          } else {
+            seedPassword.classList.remove("is-invalid");
+          }
+
+
+
+        // ethers.Wallet.fromMnemonic( mnemonic [ , path , [ wordlist ] ] ) ⇒ Wallet
+        // If path is not specified, the Ethereum default path is used (i.e. m/44'/60'/0'/0/0).
+          const wallet = ethers.Wallet.fromMnemonic(seedTextarea.value.trimStart().trimEnd());
+          console.log('address:', wallet.address)
+
+          // 2 RESTORE WALLET AND SAVE TO LOCALSTORAGE (encrypted?)
+          console.log('password: ',seedPassword.value)
+          // hide pannel wit textare and password
+          seedData.style.display = 'none'
+          // hide restore button
+          setWalletRestore.style.display = 'none'
+
+          // momentarely desactivate close/cancel button
+          closeWalletRestore.disabled = true;
+
+          
+          const promisseJSON = wallet.encrypt( seedPassword.value, progressCallback);
+          promisseJSON.then((jsonWallet) => {
+          console.log(jsonWallet)
+
+
+          console.log('WALLET ENCRYPTED')
+          
+          // loaderCW
+          document.getElementById('displayRestoreProgress').innerHTML=` <svg xmlns="http://www.w3.org/2000/svg" style="display: none;"> <symbol id="check-circle-fill" fill="currentColor" viewBox="0 0 16 16"> <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zm-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z"/> </symbol> <symbol id="info-fill" fill="currentColor" viewBox="0 0 16 16"> <path d="M8 16A8 8 0 1 0 8 0a8 8 0 0 0 0 16zm.93-9.412-1 4.705c-.07.34.029.533.304.533.194 0 .487-.07.686-.246l-.088.416c-.287.346-.92.598-1.465.598-.703 0-1.002-.422-.808-1.319l.738-3.468c.064-.293.006-.399-.287-.47l-.451-.081.082-.381 2.29-.287zM8 5.5a1 1 0 1 1 0-2 1 1 0 0 1 0 2z"/> </symbol> <symbol id="exclamation-triangle-fill" fill="currentColor" viewBox="0 0 16 16"> <path d="M8.982 1.566a1.13 1.13 0 0 0-1.96 0L.165 13.233c-.457.778.091 1.767.98 1.767h13.713c.889 0 1.438-.99.98-1.767L8.982 1.566zM8 5c.535 0 .954.462.9.995l-.35 3.507a.552.552 0 0 1-1.1 0L7.1 5.995A.905.905 0 0 1 8 5zm.002 6a1 1 0 1 1 0 2 1 1 0 0 1 0-2z"/> </symbol> </svg> <div class="alert alert-success d-flex align-items-center" role="alert"> <svg class="bi flex-shrink-0 me-2" width="24" height="24" role="img" aria-label="Success:"><use xlink:href="#check-circle-fill"/></svg> <div> Wallet encrypted and saved into localstorage </div> </div> `
+          
+          // change cancel to close text in button
+          closeWalletRestore.innerHTML='close'
+      
+          localStorage.setItem('jsonWallet', jsonWallet)
+          console.log(' SAVED INTO LOCALSTORAGE')
+          // walletOptCreate.style.display = 'none'
+          // walletOptConnect.style.display = 'none'
+          // document.getElementById('loader').style.display='block'
+          setTimeout(() => {
+          closeWalletRestore.disabled = false;
+          init();
+          }, 1000);
+              });
+        }

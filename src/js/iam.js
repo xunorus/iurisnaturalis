@@ -405,16 +405,32 @@ function loadIAMinfo(){
 
       function editIAMcode(){
         console.log('EDIT IAM CODE')
-        // UPDATE UI
         document.getElementById('iam').setAttribute('style', 'display:flex !important');
-        // document.getElementById('soveraindocs').setAttribute('style', 'display:none !important');
-        // document.getElementById('mint').setAttribute('style', 'display:none !important');
-    
-          
+        document.getElementById('splash').setAttribute('style', 'display:none !important');
+        document.getElementById('soveraindocs').setAttribute('style', 'display:none !important');
     
         headMessages.innerHTML = ''
         localStorage.removeItem('iamcode');
             console.log('iamcode REMOVED!')
-    
       }
     
+
+      function  checkIfIAMCode(){
+        let loadIAM = localStorage.getItem('iamcode')
+        if(!loadIAM){
+            
+            console.log('THERE IS NO IAM CODE')
+            
+            // UPDATE UI
+            document.getElementById('iam').setAttribute('style', 'display:flex !important');
+            document.getElementById('splash').setAttribute('style', 'display:none !important');
+            document.getElementById('soveraindocs').setAttribute('style', 'display:none !important');
+            // document.getElementById('mint').setAttribute('style', 'display:none !important');
+    
+        } else{
+            
+            console.log('THERE IS IAM CODE')
+            createIAMCODE()
+        // document.getElementById('edit').setAttribute('style', 'display:none !important');
+      }
+    }

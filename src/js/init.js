@@ -59,20 +59,25 @@
         if(walletChoice == "METAMASK"){
             console.log('METAMASK IS ACTIVE')
             useMetamaskWallet()
+            reloadTranslations()
+      document.getElementById('loader').style.display='none'
+
 
         }
             if(walletChoice =="LOCALWALLET"&& !jsonWallet==false){
             console.log('LOCALWALLET IS ACTIVE')
             useLocalWallet()
-            reloadTranslations()
+            // reloadTranslations()
+            // document.getElementById('loader').style.display='none'
 
         }
     } else {
       console.log('NO WALLET CHOICE o available IN Initv3')
       document.getElementById('loader').style.display='none'
-    reloadTranslations()
-    //   document.getElementById('mint').setAttribute('style', 'display:flex !important');
-    //   document.getElementById('edit').setAttribute('style', 'display:none !important');
+    // reloadTranslations()
+    //   document.getElementById('splash').setAttribute('style', 'display:flex !important');
+  
+      //   document.getElementById('edit').setAttribute('style', 'display:none !important');
     //   document.getElementById('soveraindocs').setAttribute('style', 'display:none !important');
 
     //   SEARCH FUNCTION

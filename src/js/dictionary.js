@@ -62,7 +62,8 @@
     youareowneroftoken: "YOUR ARE OWNER OF TOKEN ",
     send: "send",
     cancel: "Cancel",
-    updatenft:"Update NFT"
+    updatenft:"Update NFT",
+    addAttests:"MAKE ATESTATION"
   },
   fr: {
     IAMDescription:'IAM-(Les initiales de vos noms )-(Votre date de naissance )',
@@ -116,7 +117,8 @@
     youareowneroftoken: "VOUS ÊTES PROPRIÉTAIRE DU JETON ",
     send: "Envoyer",
     cancel: "Annuler",
-    updatenft:"Mettre à jour NFT"
+    updatenft:"Mettre à jour NFT",
+    addAttests:"FAIRE L'ATTESTATION"
   },
   es: {
     IAMDescription:'IAM-(Las iniciales de su nombre )-(fecha de nacimiento )',
@@ -170,7 +172,8 @@
     youareowneroftoken: "ERES CREADOR DEL TOKEN ",
     send: "Enviar",
     cancel: "Cancelar",
-    updatenft:"Actualizar NFT"
+    updatenft:"Actualizar NFT",
+    addAttests:"DAR TESTIMONIO"
   }
   };
   
