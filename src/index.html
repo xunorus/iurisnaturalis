@@ -76,9 +76,41 @@
       </div>
     </div>
   
+    <!-- SPLASH -->
+      <!-- SPLASHSCREEN -->
+  <!-- <div id="search" style="display: none;">
+    <div class="title"> 
+      <h1 id="mainTitle">IURIS NATURALIS</h1> 
+      <div id="actionButtons">
+        <button  type="submit" id='createIAMcode' onclick="event.stopPropagation();createUP()" class="btn btn-outline-secondary btn-lg" data-translate="start" >START</button>
+      </div>
+    </div> 
+  </div> -->
+  <!-- SPLASH / SEARCH -->
+  <div id="splash" style="display: none;">
+    <div class="title"> 
+      <h1 id="mainTitle">IURIS NATURALIS</h1> 
+      <div class="search-container">
+        <div class="search-bar">
+          <input type="text" id="mainSearch" class="search-input" placeholder="Search...">
+          <button class="search-button">
+            <i class="bi bi-search"></i>
+          </button>
+        </div>
+      </div>
+      
+      <ul id="resultsList">
+    </ul>
+
+      <div id="actionButtons">
+      </div>
+    </div> 
+  </div>
+
+
   
-    <!-- PROTOMINT -->
-    <div id="edit" style="display: none;">
+    <!-- IAM/PROTOMINT -->
+    <div id="iam" style="display: none;">
       <h1 class="heading" data-translate='createIAM'>CREATE IAM CODE </h1>
       <div id="IAMform">
         <div class="left-column">
@@ -146,7 +178,6 @@
           <div id='iamImgLoader' class="lds-dual-ring" style="display:none ;"></div>
           <div id="alertMessage"></div>
         </label>
-  
         </div>
         
       </div>
@@ -159,7 +190,7 @@
   
     
     </div>
-  <!-- FIN EDIT -->
+  <!-- FIN IAM -->
   
   <div id="soveraindocspremint" style="display: none;"></div>
   <div id="soveraindocs" style="display: none;"></div>

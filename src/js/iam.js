@@ -1,4 +1,74 @@
-  function loadIAMinfo(){
+async function createIAMCODE(){
+    console.log(' called createIAMCODE!')
+    
+    let checkFIELDS =  checkIamFields()
+    console.log(' called checkIamFields to =>iamcode REMOVED!')
+
+    console.log(checkFIELDS)
+
+    if(checkFIELDS ==false){ // if FALSE
+        console.log('(FALSE) FILL ALL FIELDS FIRST TO CREATE IAM CODE')
+        return
+    }
+
+    let name =localStorage.getItem("name") 
+    let surname = localStorage.getItem("surname") 
+    let dateOfBirth = localStorage.getItem("dateofbirth") 
+
+    // human readable nom prenom
+    let nom = name.toLowerCase();
+    let prenom = surname.toLowerCase();
+    let n = nom.match(/(?:\s|^)(\S)/g).join('').replace(/ /g,'').toLowerCase();//FIXB BUG1 ACENTOS
+    var p = prenom.match(/(?:\s|^)(\S)/g).join('').replace(/ /g,'').toLowerCase();//FIXB BUG1 ACENTOS
+
+
+    let iamCode = 'IAM-'+[n,p,'-',dateOfBirth].join("").toLocaleLowerCase()
+
+    localStorage.setItem('iamcode', iamCode);
+
+    let loadIAM =  localStorage.getItem('iamcode')
+    let loadIAMIMG =  localStorage.getItem('image')
+
+    iamCode.innerHTML=  `IAM-<span id="iamCodeNom">${n}</span><span id="iamCodePrenom">${n}</span>-<span id="iamCodemmjjaaaa">${dateOfBirth}</span>
+    <div id="editButtons">
+    </div>`;
+
+
+    // iamImg.src = JSON.parse(loadIAMIMG);
+    headMessages.innerHTML = `<div class="alert alert-primary alert-dismissible fade show"> 
+    <img src="${JSON.parse(loadIAMIMG)}" alt="Rounded circle Image" class="rounded rounded-circle img-thumbnail" width='40px'>
+    <strong>${loadIAM}</strong> 
+    <button type="button" class="btn-edit" onclick="event.stopPropagation();editIAMcode()" >
+    </button> 
+    </div>`
+    
+    
+    
+    // SUCCESS
+    document.getElementById('iam').style.display = 'none';
+    Toastcenter.fire( 'Success','IAM code created!', "success");
+
+    // document.getElementById('soveraindocs').setAttribute('style', 'display:block !important');
+    // document.getElementById('edit').setAttribute('style', 'display:none !important');
+    // document.getElementById('mint').setAttribute('style', 'display:none !important');
+
+    // LOAD TABLE WITH SOVERAIN DOCS
+    // addProtomintDOCSTEMPLATE()
+    // loadDocs()
+    // reloadTranslations()
+    
+}
+
+
+
+
+function createIAMcode(){
+    console.log('creating IAM CODE')
+    document.getElementById('splash').setAttribute('style', 'display:none ');
+    document.getElementById('iam').setAttribute('style', 'display:block');
+
+}
+function loadIAMinfo(){
   
   let iamName = localStorage.getItem("name");
   if (!iamName) {
@@ -47,7 +117,7 @@
   let loadImg = window.localStorage.getItem('image')
   if (!loadImg)  {
     console.log('NO IAM IMG')
-    itemImgMINT.src ='512x512.svg'
+    // itemImgMINT.src ='512x512.svg'
     fileCreateItemFile.value = null
     // return
   }else{
@@ -256,3 +326,95 @@
     
     };
     }
+
+
+    function checkIamCode(){
+        if(!iamname.value || !iamsurname.value || !iamdate.value ){
+      
+          console.log('delete iamcode')
+          localStorage.removeItem('iamcode');
+          console.log('iamcode REMOVED!')
+    
+      
+        }else{
+          console.log('add iamcode to localstorage')
+          createIAMCODE()
+        //   document.getElementById('edit').setAttribute('style', 'display:none !important');
+        }
+      
+      }
+
+
+      function checkIamFields(){
+        console.log('CALLED checkIamFields!')
+    
+    
+        let iamname = document.getElementById('iamname')
+        if (iamname.value=='') { 
+            console.log('vacio')  
+            iamname.classList.add("is-invalid");
+            iamname.classList.remove("is-valid");
+            localStorage.removeItem('iamcode');
+            console.log('iamcode REMOVED!')
+    
+            return false
+        }   
+     
+      
+        let iamsurname = document.getElementById('iamsurname')
+    
+        if (iamsurname.value=='') { 
+          iamsurname.classList.add("is-invalid");
+          iamsurname.classList.remove("is-valid");
+        localStorage.removeItem('iamcode');
+        console.log('iamcode REMOVED!')
+    
+        return false  
+        }
+    
+        let iamdate = document.getElementById('iamdate')
+    
+        if (iamdate.value=='') { 
+          iamdate.classList.add("is-invalid");
+          iamdate.classList.remove("is-valid");
+        localStorage.removeItem('iamcode');
+        console.log('iamcode REMOVED!')
+    
+        return false
+        }
+    
+    
+        let loadImg = window.localStorage.getItem('image')
+        if (loadImg) {
+          itemImgMINT.src =JSON.parse(loadImg);
+          itemImgMINT.style.display='block'
+          alertMessage.innerHTML = '';
+        } else {
+            itemImgMINT.src ='512x512.svg'
+            fileCreateItemFile.value = null
+            let alertelem = `<div  id='imgalert' class="alert alert-danger d-flex align-items-center" role="alert"> <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-exclamation-triangle-fill flex-shrink-0 me-2" viewBox="0 0 16 16" role="img" aria-label="Warning:"> <path d="M8.982 1.566a1.13 1.13 0 0 0-1.96 0L.165 13.233c-.457.778.091 1.767.98 1.767h13.713c.889 0 1.438-.99.98-1.767L8.982 1.566zM8 5c.535 0 .954.462.9.995l-.35 3.507a.552.552 0 0 1-1.1 0L7.1 5.995A.905.905 0 0 1 8 5zm.002 6a1 1 0 1 1 0 2 1 1 0 0 1 0-2z"/> </svg> <div> Add an image please... </div> </div>`
+            alertMessage.innerHTML = alertelem;
+        }
+    
+        if (!iamname || !iamsurname || !iamdate ||!loadImg ) {
+            // document.getElementById('edit').setAttribute('style', 'display:flex !important');
+            return false
+        }
+        return true
+      }
+
+      function editIAMcode(){
+        console.log('EDIT IAM CODE')
+        // UPDATE UI
+        document.getElementById('iam').setAttribute('style', 'display:flex !important');
+        // document.getElementById('soveraindocs').setAttribute('style', 'display:none !important');
+        // document.getElementById('mint').setAttribute('style', 'display:none !important');
+    
+          
+    
+        headMessages.innerHTML = ''
+        localStorage.removeItem('iamcode');
+            console.log('iamcode REMOVED!')
+    
+      }
+    

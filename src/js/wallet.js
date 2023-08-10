@@ -2,7 +2,7 @@
 async function createWallet(pwd){
     
     try{ wallet = ethers.Wallet.createRandom()}
-catch (error) { console.log(error.message); fixedToast.fire( 'Error',error.message, "error"); }
+    catch (error) { console.log(error.message); fixedToast.fire( 'Error',error.message, "error"); }
 
     console.log('address:', wallet.address)
     console.log('mnemonic:', wallet.mnemonic.phrase)
@@ -364,15 +364,27 @@ function writepassword (f){
               
               // UPDATE UI
               document.getElementById('main').setAttribute('style', 'display:block !important');
+              document.getElementById('loader').style.display='none'
   
-            //   document.getElementById('edit').setAttribute('style', 'display:flex !important');
+              document.getElementById('splash').setAttribute('style', 'display:flex !important');
+            //   document.getElementById('iam').setAttribute('style', 'display:flex !important');
             //   document.getElementById('soveraindocs').setAttribute('style', 'display:none !important');
             //   document.getElementById('mint').setAttribute('style', 'display:none !important');
   
+            // document.getElementById('actionButtons').innerHTML =`
+            // <button  type="submit" id='createIAMcode' onclick="event.stopPropagation();createUP()" class="btn btn-outline-secondary btn-lg" data-translate="start" >START</button>
+            
+            // `
+
+            headMessages.innerHTML =`  <div class="alert alert-warning alert-dismissible fade show">
+            <button type="button" class="btn btn-warning" onclick="event.stopPropagation();createIAMcode();">CREATE IAM CODE</button>
+      
+            </div>`
+
           }  else{
               
               console.log('THERE IS IAM CODE')
-              document.getElementById('edit').setAttribute('style', 'display:flex !important');
+              document.getElementById('iam').setAttribute('style', 'display:flex !important');
               document.getElementById('loader').style.display='none'
   
   
@@ -392,9 +404,9 @@ function writepassword (f){
               </button> 
               </div>`
   
+              document.getElementById('iam').setAttribute('style', 'display:none !important');
               document.getElementById('soveraindocs').setAttribute('style', 'display:block !important');
-              document.getElementById('edit').setAttribute('style', 'display:none !important');
-              document.getElementById('mint').setAttribute('style', 'display:none !important');
+            //   document.getElementById('mint').setAttribute('style', 'display:none !important');
   
               // LOAD TABLE WITH SOVERAIN DOCS
               addProtomintDOCSTEMPLATE()
@@ -524,7 +536,8 @@ async function walletDisconnect(){
     localStorage.removeItem('wallet');
 
     // hide main
-    document.getElementById('main').style.display = 'none';
+    // document.getElementById('main').style.display = 'none';
+    document.getElementById('splash').setAttribute('style', 'display:flex !important');
 
     // DELETE ADDRESS RESTORE  BANNER
     usrAddr.innerHTML = 'IURIS-NATURALIS'
@@ -533,12 +546,17 @@ async function walletDisconnect(){
       // UNSET GLOBAL ADDRESS
       userAddres = '';
 
+   
+
+
       // HIDE ACTION BUTTONS
     //   document.getElementById('createUP').style.visibility ='hidden'
 
       // SHOW SPLASHSCREEN
-    //   document.getElementById('mint').setAttribute('style', 'display:flex !important');
+    //   document.getElementById('splash').setAttribute('style', 'display:none !important');
+    //   document.getElementById('iam').setAttribute('style', 'display:none !important');
     //   document.getElementById('edit').setAttribute('style', 'display:none !important');
+    //   document.getElementById('mint').setAttribute('style', 'display:flex !important');
     //   document.getElementById('soveraindocs').setAttribute('style', 'display:none !important');
 
     
