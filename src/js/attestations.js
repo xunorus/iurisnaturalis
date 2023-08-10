@@ -28,13 +28,25 @@ document.getElementById('soveraindocspremint').style.display='none'
 
 
 
+
 async function attest() {
 
-    const EASContractAddress = "0x4200000000000000000000000000000000000021"; // Optimism Goerli v1.0.1
-    const provider = new ethers.providers.JsonRpcProvider("https://goerli.optimism.io");
+  const provider = new ethers.providers.JsonRpcProvider("https://goerli.optimism.io");
+  console.log('provider:',provider);
+  
+  const EASContractAddress = "0x4200000000000000000000000000000000000021"; // Optimism Goerli v1.0.1
+const eas = new EAS(EASContractAddress);
 
-    console.log('provider:',provider);
-  const uid = "0xff08bbf3d3e6e0992fc70ab9b9370416be59e87897c3d42b20549901d2cccc3e";
-  const attestation = await eas.getAttestation(uid);
-  console.log(attestation);
+eas.connect(provider);
+  window.eas = eas;
+  console.log('eas:',eas);
+
+
+
+    const uid = "0xff08bbf3d3e6e0992fc70ab9b9370416be59e87897c3d42b20549901d2cccc3e";
+    // const attestation =  eas.getAttestation(uid);
+    const attestation = await eas.getAttestation(uid);
+    console.log(attestation);
+    
 }
+

@@ -327,12 +327,8 @@ function writepassword (f){
               // createIAMCODE()
   
   
-              // let loadIAM =  localStorage.getItem('iamcode')
               let loadIAMIMG =  localStorage.getItem('image')
-              // iamCode.innerHTML= loadIAM;
              iamCode.innerHTML= `IAM-<span id="iamCodeNom">n</span><span id="iamCodePrenom">p</span>-<span id="iamCodemmjjaaaa">mmjjaaaa</span><div id="editButtons">  </div>`;
-  
-              // iamImg.src = JSON.parse(loadIAMIMG);
               headMessages.innerHTML = `<div class="alert alert-primary alert-dismissible fade show"> 
               <img src="${JSON.parse(loadIAMIMG)}" alt="Rounded circle Image" class="rounded rounded-circle img-thumbnail" width='40px'>
               <strong>${loadIAM}</strong> 
@@ -360,22 +356,16 @@ function writepassword (f){
             loadIAMinfo()
             loadOnchangeEvents()
             checkIfIAMCode()
+                // SWEETALERT SUCCESS bypasses IAM CODE CREATED MESG
+        Toast.fire({ icon: 'success', title: 'Connected!' })
   return
             
             } else {
         
               console.log('YES THERE IS A SIGNED JSON')
               console.log('COMPARE ADDRESS:', userAddress, ipfsDistros[0].address)
-              // document.getElementById('mint').style.display ='none'
-              // if
               await reloadIpfsDistros()
-      
-      
             }
-  
-            
-  
-   
       }
   
       // CONNECT METAMASK

@@ -381,12 +381,35 @@
 <!-----------------------------
   SCRIPTS 
 --------------------------->
-<script type="module">
-  import { EAS, Offchain, SchemaEncoder, SchemaRegistry } from "@ethereum-attestation-service/eas-sdk";
-  window.EAS = EAS
-  window.Offchain = Offchain
-  window.SchemaEncoder = SchemaEncoder
-</script>
+  <script type="module" async >
+    // import { EAS, Offchain, SchemaEncoder, SchemaRegistry } from "@ethereum-attestation-service/eas-sdk";
+    // window.eas = EAS
+    // window.Offchain = Offchain
+    // window.SchemaEncoder = SchemaEncoder;
+    
+    
+    import { EAS } from "@ethereum-attestation-service/eas-sdk";
+    window.EAS = EAS
+
+//     const provider = new ethers.providers.JsonRpcProvider("https://goerli.optimism.io");
+//     console.log('provider:',provider);
+    
+//     const EASContractAddress = "0x4200000000000000000000000000000000000021"; // Optimism Goerli v1.0.1
+// const eas = new EAS(EASContractAddress);
+
+// eas.connect(provider);
+//     window.eas = eas;
+//     console.log('eas:',eas);
+
+
+
+// const uid = "0xff08bbf3d3e6e0992fc70ab9b9370416be59e87897c3d42b20549901d2cccc3e";
+
+// const attestation = await eas.getAttestation(uid);
+
+// console.log(attestation);
+
+  </script>
 
 <!-- external -->
 <script src="js/ethers-5.2.umd.min.js" type="application/javascript"></script>
@@ -395,12 +418,15 @@
   <!-- internal -->
   <script src="js/base.js" type="application/javascript"></script>
   <script src="js/iam.js" type="application/javascript"></script>
+  <script src="js/attestations.js" type="application/javascript"></script>
   <script src="js/wallet.js" type="application/javascript"></script>
   <script src="js/dictionary.js" type="application/javascript"></script>
   <script src="js/toasts.js" type="application/javascript"></script>
   <script src="js/docs.js" type="application/javascript"></script>
-  <script src="js/attestations.js" type="application/javascript"></script>
   <script src="js/init.js" type="application/javascript"></script>
   
+
+
+
 </body>
 </html>
