@@ -2465,3 +2465,6 @@ function openModalId(id,event){
     console.log('closing modal', id,event)
       xModal.hide(event)
   }
+
+
+  

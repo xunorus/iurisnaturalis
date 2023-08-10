@@ -150,7 +150,7 @@
     uploadcourtesytranslations:"subir traducciones de cortesía de este documento",
     addanother:"Agrega otro",
     close:"Cerrar",
-    connect:"Conectarse a OPPT",
+    connect:"Conectarse",
     setpassword:"Configurar la Contraseña",
     createwallet: "CREAR LA WALLET",
     restorewallet: "RESTAURAR LA WALLET",

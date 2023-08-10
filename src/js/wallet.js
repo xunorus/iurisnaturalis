@@ -365,9 +365,9 @@ function writepassword (f){
               // UPDATE UI
               document.getElementById('main').setAttribute('style', 'display:block !important');
   
-              document.getElementById('edit').setAttribute('style', 'display:flex !important');
-              document.getElementById('soveraindocs').setAttribute('style', 'display:none !important');
-              document.getElementById('mint').setAttribute('style', 'display:none !important');
+            //   document.getElementById('edit').setAttribute('style', 'display:flex !important');
+            //   document.getElementById('soveraindocs').setAttribute('style', 'display:none !important');
+            //   document.getElementById('mint').setAttribute('style', 'display:none !important');
   
           }  else{
               
@@ -526,7 +526,7 @@ async function walletDisconnect(){
     // hide main
     document.getElementById('main').style.display = 'none';
 
-    // DELETE ADDRESS RESTORE BANNER
+    // DELETE ADDRESS RESTORE  BANNER
     usrAddr.innerHTML = 'IURIS-NATURALIS'
     // $("#usrAddr").textEffect();
   
@@ -537,9 +537,9 @@ async function walletDisconnect(){
     //   document.getElementById('createUP').style.visibility ='hidden'
 
       // SHOW SPLASHSCREEN
-      document.getElementById('mint').setAttribute('style', 'display:flex !important');
-      document.getElementById('edit').setAttribute('style', 'display:none !important');
-      document.getElementById('soveraindocs').setAttribute('style', 'display:none !important');
+    //   document.getElementById('mint').setAttribute('style', 'display:flex !important');
+    //   document.getElementById('edit').setAttribute('style', 'display:none !important');
+    //   document.getElementById('soveraindocs').setAttribute('style', 'display:none !important');
 
     
           headMessages.innerHTML=''    
