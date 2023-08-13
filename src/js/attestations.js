@@ -79,6 +79,9 @@ const bytes32Value = stringToBytes32(inputString);
 console.log(bytes32Value);
 const offchain = await eas.getOffchain();
 
+const timestamp = Math.floor(new Date().getTime() / 1000);
+console.log(timestamp);
+
 
 const schemaEncoder = new SchemaEncoder("bytes32 IAMcode,address IAMaddress");
 const encodedData = schemaEncoder.encodeData([
@@ -89,7 +92,7 @@ const encodedData = schemaEncoder.encodeData([
 const offchainAttestation = await offchain.signOffchainAttestation({
 recipient: signer.address,
 expirationTime: 0,
-time: 1671219636,
+time: timestamp,
 revocable: true,
 version: 1,
 nonce: 0,
@@ -131,7 +134,7 @@ async function attest(){
   
                           // cancelMinting.disabled = true;//DISABLE CANCEL
                           openModalId('#attestingModal')
-                          step0.innerHTML= `<h5>1- Decrypt wallet  <span id="step0Spinner" style="" class="spinner-grow spinner-grow-sm"></span> <svg id="step0Check"  style="visibility:hidden" width="18" height="16" viewBox="0 0 512 512"  xmlns:svg="http://www.w3.org/2000/svg"> <path d="M243.8 339.8C232.9 350.7 215.1 350.7 204.2 339.8L140.2 275.8C129.3 264.9 129.3 247.1 140.2 236.2C151.1 225.3 168.9 225.3 179.8 236.2L224 280.4L332.2 172.2C343.1 161.3 360.9 161.3 371.8 172.2C382.7 183.1 382.7 200.9 371.8 211.8L243.8 339.8zM512 256C512 397.4 397.4 512 256 512C114.6 512 0 397.4 0 256C0 114.6 114.6 0 256 0C397.4 0 512 114.6 512 256zM256 48C141.1 48 48 141.1 48 256C48 370.9 141.1 464 256 464C370.9 464 464 370.9 464 256C464 141.1 370.9 48 256 48z" style="fill:#00ff00"/></svg> </h5>
+                          step0.innerHTML= `<h5>1- Decrypting wallet  <span id="step0Spinner" style="" class="spinner-grow spinner-grow-sm"></span> <svg id="step0Check"  style="visibility:hidden" width="18" height="16" viewBox="0 0 512 512"  xmlns:svg="http://www.w3.org/2000/svg"> <path d="M243.8 339.8C232.9 350.7 215.1 350.7 204.2 339.8L140.2 275.8C129.3 264.9 129.3 247.1 140.2 236.2C151.1 225.3 168.9 225.3 179.8 236.2L224 280.4L332.2 172.2C343.1 161.3 360.9 161.3 371.8 172.2C382.7 183.1 382.7 200.9 371.8 211.8L243.8 339.8zM512 256C512 397.4 397.4 512 256 512C114.6 512 0 397.4 0 256C0 114.6 114.6 0 256 0C397.4 0 512 114.6 512 256zM256 48C141.1 48 48 141.1 48 256C48 370.9 141.1 464 256 464C370.9 464 464 370.9 464 256C464 141.1 370.9 48 256 48z" style="fill:#00ff00"/></svg> </h5>
                           <div id="step0Progress"></div>`;
                           
                           let encryptedjson = localStorage.getItem('jsonWallet')
@@ -170,9 +173,6 @@ async function attest(){
                               console.log('ATTEST IAM code is controlled by IAM address');
 
                               const EASContractAddress = "0xC2679fBD37d54388Ce493F1DB75320D236e1815e"; // Sepolia Testnet v0.26
-                              // const provider = new ethers.providers.JsonRpcProvider("https://endpoints.omniatech.io/v1/eth/sepolia/public");
-                              // const privateKey = "0xeddb270797ba825b0e911b0fd9d203e50d753f61691d1172c9fd9bd9c10f520d";
-                              // const signer = new ethers.Wallet(privateKey, provider);
                               
                                     let eas= new EAS(EASContractAddress);
                                     console.log('provider: ', provider);
@@ -180,35 +180,27 @@ async function attest(){
                               
                               console.log('offchainIAM')
                               let inputString = localStorage.getItem('iamcode')
-                              // const inputString = "IAM-chm-04181980";
                               const bytes32Value = stringToBytes32(inputString);
                               console.log(bytes32Value);
                               const offchain = await eas.getOffchain();
                               
-                              
+                              // get timestamp
+                              const timestamp = Math.floor(new Date().getTime() / 1000);
+                              console.log(timestamp);
+
                               const schemaEncoder = new SchemaEncoder("bytes32 IAMcode,address IAMaddress");
                               const encodedData = schemaEncoder.encodeData([
                                 { name: "IAMcode", value: bytes32Value, type: "bytes32" },
                                 { name: "IAMaddress", value: address, type: "address" },
                               ]);
                               
-                              // const offchainAttestation = await offchain.signOffchainAttestation({
-                              // recipient: signer.address,
-                              // expirationTime: 0,
-                              // time: 1671219636,
-                              // revocable: true,
-                              // version: 1,
-                              // nonce: 0,
-                              // schema: "0x555f3e615bdcbc8af0b83820b451e4bde6ca57cb74b6307ae16ec83d29486b1e",
-                              // refUID: '0x0000000000000000000000000000000000000000000000000000000000000000',
-                              // data: encodedData,
-                              // }, signer);
+                              
 
                               try { 
                                 offchainAttestation = await offchain.signOffchainAttestation({
                                   recipient: signer.address,
                                   expirationTime: 0,
-                                  time: 1671219636,
+                                  time: timestamp,
                                   revocable: true,
                                   version: 1,
                                   nonce: 0,
@@ -225,6 +217,7 @@ async function attest(){
                               const fullOffchainAttestLink = 'https://sepolia.easscan.org'+url;
                               console.log('FULL URL:',fullOffchainAttestLink )
 
+                              // END... -------------------------------------------------------------
                               // SUCCESS
                               // 0. close modal id
                               closeModalId('#attestingModal')

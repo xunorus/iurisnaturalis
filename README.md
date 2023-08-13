@@ -11,6 +11,7 @@ The goal of Iuris Naturalis is to create a resilient decentraliced platform for 
 
 The DAP usses  EAS  attestations combined with IPFS,  simple onchain smart contract based on the greek klerotherion concept used to resolve honor disputes.
 
+
 # github
 https://github.com/xunorus/iurisnaturalis
 

@@ -74,6 +74,8 @@
     } else {
       console.log('NO WALLET CHOICE o available IN Initv3')
       document.getElementById('loader').style.display='none'
+        document.getElementById('splash').setAttribute('style', 'display:flex !important');
+
     // reloadTranslations()
     //   document.getElementById('splash').setAttribute('style', 'display:flex !important');
   

@@ -1122,3 +1122,122 @@
     margin: 0 8em 0 8em;
     margin: auto;
   }
+
+
+  /* ---------------------------- */
+  
+  
+  .flower-of-life {
+    margin: auto;
+    font-size: 50px;
+    width: calc(3 * 2em);
+    height: calc(3 * 2em);
+    position: relative;
+    overflow: hidden;
+    border-radius: 50%;
+    border: 1px solid #fff;
+    box-sizing: border-box;
+  }
+  .flower-of-life .petal {
+    width: 2em;
+    height: 2em;
+    position: absolute;
+    margin: auto;
+    box-sizing: border-box;
+    top: -2em;
+    left: -2em;
+    border-radius: 50%;
+    border: 1px solid #fff;
+    /* background: rgba(#fff, .3); */
+    /*&:after {
+      content: '';
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      background: #f00;
+      top: 0; left: 0; bottom: 0; right: 0;
+      margin: auto;
+    }*/
+    /*    
+        &:nth-child(20) { top: 0em; left: .27em }
+        &:nth-child(21) { top: 4em; left: .27em }
+  
+        &:nth-child(22) { top: 1.5em; left: -.6em }
+        &:nth-child(23) { top: 3.5em; left: -.6em }*/
+  }
+  .flower-of-life .petal:nth-child(1) {
+    top: 0em;
+    left: 2em;
+  }
+  .flower-of-life .petal:nth-child(2) {
+    top: 1em;
+    left: 2em;
+  }
+  .flower-of-life .petal:nth-child(3) {
+    top: 2em;
+    left: 2em;
+  }
+  .flower-of-life .petal:nth-child(4) {
+    top: 3em;
+    left: 2em;
+  }
+  .flower-of-life .petal:nth-child(5) {
+    top: 4em;
+    left: 2em;
+  }
+  .flower-of-life .petal:nth-child(6) {
+    top: 0.5em;
+    left: 1.15em;
+  }
+  .flower-of-life .petal:nth-child(7) {
+    top: 1.5em;
+    left: 1.15em;
+  }
+  .flower-of-life .petal:nth-child(8) {
+    top: 2.5em;
+    left: 1.15em;
+  }
+  .flower-of-life .petal:nth-child(9) {
+    top: 3.5em;
+    left: 1.15em;
+  }
+  .flower-of-life .petal:nth-child(10) {
+    top: 0.5em;
+    left: 2.88em;
+  }
+  .flower-of-life .petal:nth-child(11) {
+    top: 1.5em;
+    left: 2.88em;
+  }
+  .flower-of-life .petal:nth-child(12) {
+    top: 2.5em;
+    left: 2.88em;
+  }
+  .flower-of-life .petal:nth-child(13) {
+    top: 3.5em;
+    left: 2.88em;
+  }
+  .flower-of-life .petal:nth-child(14) {
+    top: 1em;
+    left: 0.26em;
+  }
+  .flower-of-life .petal:nth-child(15) {
+    top: 2em;
+    left: 0.26em;
+  }
+  .flower-of-life .petal:nth-child(16) {
+    top: 3em;
+    left: 0.26em;
+  }
+  .flower-of-life .petal:nth-child(17) {
+    top: 1em;
+    left: 3.75em;
+  }
+  .flower-of-life .petal:nth-child(18) {
+    top: 2em;
+    left: 3.75em;
+  }
+  .flower-of-life .petal:nth-child(19) {
+    top: 3em;
+    left: 3.75em;
+  }

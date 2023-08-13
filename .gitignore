@@ -7,3 +7,7 @@ src/trash/
 src/offchain.html
 src/test/
 .DS_Store
+public/
+.firebase/
+.firebaserc
+firebase.json

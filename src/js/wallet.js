@@ -532,7 +532,7 @@ async function restoreWallet(){
 
         const decryptProgress = (percent) => {
         console.log(`Decrypting... ${percent*100}%`);
-        step0Progress.innerHTML =`<div ;class="progress">Decrypting ...
+        step0Progress.innerHTML =`<div ;class="progress">
         <div class="progress-bar" role="progressbar" style="width:  ${percent*100}%;" aria-valuenow="${percent*100}" aria-valuemin="0" aria-valuemax="100">${ Math.round(percent * 100)}%</div>
       </div>`
         };

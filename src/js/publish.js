@@ -191,8 +191,14 @@
     
     
                         // PREPARE JSON FOR SIGNED WEBPAGE
-                        let jsonforwebsite =JSON.stringify(JSON2SIGN)
                         console.log('JSON2SIGN: ',JSON2SIGN)
+
+                        // USE THIS jsonforwebsite to ATTEST (nope, not here... just cid)
+                        let jsonforwebsite =JSON.stringify(JSON2SIGN)
+                        console.log('jsonforwebsite: ',jsonforwebsite)
+
+
+
                         let sigObject = {iamSignature: signature}
                         let signatureforwebsite =JSON.stringify(sigObject)
                         
@@ -201,23 +207,14 @@
                         
                         
                         //  CREATE SIGNEDIPFS WEBSITE
-                        // signedipfsWebsite (signedjson,signature,iamphoto,ipfsurl){ 
-    
                         let signedIpfsWebsite;
-                        console.log( 'signedipfsWebsite', jsonforwebsite, signatureforwebsite,iamphoto);
                         try { signedIpfsWebsite =  await signedipfsWebsite( jsonforwebsite, signatureforwebsite,iamphoto); }
                         catch (error) { 
                           console.log(error.message, 'ERROR EN  signedipfsWebsite()'); 
                           closeModalId('#walletProgress');
-                          // closeModalId('#walletProgress');
                           reloadTranslations();
                           document.getElementById('createIPFSDelivery').disabled = false;
-    
-    
                           return }
-    
-                        console.log('signedIpfsWebsite:',signedIpfsWebsite)
-    
     
                         // PREPARE FILE
                         let name = 'ipfspage.html';// funciona...
@@ -232,18 +229,91 @@
     
                         let ipfsLink = `${ipfsGateway}${CID}`
                         console.log('IPFS STORED FILE AT :',ipfsLink)
-                        console.log('cid:' ,CID);
                         localStorage.setItem('lastIpfsDistroCID', ipfsLink);
-    
-    
+                        
+                        // USE THIS CID to ATTEST!!!
+                        console.log('cid:' ,CID);
+
+                        // DO SOMETHING HERE... -------------------------------------------------------------
+
+                        //TIMESTAMP IN UNIXTIME
+                        // let timestamp = Date.now();
+                        // unixTimestampInSeconds Unix timestamp in seconds
+                        const timestamp = Math.floor(new Date().getTime() / 1000);
+                        console.log(timestamp);
+                        
+
+                           //   GET PROVIDER
+                        //    let provider = new ethers.providers.JsonRpcProvider(`${optionsList[0].API}`);
+                        //    console.log('JsonRpcProvider', optionsList[0].API);
+                           
+                           //   GET NETWORK
+                        //  try{ network = await provider.getNetwork(); }
+                        //  catch (error) { console.log(error.message); 
+                        //    fixedToast.fire( 'Error',error.message, "error"); 
+                        //    mode.innerHTML = 'OFFCHAIN';
+                        //    mode.style.border = '1px solid red';
+                        //    mode.style.color = 'red';
+                        //  }
+
+                         // GET SIGNER
+                    //      const signer = localWallet.connect(provider)
+                         const address = await signer.getAddress();
+                            console.log('ADDRESS:', address)
+                    //       balance = await signer.getBalance();
+                       
+
+                        const EASContractAddress = "0xC2679fBD37d54388Ce493F1DB75320D236e1815e"; // Sepolia Testnet v0.26
+                              
+                        let eas= new EAS(EASContractAddress);
+                        console.log('provider: ', provider);
+                        eas.connect(provider);
+                        
+                        console.log('offchainIAM')
+                        let inputString = localStorage.getItem('iamcode')
+                        const bytes32Value = stringToBytes32(inputString);
+                        console.log(bytes32Value);
+                        const offchain = await eas.getOffchain();
+                        
+
+                        const schemaEncoder = new SchemaEncoder("bytes32 IAMcode,address IAMaddress,string CID");
+                        const encodedData = schemaEncoder.encodeData([
+                            { name: "IAMcode", value: bytes32Value, type: "bytes32" },
+                            { name: "IAMaddress", value: address, type: "address" },
+                            { name: "CID", value: CID, type: "string" },
+                        ]);
+
+                        const offchainAttestation = await offchain.signOffchainAttestation({
+                        recipient: signer.address,
+                        expirationTime: 0,
+                        time: timestamp,
+                        revocable: true,
+                        version: 1,
+                        nonce: 0,
+                        schema: "0xa1c7d32280a93b1d57e811407f74c52b8991ccbe514a2309962831163ad36682",
+                        refUID: '0x0000000000000000000000000000000000000000000000000000000000000000',
+                        data: encodedData,
+                        }, signer);
+                        console.log('offchainAttestation:' ,offchainAttestation)
+                        o = offchainAttestation;
+                        y= JSON.stringify(o)
+                        let offchainobject  = {sig: offchainAttestation, signer: signer.address}
+
+                        const url = createOffchainURL(offchainobject);
+                        console.log('URL:','https://sepolia.easscan.org'+url )
+                        const fullOffchainAttestLink = 'https://sepolia.easscan.org'+url;
+                              localStorage.setItem('fullAttestation', fullOffchainAttestLink)
+
+                        
+                        // END... -------------------------------------------------------------
                         // SAVE SIGNED JSON INTOLOCALSTORAGE
                         localStorage.setItem('signedJson',jsonforwebsite )
     
                         //DELETE OLD LOCALSTORAGE
                         localStorage.removeItem('IPFSdistributions')
     
+                        
                         //SAVE TO LOCALSTORAGE
-                        let timestamp = Date.now();
                         let ipfsDistro = { cid: CID, timestamp: timestamp, signature: signature, address:userAddress, signedJSON: jsonforwebsite }// agregar signedJSON
                         console.log('ipfsDistro: ',ipfsDistro)
                         SaveDataToLocalStorage(ipfsDistro);//save to IPFSdistributions
@@ -251,8 +321,9 @@
                         
                         setTimeout(() => {
                           // UPDATE UI
-                          init();
+                          // init();
                           window.scrollTo({ top: 0, behavior: 'smooth' });
+                          Toastcenter.fire( '','Done!', "success");
                         }, 400);
     
     
@@ -260,7 +331,6 @@
       
                         // SUCCESS MESSAGE
                         closeModalId('#walletProgress')
-                        Toastcenter.fire( '','VOTRE ENVOI EST TÉLÉCHARGÉ, SIGNÉ, ET PRÊT À ENVOYER!', "success");
     
     
     
@@ -330,7 +400,6 @@
       <meta http-equiv="Content-Security-Policy" content="
       img-src 'self' data: ${ipfsurl} ;
       style-src-elem 'self'  'unsafe-inline' ${ipfsurl} ${fontsurl};
-
       ">
 
 
@@ -371,7 +440,75 @@
     let iamcode = ipfsdist.iamCode;
     let cid = ipfsdist.cid;
     console.log('CID: ', ipfsdist)
-    
+    // ----------------
+    // CALCULATE TIME PASSED
+    // Example Unix timestamp in seconds
+      // const unixTimestampInSeconds = 1678771200;
+      // const unixTimestampInSeconds = ipfsDistros[0].timestamp;
+
+      // Convert the Unix timestamp to milliseconds
+      // const unixTimestampInMillis = unixTimestampInSeconds * 1000;
+
+      // // Get the current time in milliseconds
+      // const currentTimeInMillis = new Date().getTime();
+
+      // // Calculate the time difference in milliseconds
+      // const timeDifferenceInMillis = currentTimeInMillis - unixTimestampInMillis;
+
+      // // Convert the time difference to days, hours, minutes, and seconds
+      // const daysPassed = Math.floor(timeDifferenceInMillis / (1000 * 60 * 60 * 24));
+      // const hoursPassed = Math.floor((timeDifferenceInMillis % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+      // const minutesPassed = Math.floor((timeDifferenceInMillis % (1000 * 60 * 60)) / (1000 * 60));
+      // const secondsPassed = Math.floor((timeDifferenceInMillis % (1000 * 60)) / 1000);
+
+      // console.log(`${daysPassed} days, ${hoursPassed} hours, ${minutesPassed} minutes, ${secondsPassed} seconds have passed since the Unix timestamp.`);
+// Function to format time components
+        
+        function formatTimeComponent(value, unit) {
+          return value === 1 ? `${value} ${unit}` : `${value} ${unit}s`;
+        }
+
+        // Example Unix timestamp in seconds
+        // const unixTimestampInSeconds = 1678771200;
+        const unixTimestampInSeconds = ipfsDistros[0].timestamp;
+
+        // Convert the Unix timestamp to milliseconds
+        const unixTimestampInMillis = unixTimestampInSeconds * 1000;
+
+        // Get the current time in milliseconds
+        const currentTimeInMillis = new Date().getTime();
+
+        // Calculate the time difference in milliseconds
+        const timeDifferenceInMillis = currentTimeInMillis - unixTimestampInMillis;
+
+        // Convert the time difference to days, hours, minutes, and seconds
+        const daysPassed = Math.floor(timeDifferenceInMillis / (1000 * 60 * 60 * 24));
+        const hoursPassed = Math.floor((timeDifferenceInMillis % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+        const minutesPassed = Math.floor((timeDifferenceInMillis % (1000 * 60 * 60)) / (1000 * 60));
+        const secondsPassed = Math.floor((timeDifferenceInMillis % (1000 * 60)) / 1000);
+
+        // Build the output string
+        let output = "Updated ";
+        if (daysPassed > 0) {
+          output += formatTimeComponent(daysPassed, "day");
+        }
+        if (hoursPassed > 0) {
+          output += formatTimeComponent(hoursPassed, "hour");
+        }
+        if (minutesPassed > 0) {
+          output += formatTimeComponent(minutesPassed, "minute");
+        }
+        if (daysPassed === 0 && hoursPassed === 0 && minutesPassed === 0) {
+          output += formatTimeComponent(secondsPassed, "second");
+        }
+
+        console.log(output + " ago");
+
+
+
+
+
+    // -------------
     let lIDC = localStorage.getItem('lastIpfsDistroCID');
 
     if(!lIDC){
@@ -393,6 +530,7 @@
 
     // get offchain attestation
         let offchainAttestation = localStorage.getItem('iamAttestation')
+        let fulloffchainAttestation = localStorage.getItem('fullAttestation')
 
 
 console.log('CLEARING #MAIN')
@@ -419,7 +557,7 @@ document.getElementById('soveraindocs').setAttribute('style', 'display:inline!im
     <div class="card-body">
     <h5 class="card-title" data-translate="actions">ACTIONS </h5>
     <p class="card-text">IAM attestation: <code>   <a href="${offchainAttestation}" target="_blank" rel="noopener noreferrer">offchain attestation</a>    </code></p>
-    <p class="card-text">Full Attestation: <code><a href="${offchainAttestation}" target="_blank" rel="noopener noreferrer">offchain attestation</a></code></p>
+    <p class="card-text">Full Attestation: <code><a href="${fulloffchainAttestation}" target="_blank" rel="noopener noreferrer">offchain attestation</a></code></p>
     <p class="card-text published">Published: <code>   <a href="${lIDC}" target="_blank" rel="noopener noreferrer">IPFS link</a>    </code> </p>
     <p class="card-text">Documents:<code> ${docs.length}</code></p>
     
@@ -481,7 +619,8 @@ document.getElementById('soveraindocs').setAttribute('style', 'display:inline!im
     
     <div class="card text-center">
     <div class="card-footer text-muted">
-      Updated 2 days ago
+      ${output + " ago"}
+      <a href="ethereum:0x1c87FDF8844cbEe5DC7f0F1681C44bF3c99A0e3d?value=50000000000000000&gas=21000&gasPrice=5000000000">Donate ETH to 0x1c87FDF8844cbEe5DC7f0F1681C44bF3c99A0e3d</a>
     </div>
   </div>
 `
@@ -544,7 +683,7 @@ console.log('qr code ADDED')
 
      setTimeout(() => {
       Toastcenter.fire( '',`ENVOI IPFS deleted!`, "info");
-      initv3();
+      init();
     }, 500);
 }
 
