@@ -351,8 +351,9 @@ function writepassword (f){
       
             </div>`
   
+            document.getElementById('soveraindocs').setAttribute('style', 'display:block !important');
               document.getElementById('iam').setAttribute('style', 'display:none !important');
-              document.getElementById('soveraindocs').setAttribute('style', 'display:block !important');
+              document.getElementById('splash').setAttribute('style', 'display:none !important');
   
               // LOAD TABLE WITH SOVERAIN DOCS
             // addAttestIAMcode()
@@ -379,6 +380,8 @@ function writepassword (f){
         
               console.log('YES THERE IS A SIGNED JSON')
               console.log('COMPARE ADDRESS:', userAddress, ipfsDistros[0].address)
+              document.getElementById('splash').setAttribute('style', 'display:none !important');
+              
               await reloadIpfsDistros()
             }
       }
@@ -468,6 +471,8 @@ async function walletDisconnect(){
     // hide main
     document.getElementById('splash').setAttribute('style', 'display:flex !important');
     document.getElementById('iam').setAttribute('style', 'display:none !important');
+    document.getElementById('soveraindocspremint').setAttribute('style', 'display:none !important');
+    document.getElementById('soveraindocs').setAttribute('style', 'display:none !important');
     document.getElementById('attesttionUI').setAttribute('style', 'display:none !important');
 
     // DELETE ADDRESS RESTORE  BANNER
