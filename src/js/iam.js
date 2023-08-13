@@ -1,4 +1,4 @@
-async function createIAMCODE(){
+async function createIAMCODE_old(){
     console.log(' called createIAMCODE!')
     
     let checkFIELDS =  checkIamFields()
@@ -46,16 +46,8 @@ async function createIAMCODE(){
     
     // SUCCESS
     document.getElementById('iam').style.display = 'none';
-    Toastcenter.fire( 'Success','IAM code created!', "success");
+    Toastcenter.fire( 'Success','IAM code created and Attested!', "success");
 
-    // document.getElementById('soveraindocs').setAttribute('style', 'display:block !important');
-    // document.getElementById('edit').setAttribute('style', 'display:none !important');
-    // document.getElementById('mint').setAttribute('style', 'display:none !important');
-
-    // LOAD TABLE WITH SOVERAIN DOCS
-    // addProtomintDOCSTEMPLATE()
-    // loadDocs()
-    // reloadTranslations()
     
 }
 
@@ -407,6 +399,7 @@ function loadIAMinfo(){
         console.log('EDIT IAM CODE')
         document.getElementById('iam').setAttribute('style', 'display:flex !important');
         document.getElementById('splash').setAttribute('style', 'display:none !important');
+        document.getElementById('attesttionUI').setAttribute('style', 'display:none !important');
         document.getElementById('soveraindocs').setAttribute('style', 'display:none !important');
     
         headMessages.innerHTML = ''
@@ -416,6 +409,8 @@ function loadIAMinfo(){
     
 
       function  checkIfIAMCode(){
+        console.log('CHECKING IF checkIfIAMCode')
+
         let loadIAM = localStorage.getItem('iamcode')
         if(!loadIAM){
             
@@ -430,7 +425,72 @@ function loadIAMinfo(){
         } else{
             
             console.log('THERE IS IAM CODE')
-            createIAMCODE()
+            // createIAMCODE()
         // document.getElementById('edit').setAttribute('style', 'display:none !important');
       }
     }
+
+    function setAttestedIamcode(offchainAttestation){
+      let loadIAMIMG =  localStorage.getItem('image')
+      let loadIAM =  localStorage.getItem('iamcode')
+
+      headMessages.innerHTML = `<div class="alert alert-primary alert-dismissible fade show"> 
+      <img src="${JSON.parse(loadIAMIMG)}" alt="Rounded circle Image" class="rounded rounded-circle img-thumbnail" width='40px'>
+      <strong>${loadIAM}</strong> 
+
+      <a href="${offchainAttestation}" target="_blank" rel="noopener noreferrer">offchain attestation</a>
+
+      <button type="button" class="btn-edit" onclick="event.stopPropagation();editIAMcode()" >
+      </button> 
+
+      </div>`
+    }
+
+
+
+
+
+    async function createIAMCODE(){
+      console.log(' called createIAMCODE!')
+      
+      let checkFIELDS =  checkIamFields()
+      console.log(' called checkIamFields to =>iamcode REMOVED!')
+  
+      console.log(checkFIELDS)
+  
+      if(checkFIELDS ==false){ // if FALSE
+          console.log('(FALSE) FILL ALL FIELDS FIRST TO CREATE IAM CODE')
+          return
+      }
+  
+      let name =localStorage.getItem("name") 
+      let surname = localStorage.getItem("surname") 
+      let dateOfBirth = localStorage.getItem("dateofbirth") 
+  
+      // human readable nom prenom
+      let nom = name.toLowerCase();
+      let prenom = surname.toLowerCase();
+      let n = nom.match(/(?:\s|^)(\S)/g).join('').replace(/ /g,'').toLowerCase();//FIXB BUG1 ACENTOS
+      var p = prenom.match(/(?:\s|^)(\S)/g).join('').replace(/ /g,'').toLowerCase();//FIXB BUG1 ACENTOS
+  
+  
+      let iamCode = 'IAM-'+[n,p,'-',dateOfBirth].join("").toLocaleLowerCase()
+  
+      localStorage.setItem('iamcode', iamCode);
+  
+      let loadIAM =  localStorage.getItem('iamcode')
+      let loadIAMIMG =  localStorage.getItem('image')
+  
+      iamCode.innerHTML=  `IAM-<span id="iamCodeNom">${n}</span><span id="iamCodePrenom">${n}</span>-<span id="iamCodemmjjaaaa">${dateOfBirth}</span>
+      <div id="editButtons">
+      </div>`;
+  
+
+      await attest()
+      
+  
+      
+  }
+  
+  
+  

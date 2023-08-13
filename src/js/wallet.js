@@ -307,7 +307,7 @@ function writepassword (f){
               console.log('THERE IS NO IAMCODE')
               
               // UPDATE UI
-              document.getElementById('main').setAttribute('style', 'display:block !important');
+              // document.getElementById('main').setAttribute('style', 'display:block !important');
               document.getElementById('loader').style.display='none'
               document.getElementById('splash').setAttribute('style', 'display:flex !important');
         
@@ -329,20 +329,32 @@ function writepassword (f){
   
               let loadIAMIMG =  localStorage.getItem('image')
              iamCode.innerHTML= `IAM-<span id="iamCodeNom">n</span><span id="iamCodePrenom">p</span>-<span id="iamCodemmjjaaaa">mmjjaaaa</span><div id="editButtons">  </div>`;
-              headMessages.innerHTML = `<div class="alert alert-primary alert-dismissible fade show"> 
-              <img src="${JSON.parse(loadIAMIMG)}" alt="Rounded circle Image" class="rounded rounded-circle img-thumbnail" width='40px'>
-              <strong>${loadIAM}</strong> 
-              <button type="button" class="btn-edit" onclick="event.stopPropagation();editIAMcode()" >
-              </button> 
-              </div>`
+             
+               // 1. save attestation link in localstorage
+               let offchainAttestation = localStorage.getItem('iamAttestation')
+
+            //  headMessages.innerHTML = `<div class="alert alert-primary alert-dismissible fade show"> 
+            //   <img src="${JSON.parse(loadIAMIMG)}" alt="Rounded circle Image" class="rounded rounded-circle img-thumbnail" width='40px'>
+            //   <strong>${loadIAM}</strong> 
+            //   <button type="button" class="btn-edit" onclick="event.stopPropagation();editIAMcode()" >
+            //   </button> 
+            //   </div>`
+            headMessages.innerHTML = `<div class="alert alert-primary alert-dismissible fade show"> 
+            <img src="${JSON.parse(loadIAMIMG)}" alt="Rounded circle Image" class="rounded rounded-circle img-thumbnail" width='40px'>
+            <strong>${loadIAM}</strong> 
+            <a href="${offchainAttestation}" target="_blank" rel="noopener noreferrer">offchain attestation</a>
+            <button type="button" class="btn-edit" onclick="event.stopPropagation();editIAMcode()" >
+            </button> 
+      
+            </div>`
   
               document.getElementById('iam').setAttribute('style', 'display:none !important');
               document.getElementById('soveraindocs').setAttribute('style', 'display:block !important');
   
               // LOAD TABLE WITH SOVERAIN DOCS
-            addAttestIAMcode()
-            // addEditDocumentsUI()
-              // loadDocs()
+            // addAttestIAMcode()
+            addEditDocumentsUI()
+              loadDocs()
               reloadTranslations()
               document.getElementById('loader').style.display='none'
 
@@ -426,7 +438,7 @@ function writepassword (f){
               console.log('chainId:', chainId)
 
 
-            addAttestIAMcode()
+            // addAttestIAMcode()
 
               reloadTranslations()
               document.getElementById('loader').style.display='none'
