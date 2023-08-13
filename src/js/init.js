@@ -10,7 +10,7 @@
   let init = async () => {
     console.log('initv3 ')
 
-
+    reloadTranslations()
 
     //  CHECK WEB3/METAMASK CAPABLE? ********************************************************
     if (typeof window.ethereum !== 'undefined') {
