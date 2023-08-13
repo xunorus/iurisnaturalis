@@ -183,6 +183,9 @@ function writepassword (f){
         //   GET NETWORK
        let provider = new ethers.providers.JsonRpcProvider(`${optionsList[0].API}`);
        console.log('JsonRpcProvider', optionsList[0].API);
+
+      //  SET NETWORK NAME IN UI
+      mode.innerHTML=`${optionsList[0].TOKEN_NAME}`
        
       try{ network = await provider.getNetwork(); }
       catch (error) { console.log(error.message); 

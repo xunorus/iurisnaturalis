@@ -50,21 +50,19 @@
         }
       
       
-       
         // DISPLAY LOADER in button
         document.getElementById('createIPFSDelivery').innerHTML = ` <span class="spinner-grow spinner-grow-sm"></span> `;
         document.getElementById('createIPFSDelivery').disabled = true;
         
-      
         //GET USER ADDRESS
-        // let userAddress = user;
-    
     
           // CREATE JSON OBJECT WITH DATA
             let iamCode2Sign = localStorage.getItem('iamcode')
             let iamPhoto2Sign = ' '
             let documents = JSON.parse(localStorage.getItem('documents')) || [];
-            JSON2SIGN= {iamDocuments: documents,iamCode: iamCode2Sign,iamPhoto: iamPhoto2Sign,iamAddress: userAddress,iamDocuments: documents};
+            let attestationLink= localStorage.getItem('iamAttestation');
+            JSON2SIGN= {iamDocuments: documents,iamCode: iamCode2Sign,iamPhoto: iamPhoto2Sign,iamAddress: userAddress,iamDocuments: documents, iamAttestationLink: attestationLink};
+            // JSON2SIGN= {iamDocuments: documents,iamCode: iamCode2Sign,iamPhoto: iamPhoto2Sign,iamAddress: userAddress,iamDocuments: documents};
       
       
             // HASH JSON
@@ -337,14 +335,15 @@
 
 
       <meta charset="utf-8"><meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"><link rel="icon" href="${ipfsGatewayCID}favicon.55e17813.ico" type="image/x-icon"><title></title><link rel="stylesheet" href="${ipfsGatewayCID}jsonVerifyCID.cf7b0304.css"></head><body> <nav class="bg-primary navbar navbar-expand-sm"> <div class="container-fluid justify-content-center"> <a class="navbar-brand" href="#"> <img src="https://bafkreihlte3mt73shm23deyp4toqwa53qt635grfpf7bsvyv2rmynzx2qu.ipfs.w3s.link/" alt="Avatar Logo" style="width:40px" class="rounded-pill"> </a> </div> </nav> <div type="application/json" id="signed">${signedjson}</div> <div type="application/json" id="signature">${signature}</div> 
-      <div id="content" class="container" style="display:none"> <div id="head"> <div id="iamInfo"> <h1 id="iamCode"></h1> <h3 id="iamTokenId"></h3> </div>
-      <img id="iamTokenImg" src=${iamphoto}></div> 
+      <div id="content" class="container" style="display:none"> <div id="head"> <div id="iamInfo"> <h1 id="iamCode"></h1> 
+      <h3 id="iamTokenId" style="font-size: 1.4rem;"> <code><a id="attestationLink" href="" target="_blank" rel="noopener noreferrer"> attestation</a>    </code></h3> </div> <img id="iamTokenImg" src=${iamphoto}></div> 
       <table class="table" id="myTable" data-card-width="837"> <thead> <tr> <th data-card-title="">Title</th> <th data-card-action-links="">CID</th> <th data-card-footer="">Actions</th> </tr> </thead> <tbody id="tbody"> </tbody> </table> </div> <ol id="footer" class="list-group list-group-numbered container" style="display:none"> <li class="list-group-item">ADDRESS: <br> <p id="iamAddress" style="word-wrap:break-word"></p> <svg id="addrTrue"  style="display:none" width="18" height="16" viewBox="0 0 512 512"  xmlns:svg="http://www.w3.org/2000/svg">   <path d="M470.6 105.4c12.5 12.5 12.5 32.8 0 45.3l-256 256c-12.5 12.5-32.8 12.5-45.3 0l-128-128c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0L192 338.7 425.4 105.4c12.5-12.5 32.8-12.5 45.3 0z" id="addressIsTrue" style="fill:#00ff00" /> </svg><svg id="addrFalse"  style="display:none"  width="18" height="16" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><path d="M310.6 150.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L160 210.7 54.6 105.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L114.7 256 9.4 361.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0L160 301.3 265.4 406.6c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L205.3 256 310.6 150.6z" id="addressIsFalse" style="fill:#ff0000"/></svg>   </li> <li class="list-group-item"> HASH:<p id="iamHash" style="word-wrap:break-word"> </p></li> <li class="list-group-item">SIGNATURE <p id="iamSignature" style="word-wrap:break-word"></p></li> </ol>
       <script id="INIT">signed.style.display="none",signature.style.display="none",content.style.display="block",footer.style.display="block",ipfsGateway="${ipfsGateway}";</script> 
       <script src="${ipfsGatewayCID}jsonVerifyCID.336889fc.js"></script>
       <script src="${ipfsGatewayCID}jsonVerifyCID.20251b0b.js"> </script>  
       <script src="${ipfsGatewayCID}jsonVerifyCID.20251b0b.js"> </script>  
       <script src="https://bafybeiajps2emmwlgbfd2c3getgjmrczlwpy6k7jsmseiq246uxnyurouq.ipfs.w3s.link/script.min.js"></script> 
+      <script>attestationLink.href = signedJson.iamAttestationLink</script> 
       <script src="${ipfsGatewayCID}jsonVerifyCID.98ee8ceb.js"></script> 
       <script src="${ipfsGatewayCID}jsonVerifyCID.73cbde04.js"></script> 
       </body></html>`;
@@ -420,10 +419,9 @@ document.getElementById('soveraindocs').setAttribute('style', 'display:inline!im
     <div class="card-body">
     <h5 class="card-title" data-translate="actions">ACTIONS </h5>
     <p class="card-text">IAM attestation: <code>   <a href="${offchainAttestation}" target="_blank" rel="noopener noreferrer">offchain attestation</a>    </code></p>
-    <p class="card-text">PoP: <code>-</code></p>
+    <p class="card-text">Full Attestation: <code><a href="${offchainAttestation}" target="_blank" rel="noopener noreferrer">offchain attestation</a></code></p>
     <p class="card-text published">Published: <code>   <a href="${lIDC}" target="_blank" rel="noopener noreferrer">IPFS link</a>    </code> </p>
     <p class="card-text">Documents:<code> ${docs.length}</code></p>
-    <p class="card-text">Signed: <code> -</code></p>
     
     <div class="card flex-row mb-4">
     <button class="btn btn-secondary  " id=""  onclick="event.stopPropagation();deleteIpfsDistro((this.parentElement))"><i class="fas fa-trash" aria-hidden="true"></i> </button>
@@ -445,7 +443,7 @@ document.getElementById('soveraindocs').setAttribute('style', 'display:inline!im
           </div>
           <br>
 
-    <a href="#" class="btn btn-primary" onclick="event.stopPropagation();mintUPT()">ATTEST ONCHAIN</a>
+    <a href="#" style="display:none" class="btn btn-primary" onclick="event.stopPropagation();mintUPT()">ATTEST ONCHAIN</a>
 
 
         </div>
@@ -477,7 +475,8 @@ document.getElementById('soveraindocs').setAttribute('style', 'display:inline!im
           <svg id="addrTrue"  style="display:none" width="18" height="16" viewBox="0 0 512 512"  xmlns:svg="http://www.w3.org/2000/svg">   <path d="M470.6 105.4c12.5 12.5 12.5 32.8 0 45.3l-256 256c-12.5 12.5-32.8 12.5-45.3 0l-128-128c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0L192 338.7 425.4 105.4c12.5-12.5 32.8-12.5 45.3 0z" id="addressIsTrue" style="fill:#00ff00" /> </svg>
           <svg id="addrFalse"  style="display:none"  width="18" height="16" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><path d="M310.6 150.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L160 210.7 54.6 105.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L114.7 256 9.4 361.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0L160 301.3 265.4 406.6c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L205.3 256 310.6 150.6z" id="addressIsFalse" style="fill:#ff0000"/></svg>   
     </li> 
-    <li class="list-group-item"> HASH:<p id="iamHash" style="word-wrap:break-word"> </p></li> <li class="list-group-item">SIGNATURE <p id="iamSignature" style="word-wrap:break-word"></p></li> 
+    <li class="list-group-item"> HASH:<p id="iamHash" style="word-wrap:break-word"> </p></li> 
+    <li class="list-group-item">SIGNATURE <p id="iamSignature" style="word-wrap:break-word"></p></li> 
     </ol>
     
     <div class="card text-center">
