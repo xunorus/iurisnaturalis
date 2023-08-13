@@ -410,6 +410,43 @@
   </div>
 <!-- fin XUN MODAL -->
 
+		<!-- Modal addDocument -->
+		<div class="modal fade" data-bs-backdrop="static"   id="addDocument" tabindex="-1" role="dialog" aria-labelledby="uplodad2ipfs" aria-hidden="true">
+		  <div class="modal-dialog modal-dialog-centered" role="document">
+		    <div class="modal-content">
+		      <div class="modal-header">
+		        <h5 class="modal-title" data-translate="title" id="uplodad2ipfs">Upload to IPFS</h5>
+		      </div>
+		      <div class="modal-body">
+
+		        <div id="headModal"></div>
+		        <div class="input-group">
+		          <label class="input-group-btn">
+              <span class="btn btn-primary">
+		              Browse
+              <input type="file" style="display: none;" name="Upload" class="form-control" accept="application/pdf"
+		                id="input_image">
+		            </span>
+		          </label>
+
+		          <input type="text" id="fileToUpload" class="form-control " readonly>
+		        </div>
+		        <input type="text" class="form-control taskInput " id="taskInput" placeholder="Title" aria-describedby="inputGroupPrepend3" required autocomplete="off">
+            
+		        <div id="success_message" class="alert alert-success" role="alert" style="display: none;"></div>
+
+		      </div>
+		      <div class="modal-footer">
+		        <button type="button" class="btn btn-outline-secondary  " data-bs-dismiss="modal" data-translate="close">Close</button>
+		        <button type="button" class="btn btn-outline-primary  " id="submit_button" data-translate="upload">Upload</button>
+            <button style='display: none;' type="button" class="btn btn-primary" data-translate="addanother" id="addAnother_button"  >Add another</button>
+
+		      </div>
+		    </div>
+		  </div>
+		</div>
+	  <!-- fin MODAL -->
+
 <!-----------------------------
   SCRIPTS 
 --------------------------->
@@ -421,6 +458,17 @@
     window.SchemaEncoder = SchemaEncoder;
     window.SchemaRegistry = SchemaRegistry;
     window.createOffchainURL = createOffchainURL
+
+    import { Web3Storage } from 'web3.storage/dist/bundle.esm.min'
+  window.Web3Storage = Web3Storage;
+
+  function getAccessToken () {
+    return 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJkaWQ6ZXRocjoweENlMmYyOWNkN2ZFRTA0YTkyMzIyNTY5ZDI5MzZmMkFiOTk5NjI2QjIiLCJpc3MiOiJ3ZWIzLXN0b3JhZ2UiLCJpYXQiOjE2OTE4OTc2NTMzOTQsIm5hbWUiOiJpdXJpc25hdHVyYWxpcyJ9.YdrpLXpE7Hcz91Oa75zro0Rztq3fNG0aS0AbiqGUfew'
+  }
+  
+  window.makeStorageClient = function(){ 
+    return new Web3Storage({ token: getAccessToken() })
+  }
 
   </script>
 
@@ -436,6 +484,7 @@
   <script src="js/dictionary.js" type="application/javascript"></script>
   <script src="js/toasts.js" type="application/javascript"></script>
   <script src="js/docs.js" type="application/javascript"></script>
+  <script src="js/publish.js" type="application/javascript"></script>
   <script src="js/init.js" type="application/javascript"></script>
   
 

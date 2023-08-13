@@ -590,3 +590,14 @@ async function restoreWallet(){
           }, 1000);
               });
         }
+
+
+        // WALLET BALANCE
+        async function getAddressBalance(address) {
+      let provider = await new ethers.providers.JsonRpcProvider(`${optionsList[0].API}`);
+          const balance = await provider.getBalance(address);
+        const balanceInEther = ethers.utils.formatEther(balance);
+        const roundedBalance = parseFloat(balanceInEther).toFixed(4);
+        return roundedBalance;
+        }
+      

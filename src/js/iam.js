@@ -1,55 +1,55 @@
-async function createIAMCODE_old(){
-    console.log(' called createIAMCODE!')
+// async function createIAMCODE_old(){
+//     console.log(' called createIAMCODE!')
     
-    let checkFIELDS =  checkIamFields()
-    console.log(' called checkIamFields to =>iamcode REMOVED!')
+//     let checkFIELDS =  checkIamFields()
+//     console.log(' called checkIamFields to =>iamcode REMOVED!')
 
-    console.log(checkFIELDS)
+//     console.log(checkFIELDS)
 
-    if(checkFIELDS ==false){ // if FALSE
-        console.log('(FALSE) FILL ALL FIELDS FIRST TO CREATE IAM CODE')
-        return
-    }
+//     if(checkFIELDS ==false){ // if FALSE
+//         console.log('(FALSE) FILL ALL FIELDS FIRST TO CREATE IAM CODE')
+//         return
+//     }
 
-    let name =localStorage.getItem("name") 
-    let surname = localStorage.getItem("surname") 
-    let dateOfBirth = localStorage.getItem("dateofbirth") 
+//     let name =localStorage.getItem("name") 
+//     let surname = localStorage.getItem("surname") 
+//     let dateOfBirth = localStorage.getItem("dateofbirth") 
 
-    // human readable nom prenom
-    let nom = name.toLowerCase();
-    let prenom = surname.toLowerCase();
-    let n = nom.match(/(?:\s|^)(\S)/g).join('').replace(/ /g,'').toLowerCase();//FIXB BUG1 ACENTOS
-    var p = prenom.match(/(?:\s|^)(\S)/g).join('').replace(/ /g,'').toLowerCase();//FIXB BUG1 ACENTOS
-
-
-    let iamCode = 'IAM-'+[n,p,'-',dateOfBirth].join("").toLocaleLowerCase()
-
-    localStorage.setItem('iamcode', iamCode);
-
-    let loadIAM =  localStorage.getItem('iamcode')
-    let loadIAMIMG =  localStorage.getItem('image')
-
-    iamCode.innerHTML=  `IAM-<span id="iamCodeNom">${n}</span><span id="iamCodePrenom">${n}</span>-<span id="iamCodemmjjaaaa">${dateOfBirth}</span>
-    <div id="editButtons">
-    </div>`;
+//     // human readable nom prenom
+//     let nom = name.toLowerCase();
+//     let prenom = surname.toLowerCase();
+//     let n = nom.match(/(?:\s|^)(\S)/g).join('').replace(/ /g,'').toLowerCase();//FIXB BUG1 ACENTOS
+//     var p = prenom.match(/(?:\s|^)(\S)/g).join('').replace(/ /g,'').toLowerCase();//FIXB BUG1 ACENTOS
 
 
-    // iamImg.src = JSON.parse(loadIAMIMG);
-    headMessages.innerHTML = `<div class="alert alert-primary alert-dismissible fade show"> 
-    <img src="${JSON.parse(loadIAMIMG)}" alt="Rounded circle Image" class="rounded rounded-circle img-thumbnail" width='40px'>
-    <strong>${loadIAM}</strong> 
-    <button type="button" class="btn-edit" onclick="event.stopPropagation();editIAMcode()" >
-    </button> 
-    </div>`
+//     let iamCode = 'IAM-'+[n,p,'-',dateOfBirth].join("").toLocaleLowerCase()
+
+//     localStorage.setItem('iamcode', iamCode);
+
+//     let loadIAM =  localStorage.getItem('iamcode')
+//     let loadIAMIMG =  localStorage.getItem('image')
+
+//     iamCode.innerHTML=  `IAM-<span id="iamCodeNom">${n}</span><span id="iamCodePrenom">${n}</span>-<span id="iamCodemmjjaaaa">${dateOfBirth}</span>
+//     <div id="editButtons">
+//     </div>`;
+
+
+//     // iamImg.src = JSON.parse(loadIAMIMG);
+//     headMessages.innerHTML = `<div class="alert alert-primary alert-dismissible fade show"> 
+//     <img src="${JSON.parse(loadIAMIMG)}" alt="Rounded circle Image" class="rounded rounded-circle img-thumbnail" width='40px'>
+//     <strong>${loadIAM}</strong> 
+//     <button type="button" class="btn-edit" onclick="event.stopPropagation();editIAMcode()" >
+//     </button> 
+//     </div>`
     
     
     
-    // SUCCESS
-    document.getElementById('iam').style.display = 'none';
-    Toastcenter.fire( 'Success','IAM code created and Attested!', "success");
+//     // SUCCESS
+//     document.getElementById('iam').style.display = 'none';
+//     Toastcenter.fire( 'Success','IAM code created and Attested!', "success");
 
     
-}
+// }
 
 
 
@@ -57,7 +57,7 @@ async function createIAMCODE_old(){
 function createIAMcode(){
     console.log('creating IAM CODE')
     document.getElementById('splash').setAttribute('style', 'display:none ');
-    document.getElementById('iam').setAttribute('style', 'display:block');
+    document.getElementById('iam').setAttribute('style', 'display:flex');
 
 }
 function loadIAMinfo(){
@@ -401,10 +401,19 @@ function loadIAMinfo(){
         document.getElementById('splash').setAttribute('style', 'display:none !important');
         document.getElementById('attesttionUI').setAttribute('style', 'display:none !important');
         document.getElementById('soveraindocs').setAttribute('style', 'display:none !important');
-    
+        document.getElementById('soveraindocspremint').setAttribute('style', 'display:none !important');
+
         headMessages.innerHTML = ''
         localStorage.removeItem('iamcode');
             console.log('iamcode REMOVED!')
+
+        localStorage.removeItem('iamAttestation');
+        console.log('iamAttestation REVOKED!')
+
+        Toast.fire({ icon: 'error', title: 'iam code and attetation deleted!' })
+
+
+
       }
     
 

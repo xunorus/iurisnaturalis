@@ -236,7 +236,12 @@ async function attest(){
   
                                // SUCCESS
                               document.getElementById('iam').style.display = 'none';
-                              Toastcenter.fire( 'Success','IAM code created and Attested!', "success");
+                              // Toastcenter.fire( 'Success','IAM code created and Attested!', "success");
+                              Toast.fire( 'Success','IAM code created and Attested!', "success");
+
+                              addEditDocumentsUI()
+                              loadDocs()
+                              reloadTranslations()
                           
                               // --- END --------------------------------------------------------------------------
                             })
