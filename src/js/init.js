@@ -3,9 +3,9 @@
   .) INITv3
   **********************************************************************************************/
   
-  let user;
-  let provider;
-  let signer;
+  // let user;
+  // let provider;
+  // let signer;
 
   let init = async () => {
     console.log('initv3 ')

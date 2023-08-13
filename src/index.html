@@ -378,18 +378,51 @@
             </div>
           </div>
         <!-- fin MODAL -->
+
+         
+<!--  ATTESTING MODAL -->
+<div class="modal fade" id="attestingModal" tabindex="-1" aria-labelledby="attestingModalLabel" aria-hidden="true" data-tor-parent="show" data-bs-backdrop="static" data-bs-keyboard="false" >
+	<div class="modal-dialog modal-dialog-centered no-transform">
+	  <div class="modal-content" data-tor="show(p):{scale.from(75) fade.in} quad">
+		<div class="modal-header">
+		  <h5 class="modal-title" id="">Attesting Process:</h5>
+			<button type="button" class="btn-close cancelMint" aria-label="Close" onclick="event.stopPropagation();cancelMint((this))"></button>
+		</div>
+		<div class="modal-body">
+      <div id="step0" class="step">
+        </div>
+			<hr>
+			<div id="step1" class="step"></div>
+			<hr>
+			<div id="step2" class="step"></div>
+			<hr>
+			<div id="step3" class="step"></div>
+      <hr>
+			<div id="step4" class="step"></div>
+    </div>
+
+	 
+		<div class="modal-footer">
+		  <button type="button"  id="cancelMinting" class="btn mb-2 btn-danger cancelMint" onclick="event.stopPropagation();cancelMint((this))"  >Cancel</button>
+		</div>
+	  </div>
+	</div>
+  </div>
+<!-- fin XUN MODAL -->
+
 <!-----------------------------
   SCRIPTS 
 --------------------------->
   <script type="module" async >
-    // import { EAS, Offchain, SchemaEncoder, SchemaRegistry } from "@ethereum-attestation-service/eas-sdk";
+    import { EAS, Offchain, SchemaEncoder, SchemaRegistry } from "@ethereum-attestation-service/eas-sdk";
     // window.eas = EAS
-    // window.Offchain = Offchain
-    // window.SchemaEncoder = SchemaEncoder;
-    
-    
-    import { EAS } from "@ethereum-attestation-service/eas-sdk";
     window.EAS = EAS
+    window.Offchain = Offchain
+    window.SchemaEncoder = SchemaEncoder;
+    window.SchemaRegistry = SchemaRegistry;
+    
+    
+    // import { EAS } from "@ethereum-attestation-service/eas-sdk";
 
 //     const provider = new ethers.providers.JsonRpcProvider("https://goerli.optimism.io");
 //     console.log('provider:',provider);

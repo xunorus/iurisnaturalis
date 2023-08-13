@@ -4,4 +4,6 @@ node_modules/
 package.json
 yarn.lock
 src/trash/
+src/offchain.html
+src/test/
 .DS_Store
