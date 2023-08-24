@@ -18,7 +18,7 @@
     placeofbirth:'place of birth',
     address:'address',
     createIAM:'0 -Create IAM code',
-    addDocs:'1 -Add documents',
+    addDocs:'Documents',
     title: "Upload to IPFS",
     upload: "Upload",
     adddoc: "Add document",
@@ -63,7 +63,8 @@
     send: "send",
     cancel: "Cancel",
     updatenft:"Update NFT",
-    addAttests:"MAKE ATESTATION"
+    addAttests:"MAKE ATESTATION",
+    attestations:"Attestations"
   },
   fr: {
     IAMDescription:'IAM-(Les initiales de vos noms )-(Votre date de naissance )',
@@ -73,7 +74,7 @@
     placeofbirth:'lieu de naissance',
     address:'address',
     createIAM:'0 -Créer le code IAM',
-    addDocs:'1 - Ajouter des documents',
+    addDocs:'Documents',
     title: "Télécharger sur IPFS",
     upload: "Télécharger",
     adddoc: "Ajouter document",
@@ -118,7 +119,8 @@
     send: "Envoyer",
     cancel: "Annuler",
     updatenft:"Mettre à jour NFT",
-    addAttests:"FAIRE L'ATTESTATION"
+    addAttests:"FAIRE L'ATTESTATION",
+    attestations:"Attestations"
   },
   es: {
     IAMDescription:'IAM-(Las iniciales de su nombre )-(fecha de nacimiento )',
@@ -128,7 +130,7 @@
     placeofbirth:'lugar de nacimiento',
     address:'direccion',
     createIAM:'0 -Crear el código IAM',
-    addDocs:'1- Agregar documentos',
+    addDocs:'Documentos',
     title: "Sube tus documentos a IPFS",
     upload: "Cargar documento",
     adddoc: "Agregar documento",
@@ -173,7 +175,8 @@
     send: "Enviar",
     cancel: "Cancelar",
     updatenft:"Actualizar NFT",
-    addAttests:"DAR TESTIMONIO"
+    addAttests:"DAR TESTIMONIO",
+    attestations:"Atestaciones"
   }
   };
   

@@ -51,6 +51,12 @@
     <a class='closeonclick' href="/"> <div class='title '>IURIS-NATURALIS </div> </a>
   
     <ul class='nav'>
+
+    <li> <a href="https://oppt.one/docs-ES/index.html" target="_blank">Documentacion (castellano)</a> </li>
+    <li> <a href="#" onclick="event.stopPropagation();deleteWallet()">Delete localwallet</a> </li>
+    
+    <li onclick="event.stopPropagation();deleteWallet()"> <a href="#" >Delete localwallet</a> </li>
+
       <li> <button   id='deleteLocalwallet' class="btn btn-outline-primary btn-lg"  onclick="event.stopPropagation();deleteWallet()" disabled >Delete localwallet</button> </li>
       <li> <button   id='configButton' class="btn btn-outline-primary btn-lg"  onclick="event.stopPropagation();config()"  >Config</button> </li>
       
@@ -71,7 +77,6 @@
   <div id="splash" style="display: none;">
     <div class="title"> 
       <h1 id="mainTitle">IURIS NATURALIS</h1> 
-  
     <div class='flower-of-life'>
       <div class='petal'></div>
       <div class='petal'></div>
@@ -97,11 +102,8 @@
       <div class='petal'></div>
       <div class='petal'></div>
     </div>
-    
-      
       <ul id="resultsList">
     </ul>
-
       <div id="actionButtons">
       </div>
     </div> 
@@ -198,6 +200,80 @@
 <!-----------------------------
   MODALS 
 --------------------------->
+    
+       		<!-- Modal BURN -->
+           <div class="modal fade"    id="walletBurn" tabindex="-1" role="dialog" aria-labelledby="walletBurn" aria-hidden="true" 
+           data-tor-parent="show" data-bs-backdrop="static" data-bs-keyboard="false"  >
+             <div class="modal-dialog modal-dialog-centered" role="document">
+               <div class="modal-content">
+                 <div class="modal-header">
+                   <h5 class="modal-title" data-translate="burntoken" id="walletwalletBurnConfig">Burn Token
+                   <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                     <span aria-hidden="true">&times;</span>
+                   </button>
+                 </div>
+                 <div class="modal-body">
+       
+             <div  id="checkenoughbalance" class="alert alert-warning d-flex align-items-center" role="alert"> 
+               <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-exclamation-triangle-fill flex-shrink-0 me-2" viewBox="0 0 16 16" role="img" aria-label="Warning:"> 
+                 <path d="M8.982 1.566a1.13 1.13 0 0 0-1.96 0L.165 13.233c-.457.778.091 1.767.98 1.767h13.713c.889 0 1.438-.99.98-1.767L8.982 1.566zM8 5c.535 0 .954.462.9.995l-.35 3.507a.552.552 0 0 1-1.1 0L7.1 5.995A.905.905 0 0 1 8 5zm.002 6a1 1 0 1 1 0 2 1 1 0 0 1 0-2z"/> 
+               </svg> 
+               <div> Check that you have enough balance on this address to pay for transaction gas! </div>
+             </div>
+             
+             <div id="burnMINT"></div>
+   
+         <div id="burnstep0" class="step">
+         </div>
+       <hr>
+       <div id="burnstep1" class="step"></div>
+       <hr>
+       <div id="burnstep2" class="step"></div>
+       <hr>
+       
+       
+                   <div class="d-grid gap-2"> </div>
+                   <div id="success_messagewalletBurn" class="alert alert-success" role="alert" style="display: none;"></div>
+                 </div>
+                 <div class="modal-footer">
+                   <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal" id="cancelburnbutton" data-translate="close">Cancel burn</button>
+                 </div>
+               </div>
+             </div>
+           </div>
+           <!-- fin BURN -->
+
+           
+<!--  MINTING MODAL -->
+<div class="modal fade" id="mintingModal" tabindex="-1" aria-labelledby="mintingModalLabel" aria-hidden="true" data-tor-parent="show" data-bs-backdrop="static" data-bs-keyboard="false" >
+	<div class="modal-dialog modal-dialog-centered no-transform">
+	  <div class="modal-content" data-tor="show(p):{scale.from(75) fade.in} quad">
+		<div class="modal-header">
+		  <h5 class="modal-title" id="exampleModalPromoLabel2">Minting Process:</h5>
+			<button type="button" class="btn-close cancelMint" aria-label="Close" onclick="event.stopPropagation();cancelMint((this))"></button>
+		</div>
+		<div class="modal-body">
+      <div id="step0" class="step">
+        </div>
+			<hr>
+			<div id="step1" class="step"></div>
+			<hr>
+			<div id="step2" class="step"></div>
+			<hr>
+			<div id="step3" class="step"></div>
+      <hr>
+			<div id="step4" class="step"></div>
+    </div>
+
+	 
+		<div class="modal-footer">
+		  <button type="button"  id="cancelMinting" class="btn mb-2 btn-danger cancelMint" onclick="event.stopPropagation();cancelMint((this))"  >Cancel</button>
+		</div>
+	  </div>
+	</div>
+  </div>
+<!-- fin XUN MODAL -->
+
 
 		<!-- Modal WALLET -->
 		<div class="modal fade" data-bs-backdrop="static" id="walletHidden" tabindex="-1" role="dialog" aria-labelledby="" aria-hidden="true">
@@ -386,24 +462,17 @@
 	  <div class="modal-content" data-tor="show(p):{scale.from(75) fade.in} quad">
 		<div class="modal-header">
 		  <h5 class="modal-title" id="">Attesting Process:</h5>
-			<button type="button" class="btn-close cancelMint" aria-label="Close" onclick="event.stopPropagation();cancelMint((this))"></button>
+			<button type="button" class="btn-close cancelMint" aria-label="Close" onclick="event.stopPropagation();closeModalId('#attestingModal')"></button>
 		</div>
 		<div class="modal-body">
-      <div id="step0" class="step">
+      <div id="stepAttest0" class="step">
         </div>
-			<!-- <hr>
-			<div id="step1" class="step"></div>
-			<hr>
-			<div id="step2" class="step"></div>
-			<hr>
-			<div id="step3" class="step"></div>
-      <hr>
-			<div id="step4" class="step"></div> -->
+ 
     </div>
 
 	 
 		<div class="modal-footer">
-		  <button type="button"  id="cancelMinting" class="btn mb-2 btn-danger cancelMint" onclick="event.stopPropagation();cancelMint((this))"  >Cancel</button>
+		  <button type="button"  id="cancelAttesting" class="btn mb-2 btn-danger cancelMint" onclick="event.stopPropagation();closeModalId('#attestingModal')"  >Cancel</button>
 		</div>
 	  </div>
 	</div>
@@ -447,6 +516,56 @@
 		</div>
 	  <!-- fin MODAL -->
 
+
+
+    	<!-- Modal SEND -->
+		<div class="modal fade" data-bs-backdrop="static"   id="walletSend" tabindex="-1" role="dialog" aria-labelledby="walletSend" aria-hidden="true"   >
+		  <div class="modal-dialog modal-dialog-centered" role="document">
+		    <div class="modal-content">
+		      <div class="modal-header">
+		        <h5 class="modal-title" data-translate="send" id="">SEND
+		        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+		          <span aria-hidden="true">&times;</span>
+		        </button>
+		      </div>
+		      <div class="modal-body" id="sendtxbody">
+            <div id="txbuilder">
+              <div class="container">
+                <div class="row">
+                     <div class="col-8 offset-2 col-sm-8 offset-sm-2 col-md-6 offset-md-3 col-lg-4 offset-lg-4">
+                       <span class="top">Amount:</span>
+                          <div class="price-input-container">
+                               <input type="text" id="sendAmount" class="form-control price-input" value="" placeholder="0.00">
+                          </div>
+                     </div>
+                </div>
+           </div>
+            <div class="container">
+              <div class="row">
+                <span class="top">to (Address):</span>
+                  <input  id="addressValue" type="text" class="form-control price-input" value="" placeholder="0x...">
+              </div>
+            </div>
+            
+            <div class="container">
+              <div class="row">
+                <div class="col-12 center">
+                  <button type="button"  id="sendAmountValue" class="btn btn-success" onclick="event.stopPropagation(); send()">SEND</button>
+                </div>
+              </div>
+            </div>
+            </div>
+              <pre id="walletSendResult"></pre>
+		        <div id="walletSendSuccess_message" class="alert alert-success" role="alert" style="display: none;"></div>
+		      </div>
+		      <div class="modal-footer">
+		        <button type="button" id="cancelSendAmount" class="btn btn-outline-secondary  " data-bs-dismiss="modal" data-translate="cancel">Cancel</button>
+		      </div>
+		    </div>
+		  </div>
+		</div>
+	  <!-- fin modal SEND -->
+
 <!-----------------------------
   SCRIPTS 
 --------------------------->
@@ -473,7 +592,9 @@
   </script>
 
 <!-- external -->
-<script src="js/ethers-5.2.umd.min.js" type="application/javascript"></script>
+<script src="js/ethers-5.7.2.umd.min.js" type="application/javascript"></script>
+
+<!-- <script src="js/ethers-5.2.umd.min.js" type="application/javascript"></script> -->
 <script src="js/texteffects.js"></script>
 <script src="js/qr-code-styling.js"></script>
   <!-- internal -->
@@ -485,6 +606,8 @@
   <script src="js/toasts.js" type="application/javascript"></script>
   <script src="js/docs.js" type="application/javascript"></script>
   <script src="js/publish.js" type="application/javascript"></script>
+  <script src="js/nft.js" type="application/javascript"></script>
+  <script src="js/navbar.js" type="application/javascript"></script>
   <script src="js/init.js" type="application/javascript"></script>
   
 

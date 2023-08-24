@@ -1,0 +1,523 @@
+<!DOCTYPE html>
+<html>
+<head>Atestacion sobre el honor de creacion musical</title>
+    <!-- Agrega enlaces a los archivos CSS de Bootstrap -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Mantén tus estilos personalizados aquí si es necesario -->
+    <style>
+               body{
+            background-color: black;
+            color: green;
+        }
+        button{
+            cursor: pointer;
+        }
+        input, textarea{
+            background-color: transparent!important;
+            color: green!important;
+        }
+        input::placeholder, textarea::placeholder{
+            background-color: transparent!important;
+            color: darkgreen!important;
+        }
+        /* Custom styles */
+#previewModal {
+    z-index: 1050;
+}
+
+#previewContent {
+    height: 80vh; /* Adjust this as needed */
+    overflow: auto;
+}
+      
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="row">
+            <div class="col-md-8 offset-md-2 col-lg-6 offset-lg-3">
+
+        <h1 class="mt-4">Atestacion sobre el honor de creacion musical</h1>
+        <form>
+            <h2 class="mt-4">Información del atestador</h2>
+<span>
+    Atestador: Un atestador, en  contextos legales o notariales, un atestador puede ser una persona que está presente para dar fe de que algo ha ocurrido o ha sido declarado por otra persona.
+</span>
+
+
+
+            <div class="mb-3">
+                <label for="atestorIAMhashNombre" class="form-label">codigo IAM del Atestador:</label>
+                <input type="text" id="iamcode" name="atestorIAMhashNombre" class="form-control" required>
+            </div>
+            <div class="mb-3">
+                <label for="vatestorIAMhashDireccion" class="form-label">Address del atestador (privado):</label>
+                <input type="text" id="iamaddress" name="atestorIAMhashDireccion" class="form-control" required>
+            </div>
+          
+            <div class="mb-3">
+                <label for="atestorIAMhashiamhash" class="form-label">IAMhash:</label>
+                <input type="email" id="iamhash" name="atestorIAMhashiamhash" class="form-control" >
+            </div>
+
+           
+            <!-- <div class="mb-4">
+                <h2>Información de Atestatario/s</h2>
+<span> Atestatario: Atestatario es un término que se utiliza en algunos contextos legales para referirse a una persona que atestigua o da fe de ciertos hechos. Puede ser utilizado en documentos legales o notariales para indicar a las personas que han presenciado la firma de un contrato, por ejemplo. </span>
+
+                <div class="mb-3">
+                    <label for="compradorNombre" class="form-label">Codigo IAM del Atestatario:</label>
+                    <input type="text" id="compradorNombre" name="compradorNombre" class="form-control" required>
+                </div>
+                <div class="mb-3">
+                    <label for="compradorDireccion" class="form-label">Address del Atestatario:</label>
+                    <input type="text" id="compradorDireccion" name="compradorDireccion" class="form-control" required>
+                </div>
+          
+                <div class="mb-3">
+                    <label for="compradorEmail" class="form-label">codigo iam hash del Atestatario:</label>
+                    <input type="email" id="compradorEmail" name="compradorEmail" class="form-control" >
+                </div>
+            </div> -->
+
+            
+
+            <div class="mb-4">
+                <h2>Descripción </h2>
+                <div class="mb-3">
+                    <label for="marcaParamotor" class="form-label">json file (load //paste):</label>
+                    <textarea type="text" id="iamdeclaration" name="marcaParamotor" class="form-control" required>
+                </div>
+               
+            </div>
+            
+
+
+     
+
+        </form>
+    </div>
+</div>
+</div>
+    
+
+
+    <div class="container">
+        <div class="row">
+            <div class="col-md-8 offset-md-2 col-lg-6 offset-lg-3">
+
+
+
+        <div class="row">
+            <div class="col-md-6 mb-3">
+                <button class="btn btn-primary btn-block" id="attestButton">FIRMA (atestador)</button>
+
+            <!-- <button type="button" class="btn btn-primary" id="attestButton">Attest</button> -->
+
+            </div>
+            <div class="col-md-6 mb-3">
+                <button class="btn btn-secondary btn-block">FIRMA (atestatario)</button>
+            </div>
+        </div>
+    </div>
+    </div>
+</div>
+    
+<!-----------------------------
+  MODAL
+--------------------------->
+<div class="container mt-5">
+    <div class="row">
+        <div class="col-md-6">
+            <textarea id="content" class="form-control" rows="5"></textarea>
+            <button id="previewBtn" class="btn btn-primary mt-3">Preview</button>
+        </div>
+        <div id="previewModal" class="modal fade">
+            <div class="modal-dialog modal-fullscreen">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Preview</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                    </div>
+                    <div class="modal-body">
+                        <div id="previewContent"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+    <!-- Agrega el enlace al archivo JavaScript de Bootstrap si es necesario -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="js/ethers-5.7.2.umd.min.js" type="application/javascript"></script>
+
+    
+<!-----------------------------
+  SCRIPTS 
+--------------------------->
+<script type="module"> 
+// const { utils } = require('ethers');
+// const CryptoJS = require('crypto-js');
+
+import { EAS, Offchain, SchemaEncoder, SchemaRegistry, createOffchainURL, AttestationShareablePackageObject, decodeBase64ZippedBase64, Offchain, zipAndEncodeToBase64 } from "@ethereum-attestation-service/eas-sdk";
+    window.EAS = EAS
+    window.Offchain = Offchain
+    window.SchemaEncoder = SchemaEncoder
+    window.SchemaRegistry = SchemaRegistry
+    window.createOffchainURL = createOffchainURL
+    window.AttestationShareablePackageObject = AttestationShareablePackageObject
+    window.decodeBase64ZippedBase64 = decodeBase64ZippedBase64
+    window.Offchain = Offchain
+    window.zipAndEncodeToBase64 = zipAndEncodeToBase64
+</script>
+
+<script>
+    
+
+    
+/*********************************************************************************************
+.) PREFILL
+**********************************************************************************************/
+async function prefill(){
+console.log('PREFILING ...')
+
+// ADDRESS SENDER
+const provider = new ethers.providers.JsonRpcProvider("https://endpoints.omniatech.io/v1/eth/sepolia/public");
+const privateKey = "0xeddb270797ba825b0e911b0fd9d203e50d753f61691d1172c9fd9bd9c10f520d";
+const signer = new ethers.Wallet(privateKey, provider);//wallet sender
+console.log('signer:', signer)
+
+let iamcode1= 'IAM-chm-04181980'
+let declaration = `{
+  "album": "The Last Puestero 2023",
+  "cover":"https://bafybeiehctgxap7bj3hiarlqrw5kfea24b3yytwxhc6rz7hn2csnti7qfq.ipfs.w3s.link/xunorusTest.jpeg",
+  "by": "by Xunorus",
+  "externallinks": "https://tlp.xunorus.com",
+  "artistlinks": "https://xunorus.com",
+  "description":"Music for the film The Last Puestero. Commissioned by: Alonso Llosa, Belle Caceres For: The Last Puestero Feat.: Xunorus, Edwin Buger, Nolwenn Leizour, Pierre Meunier et Kiko freitas",
+  "cdinfo": "Composiciones para el Film The Last Puestero por Xunorus ",
+  "link":  null,
+  "tags": "solo,gaucho , andina, ronroco",
+  "fullscore":  null,
+  "fulldownload": null,
+  "id": "tlp7b",
+  "version": 7,
+  "tracks": [
+    {
+        "title": "A don Adonai",
+        "mp3":  "https://firebasestorage.googleapis.com/v0/b/thelastpuestero.appspot.com/o/TLPv5c%2F01-LANDR-tlpv5bMASTER-Balanced-Medium.mp3?alt=media&token=bef7b96e-adfa-4cbc-a013-7409edeb2630",
+        "wav": "https://firebasestorage.googleapis.com/v0/b/thelastpuestero.appspot.com/o/v7%2FLANDR-patamarquen%CC%83osv8b-Balanced-Medium.wav?alt=media&token=75cb63fb-3ff8-495d-be2f-2adc26793b45",
+        "credits": "Xunorus (feat. Kiko Freitas)",
+        "duration":  null,
+        "tid": "tlp5c01"
+      }  ,
+      {
+        "title": "Tropilla",
+        "mp3":  "https://firebasestorage.googleapis.com/v0/b/thelastpuestero.appspot.com/o/TLPv5c%2F02-LANDR-r1_tropillav5-Balanced-Medium.mp3?alt=media&token=664b2798-f787-4c1d-b154-c0554eb9ddf0",
+        "wav": "https://firebasestorage.googleapis.com/v0/b/thelastpuestero.appspot.com/o/v7%2FLANDR-r1_tropillav5-Balanced-Medium.wav?alt=media&token=fd9922dc-6a5d-4663-af2a-1112cd1ea99b",
+        "credits": "by Xunorus",
+        "duration": null,
+        "tid": "tlp5c02"
+      } 
+      ,
+      {
+        "title": "Doña Aurelia",
+        "mp3":  "https://firebasestorage.googleapis.com/v0/b/thelastpuestero.appspot.com/o/TLPv5c%2F03-LANDR-03-don%CC%83aAurelia-tlpv4-Warm-Low.mp3?alt=media&token=74760af3-622e-48bb-98e6-0093500d460d",
+        "wav": "https://firebasestorage.googleapis.com/v0/b/thelastpuestero.appspot.com/o/v7%2FLANDR-03-don%CC%83aAurelia-tlpv4-Balanced-Medium.wav?alt=media&token=d8aa0e61-a756-427b-9bbc-839d2d6738cc",
+        "credits": "by Xunorus",
+        "duration": null,
+        "tid": "tlp5c03"
+      }   ,
+      {
+          "title": "Refugio",
+          // "mp3":  "https://firebasestorage.googleapis.com/v0/b/thelastpuestero.appspot.com/o/TLPv5c%2F04-LANDR-04-refugio-tlpv4-Warm-Low.mp3?alt=media&token=e46e8706-4714-4063-a698-44ec06b7ca16",
+          "mp3":  "https://firebasestorage.googleapis.com/v0/b/thelastpuestero.appspot.com/o/v7%2FLANDR-refugiov5MASTER-Warm-Medium.mp3?alt=media&token=65a0d7df-11ea-4823-a012-2d443d73c683",
+          "wav":  "https://firebasestorage.googleapis.com/v0/b/thelastpuestero.appspot.com/o/v7%2FLANDR-refugiov5MASTER-Warm-Medium.wav?alt=media&token=9a504f4e-110c-4086-a384-6019061a20dc",
+          "credits": "by Xunorus",
+          "duration": null,
+          "tid": "tlp5c04"
+        }  
+        ,
+    {
+        "title": "Chacareroso",
+        "mp3":  "https://firebasestorage.googleapis.com/v0/b/thelastpuestero.appspot.com/o/v7%2FLANDR-chacareroso-v4MASTER-Balanced-Medium.mp3?alt=media&token=4faead62-5015-4d1f-89a3-a628f98cea4a",
+        "wav":  "https://firebasestorage.googleapis.com/v0/b/thelastpuestero.appspot.com/o/v7%2FLANDR-chacareroso-v4MASTER-Balanced-Medium.wav?alt=media&token=d2c691fc-15ac-4537-b55c-6f26fcf72595",
+        "feat": "by Xunorus",
+        "duration": null,
+        "tid": "tlp705"
+      }
+,
+        {
+          "title": "Horse Ride",
+          "mp3":  "https://firebasestorage.googleapis.com/v0/b/thelastpuestero.appspot.com/o/v7%2FLANDR-horseRidev7MASTER-Balanced-High.mp3?alt=media&token=57daa580-f7cc-4861-9893-5c364095079c",
+          "wav":  "https://firebasestorage.googleapis.com/v0/b/thelastpuestero.appspot.com/o/v7%2FLANDR-horseRidev7MASTER-Balanced-High.wav?alt=media&token=3a6419c0-31d2-4908-bab7-22b1d5d5f488",
+          "credits": "by Xunorus",
+          "duration": null,
+          "tid": "tlp7a06"
+        }   ,
+        {
+          "title": "Tiempo de Invierno",
+          "mp3":  "https://firebasestorage.googleapis.com/v0/b/thelastpuestero.appspot.com/o/v7%2FLANDR-tiempodeinvierno-v6dMASTER-Balanced-Medium.mp3?alt=media&token=eea7d519-6b9f-415e-8df6-579370c933d7",
+          "wav":  "https://firebasestorage.googleapis.com/v0/b/thelastpuestero.appspot.com/o/v7%2FLANDR-tiempodeinvierno-v6dMASTER-Balanced-Medium.wav?alt=media&token=5c0261a4-3d3f-4249-a379-0170d2ee7383",
+          "credits": "by Xunorus (Feat. Pierre Meunier)",
+          "duration": null,
+          "tid": "tlp6d07"
+        }   ,
+        {
+          "title": "Snow",
+          "mp3":  "https://firebasestorage.googleapis.com/v0/b/thelastpuestero.appspot.com/o/v7%2FLANDR-snow7aMASTER-Balanced-Medium.mp3?alt=media&token=e55dee66-f317-40ae-a580-cb6fcd38b811",
+          "wav":  "https://firebasestorage.googleapis.com/v0/b/thelastpuestero.appspot.com/o/v7%2FLANDR-snow7aMASTER-Balanced-Medium.wav?alt=media&token=e106f266-8345-4112-951f-b7219a6a9baf",
+          "credits": "by Xunorus",
+          "duration": null,
+          "tid": "tlp5c08"
+        }   ,
+        {
+          "title": "Free Soul",
+          "mp3":  "https://firebasestorage.googleapis.com/v0/b/thelastpuestero.appspot.com/o/v7%2FLANDR-FREESOULv7a-Balanced-Medium.mp3?alt=media&token=f507a0e1-aea4-4b7e-9f43-2e7a039f168b",
+          "wav":  "https://firebasestorage.googleapis.com/v0/b/thelastpuestero.appspot.com/o/v7%2FLANDR-FREESOULv7a-Balanced-Medium.wav?alt=media&token=7d885e4d-42f6-4bdd-9b22-eb66f9676078",
+          "credits": "by Xunorus",
+          "duration": null,
+          "tid": "tlp7a09"
+        }   ,
+        {
+          "title": "Patamarqueños",
+          "mp3":  "https://firebasestorage.googleapis.com/v0/b/thelastpuestero.appspot.com/o/v7%2FLANDR-patamarquen%CC%83osv8b-Balanced-Medium.mp3?alt=media&token=c7fcaf65-95b3-4b7c-a42f-f429e4d63d4b",
+          "wav":  "https://firebasestorage.googleapis.com/v0/b/thelastpuestero.appspot.com/o/v7%2FLANDR-patamarquen%CC%83osv8b-Balanced-Medium.wav?alt=media&token=75cb63fb-3ff8-495d-be2f-2adc26793b45",
+          "credits": "by Xunorus (Arrangement by Xunorus. Commissioned by Isaias Miciu. feat. Kiko Freitas)",
+          "duration": null,
+          "tid": "tlp7b10"
+        }   ,
+      {
+        "title": "The Last Puestero",
+        "mp3":  "https://firebasestorage.googleapis.com/v0/b/thelastpuestero.appspot.com/o/v7%2FLANDR-thelastpuestero220109-Balanced-Medium.mp3?alt=media&token=ed3eb125-5a68-472b-85bf-4ce7838f27b6",
+        "wav":  "https://firebasestorage.googleapis.com/v0/b/thelastpuestero.appspot.com/o/v7%2FLANDR-thelastpuestero220109-Balanced-Medium.wav?alt=media&token=a8ab5453-db8d-4b11-ac27-c2226d0cc4cd",
+        "credits": "by Xunorus(feat. Edwin Buger - Nolwenn Leizour)",
+        "duration": null,
+        "tid": "tlp7a11"
+      }   
+  ],
+  "Txs": [
+      {
+          "hash": "https://etherscan.io/tx/0x5d99fe9162f6cab881352232a2133eff0539bd63cfb45e2160c1190e4dd2b3ff",			
+          "timestamp" : 1675292400		
+        },
+        
+        {
+            "hash":  "https://etherscan.io/tx/0x68f62eec9cce3383f5535e05574c2139d3b8b3bbcf105752279873e01d593c3b",	
+            "timestamp" : 1679007600		
+        },
+        {
+            "hash":  "https://etherscan.io/tx/0xfa9e951d9efb9988b63413918f7edc2f4bf0e2ce59bdd7cadd6f2ae30075342f",	
+           "timestamp": 1683669600		
+    },
+    {
+        "hash": "https://etherscan.io/tx/0xd5359265ce2e4d3c81059c6a4a7ecda110c4c8587f3364ea4350b708eb058f91",
+    "timestamp": 1689458400		
+    }
+  ],
+  "extras": [
+    
+          { "musicians": [
+            {
+              "artist": "Claudio Maldonado Xunorus",
+              "credit":  "composition, arrangements, guitars and ronroco",
+              "artistid": null
+            }  ,
+            {
+              "artist": "Nolwenn Leizour ",
+              "credit":  "Contrabasse",
+              "artistid": null
+            }  ,
+            {
+              "artist": "Edwing Buger ",
+              "credit":  "Accordeon",
+              "artistid": null
+            }  ,
+            {
+              "artist": "Pierre Meunier ",
+              "credit":  "Violin",
+              "artistid": null
+            }  ,
+            {
+              "artist": "kiko Freitas ",
+              "credit":  "Bombo sample",
+              "artistid": null
+            }  
+          ]}
+     ],
+    
+  }`
+document.getElementById('iamaddress').value = signer.address;
+document.getElementById('iamcode').value = iamcode1;
+document.getElementById('iamdeclaration').value = declaration;
+ 
+// TIMESTAMP
+const timestamp = new Date().getTime();
+
+// Create a new Date object using the timestamp
+const date = new Date(timestamp);
+
+// Formatting options
+const options = {
+year: 'numeric',
+month: 'long',
+day: 'numeric',
+hour: 'numeric',
+minute: 'numeric',
+second: 'numeric',
+timeZoneName: 'short'
+};
+
+// Format the date and time
+const formattedDate = date.toLocaleDateString('es-ES', options);
+console.log(formattedDate);
+
+// DECLARATION
+// let declaration =  document.getElementById('atestorNombre').value
+// document.getElementById('stringInput').value = declaration;
+
+
+// HASH
+const ethereumAddress = document.getElementById('iamaddress').value;
+const iamCode = document.getElementById('iamcode').value;
+
+// // Concatenate Ethereum address and IAM code
+// const combinedData = ethereumAddress + iamCode;
+
+// // Hash the combined data
+// const hashedCombinedData = ethers.utils.keccak256(combinedData);
+
+// console.log('Hashed Ethereum Address and IAM Code:', hashedCombinedData);
+
+// Convert Ethereum address to bytes32 format
+const ethereumAddressBytes32 = ethers.utils.arrayify(ethereumAddress);
+
+// Encode the IAM code as UTF-8 bytes
+const iamCodeBytes = ethers.utils.toUtf8Bytes(iamCode);
+
+// Concatenate Ethereum address bytes and IAM code bytes
+const combinedBytes = ethers.utils.concat([ethereumAddressBytes32, iamCodeBytes]);
+
+// Hash the combined bytes using keccak256
+const hashedData = ethers.utils.keccak256(combinedBytes);
+
+console.log('Hashed Ethereum Address and IAM Code:', hashedData);
+document.getElementById('iamhash').value = hashedData;
+
+
+}
+
+prefill()
+
+
+/*********************************************************************************************
+.) stringToBytes32
+**********************************************************************************************/
+function stringToBytes32(inputString) {
+// Ensure the input string is not longer than 32 bytes
+if (inputString.length > 32) {
+    throw new Error("Input string is too long for bytes32");
+}
+
+// Create a new Uint8Array with a length of 32 bytes (bytes32)
+const bytes32 = new Uint8Array(32);
+
+// Convert the input string to UTF-8 bytes
+const utf8Bytes = new TextEncoder().encode(inputString);
+
+// Copy the UTF-8 bytes to the bytes32 array
+bytes32.set(utf8Bytes);
+
+return bytes32;
+}  
+
+
+/*********************************************************************************************
+.) ATTEST
+// https://sepolia.easscan.org/schema/view/0xcabcbcc995dff5d609f5ff4629945acf82cda1a41d4a88f0a547b15558151c26
+
+// https://sepolia.easscan.org/schema/view/0xf162dd2b33beb94bfcbee004fde2f92f03b4972916cef16a03c2e29d5dcea42f
+**********************************************************************************************/
+// Custom JavaScript function to run when the button is clicked
+document.getElementById('attestButton').addEventListener('click', async function() {
+// <!-- https://sepolia.easscan.org/schema/view/0x8a38a826a6b3919bcba34160e49946f233ce5f96347c42f81a997f5b8c1715b8 -->
+console.log('ATTESTING!')
+    // Get values from input fields
+    var IAMcode = document.getElementById('iamcode').value;
+    var IAMaddress = document.getElementById('iamaddress').value;
+    var IAMhash = document.getElementById('iamhash').value;
+    var IAMdeclaration = document.getElementById('iamdeclaration').value;
+
+
+    const jsonString = JSON.stringify(IAMdeclaration);
+
+    // Create a hash of the JSON string using keccak256 algorithm (Ethereum's standard hash function)
+    const hash = ethers.utils.keccak256(jsonString);
+
+    console.log('JSON Hash:', hash);
+
+
+
+
+    // Your custom logic here...
+    console.log('Ethereum Address:', IAMaddress);
+    console.log('IAM Code:', IAMcode);
+    console.log('IAM Hash:', IAMhash);
+    console.log('IAM declaration:', hash);
+
+    // ATTEST!
+    const EASContractAddress = "0xC2679fBD37d54388Ce493F1DB75320D236e1815e"; // Sepolia Testnet v0.26
+    const provider = new ethers.providers.JsonRpcProvider("https://endpoints.omniatech.io/v1/eth/sepolia/public");
+    const privateKey = "0xeddb270797ba825b0e911b0fd9d203e50d753f61691d1172c9fd9bd9c10f520d";
+    const signer = new ethers.Wallet(privateKey, provider);
+    console.log('signer:', signer)
+    let eas= new EAS(EASContractAddress);
+    console.log('provider: ', provider);
+    eas.connect(provider);
+
+console.log('offchainIAM')
+const iamcb32 = stringToBytes32(IAMcode);
+const offchain = await eas.getOffchain();
+const schemaEncoder = new SchemaEncoder("bytes32 IAMcode,bytes32 IAMhash,bytes32 IAMdeclaration");
+const encodedData = schemaEncoder.encodeData([
+{ name: "IAMcode", value: iamcb32, type: "bytes32" },
+{ name: "IAMhash", value: IAMhash, type: "bytes32" },
+{ name: "IAMdeclaration", value: hash, type: "bytes32" },
+]);
+
+const offchainAttestation = await offchain.signOffchainAttestation({
+recipient: signer.address,
+expirationTime: 0,
+time: 1671219636,
+revocable: true,
+version: 1,
+nonce: 0,
+schema: "0xf162dd2b33beb94bfcbee004fde2f92f03b4972916cef16a03c2e29d5dcea42f",
+refUID: '0x0000000000000000000000000000000000000000000000000000000000000000',
+data: encodedData,
+}, signer);
+console.log('offchainAttestation:' ,offchainAttestation)
+o = offchainAttestation;
+y= JSON.stringify(o)
+let offchainobject  = {sig: offchainAttestation, signer: signer.address}
+const url = createOffchainURL(offchainobject);
+console.log('URL:','https://sepolia.easscan.org'+url )
+
+
+document.getElementById('previewBtn').addEventListener('click', function () {
+console.log('PREVIEW')
+const content = document.getElementById('content').value;
+const previewContent = document.getElementById('previewContent');
+stringInput.innerHTML = content;
+
+// Show the preview modal
+const previewModal = new bootstrap.Modal(document.getElementById('previewModal'));
+previewModal.show();
+});
+
+});
+</script>
+</body>
+</html>

@@ -208,20 +208,27 @@ function writepassword (f){
         // SWEETALERT SUCCESS
         Toast.fire({ icon: 'success', title: 'Logged in!' })
   
-        var shortAddr = userAddress.substring(0, 6) + "..."+ userAddress.substring(38, 42);
-    console.log('ADDED ADDRESS')
+         shortAddr = userAddress.substring(0, 6) + "..."+ userAddress.substring(38, 42);
+    // console.log('ADDED ADDRESS')
         // FIX TEXTEFFECT
-        
         setTimeout(() => {
           document.getElementById('usrAddr').innerHTML = `<div id="" onclick="event.stopPropagation();copy2clipboard('${userAddress}')">${shortAddr}</div>`;
+    console.log('ADDED copy2clipboard to  ADDRESS')
+         
           if (/Mobi|Android/i.test(navigator.userAgent)) {
             console.log('textEffect avoided')
           } else {
             $("#usrAddr").textEffect();
+
+            setTimeout(() => {
+              // quick dirty fix
+          document.getElementById('usrAddr').innerHTML = `<div id="" onclick="event.stopPropagation();copy2clipboard('${userAddress}')">${shortAddr}</div>`;
+            }, 2000);
           }
           }, 900);
         document.getElementById('usrAddr').classList.add("glow");
          
+
         // REORGANICE CONNECT BUTTONS
           walletOptCreate.style.display = 'none';// boton CONNECT
           document.getElementById('walletDisconnect').style.display = 'block';
@@ -233,41 +240,61 @@ function writepassword (f){
         localStorage.setItem('wallet', 'LOCALWALLET');
   
   
-            //   -------------------------------------------------------------
-                    // 0- CHECK OWNERSHIP (check if is no owner already)
+// 0- CHECK NFT OWNERSHIP (check if is no owner already)
                     let prefIndex = 0;
                     let tAddress = optionsList[prefIndex].TOKEN_ADDRESS;
                     let tAbi =ABIs[optionsList[prefIndex].TOKEN_ABI]
-  
-                      contract = new ethers.Contract(tAddress, tAbi, provider)
-                      
+                    contract = new ethers.Contract(tAddress, tAbi, provider)
                       // CALL TIds
                       try { tokenIdbyAddr = await contract.TIds(userAddress) }
                       catch (error) { console.log('error:', error); return; }
-                      tid = parseInt( tokenIdbyAddr, 16)
+                      console.log("TOKEN ID CRUDO", tokenIdbyAddr)
+                      // let tid = parseInt( tokenIdbyAddr, 16);
+                      const tid = tokenIdbyAddr.toString(10);
+                      console.log("TOKEN ID PROCESADO", tid)
+
+                      // tid = tid.toString();
+                      // tid = parseInt( tokenIdbyAddr, 16).toString();
+                    
+                    
                       // A- IF USER DOESNT OWN A TOKEN
                       if(tid == 0) {
                         console.log('YOU DONT HAVE A UNIVERSAL PASS ')
                       } else {
+                        
                         console.log('YOUR ARE OWNER OF UP TOKEN',tid )
-                        headMessages.innerHTML = `<div class="alert alert-primary alert-dismissible fade show" > <span data-translate="youareowneroftoken">YOUR ARE OWNER OF UP TOKEN </span><strong>${tid}</strong> </div>`
+                        localStorage.setItem('nftisMinted',tid )
+
+                        headMessages.innerHTML = `<div class="alert alert-primary alert-dismissible fade show" > <span data-translate="youareowneroftoken">YOUR ARE OWNER OF UP TOKEN </span><strong>${tid}</strong> <i class="fas fa-trash iconbutton" aria-hidden="true" onclick="event.stopPropagation();burnNFT((this.parentElement))"></i> </div>`
                         console.log('CARGAR MANUALMENTE LA PRIMER VEZ con tokenid + version y recibe ipfs link,desde blockchain. guarda todo en localstorage para no cargar todo cada vez.')
                         console.log('PRIMERO seriallamar al contracto para obtener la ultima version de ipfs para este token (public)')
   
+                        console.log( `contract.universalPass(${tid})` )
                         try { universalPassData = await contract.universalPass(tid) }
                         catch (error) { console.log('error:', error); return; }
   
                         console.log('universalPassData', universalPassData)
                         console.log('URI: ', universalPassData.uri)
-                        console.log('LAST UPDATED' ,parseInt(universalPassData.dateUpdated,16))
+                        console.log('LAST UPDATED', parseInt(universalPassData.dateUpdated,16))
                         console.log('SEGUNDO cargar solo el json de la uri')
   
+                         UPuri = universalPassData.uri;
+
+                         if(UPuri ==''){
+                          console.log('URI IS NOT SET');
+                          // hide loader
+                          document.getElementById('loader').style.display='none'
+
+                          return
+                         } else {
+                          console.log('URI IS SET', UPuri)
+
+                         }
+
                        let cidcid =  await fetch(universalPassData.uri)
                         .then(function(response) { if (response.ok) { return response.json(); } else { throw new Error("Error: " + response.status); } })
                         .then(async function(data) { 
-  
-                      return { url: data.external_url, img: data.image };
-  
+                        return { url: data.external_url, img: data.image };
                       })
                         .catch(function(error) { console.log(error); });
                         // GET LAST UPDATED
@@ -275,15 +302,12 @@ function writepassword (f){
   
                         // FORM LINK
                       let link = `${ipfsGateway}${cidcid.url}`;
-                      // FETCH CIDCID
                       fetch(cidcid.url)
                       .then(response => response.text())
                       .then(async  html => {
                         const parser = new DOMParser();
                         const doc = parser.parseFromString(html, 'text/html');
                          signed = doc.getElementById('signed').innerText;
-                        // console.log('signed:', JSON.parse(signed)); 
-                        // console.log('RUNNING nftIpfsDistro:' ,signed,tid,universalPassData)
                         let uplink = cidcid.url;
                         let img= cidcid.img;
                        await nftIpfsDistro(signed,tid,universalPassData,uplink,img)
@@ -291,33 +315,30 @@ function writepassword (f){
                       .catch(error => {
                         console.error('Error:', error);
                       });
-  
                         return
                       }
+
+
+
+
+
   
-          //1. CHECK IF USER HAS PUBLISHED ON IPFS (signedJson)
+//1. CHECK IF USER(ADDRESS) HAS PUBLISHED ON IPFS (signedJson)
           let ipfsDistros = JSON.parse(window.localStorage.getItem('IPFSdistributions'));
           if(!ipfsDistros){
               console.log('THERE ARE NO ipfsDistros')
               console.log('NO, THERE IS NOT A SIGNED JSON, WE CONTINUE TO LOAD IAM CODE AND DOCS')
               
-              // 2.  CHECK IF THERE IS IAMCODE , then check documents
-          // let ipfsDistros = JSON.parse(window.localStorage.getItem('IPFSdistributions'));
-  
+// 2.  CHECK IF THERE IS IAMCODE , then check documents
           let loadIAM = localStorage.getItem('iamcode')
-              
           if(!loadIAM){
               console.log('THERE IS NO IAMCODE')
               
               // UPDATE UI
-              // document.getElementById('main').setAttribute('style', 'display:block !important');
-              document.getElementById('loader').style.display='none'
-              document.getElementById('splash').setAttribute('style', 'display:flex !important');
-        
-
+            document.getElementById('loader').style.display='none'
+            document.getElementById('splash').setAttribute('style', 'display:flex !important');
             headMessages.innerHTML =`  <div class="alert alert-warning alert-dismissible fade show">
             <button type="button" class="btn btn-warning" onclick="event.stopPropagation();createIAMcode();">CREATE IAM CODE</button>
-      
             </div>`
 
           }  else{
@@ -325,23 +346,20 @@ function writepassword (f){
               console.log('THERE IS IAM CODE')
               document.getElementById('iam').setAttribute('style', 'display:flex !important');
               document.getElementById('loader').style.display='none'
-  
-  
-              // createIAMCODE()
-  
-  
               let loadIAMIMG =  localStorage.getItem('image')
              iamCode.innerHTML= `IAM-<span id="iamCodeNom">n</span><span id="iamCodePrenom">p</span>-<span id="iamCodemmjjaaaa">mmjjaaaa</span><div id="editButtons">  </div>`;
              
                // 1. save attestation link in localstorage
                let offchainAttestation = localStorage.getItem('iamAttestation')
 
-            //  headMessages.innerHTML = `<div class="alert alert-primary alert-dismissible fade show"> 
-            //   <img src="${JSON.parse(loadIAMIMG)}" alt="Rounded circle Image" class="rounded rounded-circle img-thumbnail" width='40px'>
-            //   <strong>${loadIAM}</strong> 
-            //   <button type="button" class="btn-edit" onclick="event.stopPropagation();editIAMcode()" >
-            //   </button> 
-            //   </div>`
+              //  FIX METAMASK LOCALWALLET COMPATIBILITY
+          if(!offchainAttestation){
+            console.log('THERE IS NO  OFFCHAIN ATTESTATION')
+          } else{
+            console.log('YES THERE IS OFFCHAIN ATTESTATION')
+
+          }
+
             headMessages.innerHTML = `<div class="alert alert-primary alert-dismissible fade show"> 
             <img src="${JSON.parse(loadIAMIMG)}" alt="Rounded circle Image" class="rounded rounded-circle img-thumbnail" width='40px'>
             <strong>${loadIAM}</strong> 
@@ -352,8 +370,8 @@ function writepassword (f){
             </div>`
   
             document.getElementById('soveraindocs').setAttribute('style', 'display:block !important');
-              document.getElementById('iam').setAttribute('style', 'display:none !important');
-              document.getElementById('splash').setAttribute('style', 'display:none !important');
+            document.getElementById('iam').setAttribute('style', 'display:none !important');
+            document.getElementById('splash').setAttribute('style', 'display:none !important');
   
               // LOAD TABLE WITH SOVERAIN DOCS
             // addAttestIAMcode()
@@ -393,17 +411,14 @@ function writepassword (f){
             let psend = await provider.send("eth_requestAccounts", [])
             const signer = provider.getSigner()
             const account = await signer.getAddress()
+
+            // SET GLOBAL ADDRESS
             userAddress = account;//set global
             console.log(' METAMASK WALLET ADDRESS:', account)
   
-        loadIAMinfo()
-        loadOnchangeEvents()
-        checkIfIAMCode()
   
         // SWEETALERT SUCCESS
         Toast.fire({ icon: 'success', title: 'Logged in!' })
-  
-  
           
           // SET ADDRESS
           var shortAddr = account.substring(0, 6) + "..."+ account.substring(38, 42);
@@ -411,15 +426,16 @@ function writepassword (f){
 
           setTimeout(() => {
             document.getElementById('usrAddr').innerHTML = `<div id="" onclick="event.stopPropagation();copy2clipboard('${account}')">${shortAddr}</div>`;
-
               if (/Mobi|Android/i.test(navigator.userAgent)) {
                 console.log('textEffect avoided')
               } else {
                 $("#usrAddr").textEffect();
+                setTimeout(() => {
+                  // quick dirty fix
+              document.getElementById('usrAddr').innerHTML = `<div id="" onclick="event.stopPropagation();copy2clipboard('${userAddress}')">${shortAddr}</div>`;
+                }, 2000);
               }
-
             }, 900);
-            
             document.getElementById('usrAddr').classList.add("glow");
 
               // REORGANICE CONNECT BUTTONS
@@ -429,16 +445,50 @@ function writepassword (f){
               // SHOW ACTION BUTTONS
               // document.getElementById('createUP').style.visibility ='visible'
               
-  
-              // SET WALLET CHOICE TO LOCALSTORAGE
-              localStorage.setItem('wallet', 'METAMASK');
-  
-  
+              
               // LISTEN TO CHANGES
               ethereum.on("accountsChanged", function(accounts) { console.log("ethereum account changed to: ", accounts); walletDisconnect(); });
               ethereum.on("chainChanged", function(accounts) { console.log("ethereum account changed to: ", accounts); walletDisconnect(); });
               ethereum.on("disconnect", function(accounts) { console.log("ethereum account changed to: ", accounts); walletDisconnect(); });
+              
   
+              // SET WALLET CHOICE TO LOCALSTORAGE
+              localStorage.setItem('wallet', 'METAMASK');
+
+              
+
+
+            // 2.  CHECK IF THERE IS IAMCODE , then check documents
+          let loadIAM = localStorage.getItem('iamcode')
+          if(!loadIAM){
+              console.log('THERE IS NO IAMCODE')
+              
+              // UPDATE UI
+            document.getElementById('loader').style.display='none'
+            document.getElementById('splash').setAttribute('style', 'display:flex !important');
+            headMessages.innerHTML =`  <div class="alert alert-warning alert-dismissible fade show">
+            <button type="button" class="btn btn-warning" onclick="event.stopPropagation();createIAMcode();">CREATE IAM CODE</button>
+            </div>`
+
+
+
+          }  else{
+            console.log('THERE IS IAM CODE')
+
+                // 1. save attestation link in localstorage
+                let offchainAttestation = localStorage.getItem('iamAttestation')
+                //  FIX METAMASK LOCALWALLET COMPATIBILITY
+            if(!offchainAttestation){
+              console.log('THERE IS NO  OFFCHAIN ATTESTATION')
+            } else{
+              console.log('YES THERE IS OFFCHAIN ATTESTATION')
+              console.log('checking if it correspond to your address ...')
+
+            }
+
+          }
+
+
               // return signer
               let chainId= await signer.getChainId()
               console.log('chainId:', chainId)
@@ -448,6 +498,11 @@ function writepassword (f){
 
               reloadTranslations()
               document.getElementById('loader').style.display='none'
+
+              // loadIAMinfo()
+              // loadOnchangeEvents()
+              // checkIfIAMCode()
+      
 
   }
   
@@ -535,9 +590,25 @@ async function restoreWallet(){
           };
 
 
+          const decryptAttestProgress = (percent) => {
+            // console.log(`Decrypting... ${percent*100}%`);
+            
+            document.getElementById('stepAttest0Progress').innerHTML =`<div class="progress">
+            <div class="progress-bar" role="progressbar" style="width:  ${percent*100}%;" aria-valuenow="${percent*100}" aria-valuemin="0" aria-valuemax="100">${ Math.round(percent * 100)}%</div>
+          </div>`
+
+          if (percent === 1) {
+            console.log("Decryption complete!");
+            // You can add additional code here that you want to execute when decryption is complete.
+            document.getElementById('stepAttest0Spinner').style.display= 'none'
+            document.getElementById('stepAttest0Check').style.visibility= 'visible'
+        }
+            };
+
         const decryptProgress = (percent) => {
         console.log(`Decrypting... ${percent*100}%`);
-        step0Progress.innerHTML =`<div ;class="progress">
+        
+        document.getElementById('step0Progress').innerHTML =`<div class="progress">
         <div class="progress-bar" role="progressbar" style="width:  ${percent*100}%;" aria-valuenow="${percent*100}" aria-valuemin="0" aria-valuemax="100">${ Math.round(percent * 100)}%</div>
       </div>`
         };
@@ -609,3 +680,87 @@ async function restoreWallet(){
         return roundedBalance;
         }
       
+
+
+        // text: addr,
+        async function receive(){
+          let addr =ethers.utils.getAddress(userAddress);
+          console.log(addr)
+        const cidqr = new QRCodeStyling({ width: 300, height: 300, type: "png", data: addr, image: `iurisnaturalis.jpg`, dotsOptions: { color: "#1568B0", type: "extra-rounded" }, backgroundOptions: { color: "#fff", }, imageOptions: { crossOrigin: "anonymous", margin: 0 } });
+        let cidqrRaw =   await cidqr.getRawData('png')
+        let cidqrURL =  URL.createObjectURL(cidqrRaw)
+        console.log('xqr: ', cidqr)
+      Swal.fire({
+      html: `<div id="" onclick="event.stopPropagation();copy2clipboard('${addr}')">${addr}</div>`,
+      imageUrl: cidqrURL,
+      imageWidth: 300,
+      imageHeight: 300,
+      imageAlt: 'QR Code image',
+      })
+      }
+
+
+      // SEND RECEIBE ETHEREUM
+function openWalletSend(){
+  openModalId('#walletSend')
+
+document.getElementById('cancelSendAmount').disabled = false;
+document.getElementById('sendAmountValue').disabled = false;
+
+  var numberInput = document.getElementById('sendAmount');
+  numberInput.addEventListener('input', function() { var inputValue = numberInput.value; numberInput.value = inputValue.replace(/[^0-9.]/g, ''); });
+  document.getElementById("sendAmount").addEventListener("change", resizeInput);
+}
+
+
+// ------------------------------------------
+function resizeInput() {
+  const input = document.getElementById('sendAmount');
+  const contentLength = input.value.length;
+
+  // Define the font size range and corresponding content length range
+  const minFontSize = 15; // minimum font size in pixels
+  const maxFontSize = 20; // maximum font size in pixels
+  const minLength = 2;    // minimum content length
+  const maxLength = 18;   // maximum content length
+
+  // Calculate the desired font size based on the content length
+  const fontSize = minFontSize + ((contentLength - minLength) / ( minLength- maxLength)) * (maxFontSize - minFontSize);
+
+  input.style.fontSize = fontSize + 'pt';
+  console.log( 'resizeInput', fontSize + 'pt')
+}
+
+
+
+    
+  // COPY TO CLIPBOARD
+  function copy2clipboard(text) {
+    // let text = `${ipfsGateway}${cid}`;
+    console.log('COPIED!',text)
+    let textLink = `<a href="${text}">${text}</a>`;
+  
+    if (window.clipboardData && window.clipboardData.setData) {
+      Toast.fire( 'Copied to Clipboard',textLink, "success");
+      return window.clipboardData.setData("Text", text);
+    }
+    else if (document.queryCommandSupported && document.queryCommandSupported("copy")) {
+        var textarea = document.createElement("textarea");
+        textarea.textContent = text;
+        textarea.style.position = "fixed";  // Prevent scrolling to bottom of page in Microsoft Edge.
+        document.body.appendChild(textarea);
+        textarea.select();
+        try {
+            Toast.fire( 'Copied to Clipboard',textLink, "success");
+            return document.execCommand("copy");  // Security exception may be thrown by some browsers.
+        }
+        catch (ex) {
+            console.warn("Copy to clipboard failed.", ex);
+            return prompt("Copy to clipboard: Ctrl+C, Enter", text);
+        }
+        finally {
+            document.body.removeChild(textarea);
+        }
+    }
+  }
+  

@@ -22,6 +22,8 @@
   --upbackground: #f8f9fa;
   --tableHover: #2c618c;
   --buttonHover: #3a00ff;
+  --links: #0d6efd;
+  --linkshover: #0a58ca;
   }
   
   
@@ -54,6 +56,8 @@
       --upbackground: #fff;
       --tableHover: #6f96f1;
       --buttonHover: #3a00ff;
+      --links: #0d6efd;
+      --linkshover: #0a58ca;
    }
   
   
@@ -128,6 +132,15 @@
   overflow: scroll;
     }
   
+    a.iamlink{
+      text-decoration: none;
+      color: var(--font2);
+    }
+    a.iamlink:hover{
+      text-decoration: underline;
+      color: var(--buttonHover);
+    }
+
   
   /* Stack the layout on small devices/viewports. */
   @media all and (max-width: 575px) {
@@ -1241,3 +1254,26 @@
     top: 3em;
     left: 3.75em;
   }
+
+  .linktypebuton{
+    background-color: transparent;
+    color: var(--links);
+    text-decoration: underline;
+    border: none;
+  }
+  .linktypebuton:hover{
+    color: var(--linkshover);
+
+  }
+
+  .iconbutton{
+    cursor: pointer;
+  }
+  .iconbutton:hover{
+    color:red
+  }
+
+
+.cursor{
+  cursor: pointer;
+}

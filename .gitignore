@@ -4,10 +4,18 @@ node_modules/
 package.json
 yarn.lock
 src/trash/
-src/offchain.html
 src/test/
 .DS_Store
 public/
 .firebase/
 .firebaserc
 firebase.json
+
+src/offchain.html
+src/p2p.html
+ src/hash.html
+src/hash1.html
+src/p2p-2.html
+src/paramotor-3.html
+src/paramotor.html
+src/paramotor2.html

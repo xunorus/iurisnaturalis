@@ -277,33 +277,21 @@ if(!taskInput.value){
 let newStr = name.replace(/\s/g, ""); // Removes all spaces
 console.log('new compresed name: ',newStr);
 
-// Check file extension
-// const fileExtension = name.split('.').pop().toLowerCase();
-//   if (!allowedExtensions.includes(fileExtension)) {
-//     console.log('Invalid file extension.', fileExtension);
-//     return false;
-//   }
-
-
-
-
 
   // UPLOAD TO IPFS
-  let ipfsGateway = 'https://w3s.link/ipfs/'
-  
+  // let ipfsGateway = 'https://w3s.link/ipfs/'
   const files = [
-        // new File([data], newStr,  { type: 'application/pdf' })
         new File([data], name,  { type: 'application/pdf' })
       ]
 
     const client = makeStorageClient()
     const cid = await client.put(files, { wrapWithDirectory:false })
     let ipfsLink = `"${ipfsGateway}${cid}/${name}"`
-    const urlGateway = 'https://dweb.link/api/v0';
+    // const urlGateway = 'https://dweb.link/api/v0';
     let listLink  =`${urlGateway}/ls?arg=${cid}`
 
 
-    console.log('stored files with cid:','https://w3s.link/ipfs/'+ cid)
+    console.log('stored files with cid:',ipfsGateway+ cid)
     console.log('file link:',ipfsLink)
     console.log('list link:',listLink)
 
@@ -436,9 +424,19 @@ function addCidToUI(title,cid) {
 /*********************************************************************************************
   .) EDIT TABLE ITEMS
   **********************************************************************************************/
-  function viewItem(cid) {
+
+  
+  function openLink(link) {
+    console.log('openLink:',link);
+    window.open(link, '_blank', 'fullscreen=yes');
+    return false;
+
+  }
+    function viewItem(cid) {
     // let ipfsGateway = 'https://w3s.link/ipfs/';
-      let ipfslink = ipfsGateway+cid;
+      // let ipfslink = ipfsGateway+cid;
+    let ipfslink = `${ipfsGateway}${cid}`;
+      console.log('ipfslink:',ipfslink);
       window.open(ipfslink, '_blank', 'fullscreen=yes');
     return false;
     }
