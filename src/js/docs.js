@@ -93,37 +93,67 @@ function addEditDocumentsUI(){
       console.log(order)
       await updateArray()
       Toast.fire( 'order Updated','', "success");
+    Toast.fire( dictionary[globalLang]["orderupdated"],'', "success");
+
   
   });
   
     LoadDocs.forEach((el) => {
     let t = el.title 
     let c = el.cid.trim()
-    // console.log('cid FIX HERE!:', c)
     let ct = el.courtesy_translations
+    let att = el.attestation
+
+    // if(!att){
+    //   console.log(`this ${el} DOESNT HAVE AN ATTESTATION`)
+    //   att = ''
+    // }
+
     
     var intrarows = []
     let b =  ct.forEach((x) => {
     let l = x.lang 
     let cid = x.cid.trim()
-    
-    
     intrarows.push(` <button style="display:block" type="button" data-lang="${l}" data-cid="${cid}" class="btn btn-outline-primary" onclick="event.stopPropagation();viewItem('${cid}')" ><i class="fa-solid fa-language"></i> <span>${l}</span></button> `)
     })
     
+
     var rows = []
-    rows.push({
-      title:`${t} <i class="fa-solid fa-pen edittitle"  onclick="event.stopPropagation();editTitle('${t}',event)"></i>`,
-      cid:`<p> ${c}</p>`,
-      translations:`${intrarows.join("")} `,
-      actions: `
-      <button type="button" class="btn btn-outline-info waves-effect px-3" onclick="event.stopPropagation();viewItem('${c}')"><i class="fa-solid fa-eye" aria-hidden="true"></i></button>
-      <button type="button" class="btn btn-outline-info waves-effect px-3" onclick="event.stopPropagation();copyItem('${c}')"><i class="fas fa-clipboard" aria-hidden="true"></i></button> 
-      <button type="button" class="btn btn-outline-info waves-effect px-3" onclick="event.stopPropagation();deleteItem((this.parentElement))"><i class="fas fa-trash" aria-hidden="true"></i></button>
-      <button type="button" class="btn btn-outline-info waves-effect px-3" onclick="event.stopPropagation();showCIDQR('${c}','${t} ')"><i class="fas fa-qrcode" aria-hidden="true"></i></button>
-      <button type="button" class="btn btn-outline-primary" onclick="event.stopPropagation();uploadCourtesyTranslation(this.parentElement)" ><i class="fa-solid fa-plus" aria-hidden="true"></i> <span  data-translate="addcourtesytranslation" >Add</span></button>
-      `
-    })
+    if(!att){
+      console.log(`this ${el} DOESNT HAVE AN ATTESTATION`)
+      // att = ''
+      rows.push({
+        title:`${t} <i class="fa-solid fa-pen edittitle"  onclick="event.stopPropagation();editTitle('${t}',event)"></i>`,
+        cid:`<p> ${c}</p>`,
+        translations:`${intrarows.join("")} `,
+        actions: `
+        <button type="button" class="btn btn-outline-info waves-effect px-3" onclick="event.stopPropagation();viewItem('${c}')"><i class="fa-solid fa-eye" aria-hidden="true"></i></button>
+        <button type="button" class="btn btn-outline-info waves-effect px-3" onclick="event.stopPropagation();copyItem('${c}')"><i class="fas fa-clipboard" aria-hidden="true"></i></button> 
+        <button type="button" class="btn btn-outline-info waves-effect px-3" onclick="event.stopPropagation();deleteItem((this.parentElement))"><i class="fas fa-trash" aria-hidden="true"></i></button>
+        <button type="button" class="btn btn-outline-info waves-effect px-3" onclick="event.stopPropagation();showCIDQR('${c}','${t} ')"><i class="fas fa-qrcode" aria-hidden="true"></i></button>
+        <button type="button" class="btn btn-outline-info waves-effect px-3" onclick="event.stopPropagation();uploadCourtesyTranslation(this.parentElement)" ><i class="fa-solid fa-plus" aria-hidden="true"></i> <span  data-translate="addcourtesytranslation" >Add</span></button>
+        `
+      })
+    } else{
+      console.log(`YES ${el} HAS AN ATTESTATION`)
+
+      rows.push({
+        title:`${t} <i class="fa-solid fa-pen edittitle"  onclick="event.stopPropagation();editTitle('${t}',event)"></i>`,
+        cid:`<p> ${c}</p>`,
+        translations:`${intrarows.join("")} `,
+        actions: `
+        <button type="button" class="btn btn-outline-info waves-effect px-3" onclick="event.stopPropagation();viewItem('${c}')"><i class="fa-solid fa-eye" aria-hidden="true"></i></button>
+        <button type="button" class="btn btn-outline-info waves-effect px-3" onclick="event.stopPropagation();copyItem('${c}')"><i class="fas fa-clipboard" aria-hidden="true"></i></button> 
+        <button type="button" class="btn btn-outline-info waves-effect px-3" onclick="event.stopPropagation();deleteItem((this.parentElement))"><i class="fas fa-trash" aria-hidden="true"></i></button>
+        <button type="button" class="btn btn-outline-info waves-effect px-3" onclick="event.stopPropagation();showCIDQR('${c}','${t} ')"><i class="fas fa-qrcode" aria-hidden="true"></i></button>
+        <button type="button" class="btn btn-outline-info waves-effect px-3" onclick="event.stopPropagation();uploadCourtesyTranslation(this.parentElement)" ><i class="fa-solid fa-plus" aria-hidden="true"></i> <span  data-translate="addcourtesytranslation" >Add</span></button>
+        <button type="button" class="btn btn-outline-info waves-effect px-3" onclick="event.stopPropagation();attestAtesttation('${att}')" >
+        <i class="fa-solid fa-file-signature"></i>
+        <span data-translate="attestation">Attestation</span></button>
+        `
+      })
+    }
+
       $('#table').bootstrapTable('append', rows)
     
       reloadTranslations();
@@ -133,7 +163,8 @@ function addEditDocumentsUI(){
     // activate envoi button
     console.log('ACTIVA BOTON ENVOI')
     document.getElementById('createIPFSDelivery').disabled = false;// DESACTIVAR BOTON createIPFSDelivery
-    
+    // document.querySelector('#cancelAttesting').disabled=false;
+
     } else {
     $('#table').bootstrapTable();
     }
@@ -146,11 +177,16 @@ function addEditDocumentsUI(){
   // *********************************
    function addDoc(obj) {
     console.log('ADDING DOC',obj)
-    openModal(obj)
+    // openModal(obj)
+
+// openModalId('#addDocument')
+openModalId(`${obj}`)
+
     document.getElementById('input_image').onchange = function(e) {
       let name =input_image.files[0].name
      let title=  name.substring(0, name.lastIndexOf('.')) || name;
       taskInput.value = title
+      console.log('NEW title', title)
     }
    }
 
@@ -216,18 +252,7 @@ function addEditDocumentsUI(){
       return theBlob;
   }
   
-  
-
-  window.storeFiles = async function(files){ 
-  // async function storeFiles (files) {
-    const client = makeStorageClient()
-    const cid = await client.put(files)
-    console.log('stored files with cid:','https://w3s.link/ipfs/'+ cid)
-    console.log('file link:','https://w3s.link/ipfs/'+ cid+'/metadata.json')
-    console.log('ipfs link:','ipfs://'+ cid+'/metadata.json')
-    return cid
-  }
-    
+   
     var xinput = document.getElementsByTagName('input')[0];
     
 xinput.onchange = function () {
@@ -239,6 +264,11 @@ xinput.onchange = function () {
 };
 
   
+
+
+// ---------------------------------------------
+// UPLOAD DOCUMENT
+// ---------------------------------------------
   document.getElementById('submit_button').addEventListener('click', async e => {
   console.log('uploading to ipfs!')
 
@@ -262,6 +292,60 @@ if(!taskInput.value){
   }
 
 
+  // LAUNCH PASSWORD INPUT----------------------------
+        //  CHECK WALLET CHOICE (CONNECTED-DISCONNECTED)
+        let walletChoice = localStorage.getItem('wallet');
+        if (walletChoice) {
+            console.log('THERE IS WALLET  CHOICE SAVED IN LOCALSTORAGE')
+            if(walletChoice == "METAMASK"){
+                console.log('USE METAMASK ')              
+            }
+                  if(walletChoice =="LOCALWALLET"){
+                      console.log('USE LOCALWALLET:')
+
+
+                      // FIX modal bug
+                      closeModalId('#addDocument')
+                      // openModalId('#addDocument')
+  
+                //   -------------------------------------------------------------
+                        //STEP 0 -  DECRYPT WALLET TO MAKE THE TRANSACTION
+                        await Swal.fire({ title: 'Unlock your LOCALWALLET', input: 'password', inputAttributes: { autocapitalize: 'off' }, showCancelButton: true, confirmButtonText: 'Enter', showLoaderOnConfirm: true, backdrop: true, preConfirm: (login) => { }, allowOutsideClick: () => { const popup = Swal.getPopup(); popup.classList.remove('swal2-show'); setTimeout(() => { popup.classList.add('animate__animated', 'animate__headShake') }); setTimeout(() => { popup.classList.remove('animate__animated', 'animate__headShake') }, 500); return false }, })
+                        .then((result) => {
+                        if (result.isConfirmed) {
+                        console.log('password entered!')
+                          if(result.value ==''){ console.log('IS EMPTY'); Toast.fire({ icon: 'error', title: 'Password cannot be empty' }); return; }
+                          
+
+                      // openModalId('#addDocument')
+
+                          openModalId('#attestingModal')
+                         
+                          // START STEP 0
+                          document.getElementById('stepAttest0').innerHTML= `<h5>1- Decrypting wallet 
+                           <span id="stepAttest0Spinner" style="" class="spinner-grow spinner-grow-sm"></span>
+                           <svg id="stepAttest0Check"  style="visibility:hidden" width="18" height="16" viewBox="0 0 512 512"  xmlns:svg="http://www.w3.org/2000/svg"> <path d="M243.8 339.8C232.9 350.7 215.1 350.7 204.2 339.8L140.2 275.8C129.3 264.9 129.3 247.1 140.2 236.2C151.1 225.3 168.9 225.3 179.8 236.2L224 280.4L332.2 172.2C343.1 161.3 360.9 161.3 371.8 172.2C382.7 183.1 382.7 200.9 371.8 211.8L243.8 339.8zM512 256C512 397.4 397.4 512 256 512C114.6 512 0 397.4 0 256C0 114.6 114.6 0 256 0C397.4 0 512 114.6 512 256zM256 48C141.1 48 48 141.1 48 256C48 370.9 141.1 464 256 464C370.9 464 464 370.9 464 256C464 141.1 370.9 48 256 48z" style="fill:#00ff00"/>
+                           </svg> </h5>
+                          <div id="stepAttest0Progress"></div>`;
+                          
+                          let encryptedjson = localStorage.getItem('jsonWallet')
+                          let ew = JSON.parse( encryptedjson)
+                          console.log('pub key of wallet in localstorage:', ew.address)
+                  
+
+                          ethers.Wallet.fromEncryptedJson(encryptedjson, result.value, decryptAttestProgress)
+  .then(async (localWallet) => {
+    try {
+      // DO SOMETHING HERE with 'localWallet'... ----------------------------------------------
+      console.log('WALLET DECRYPTED: ', localWallet.address)
+      
+      // // START STEP 2
+      document.getElementById('stepAttest1').innerHTML= `<h5>2- UPLOADING FILE 
+      <span id="stepAttest1Spinner" style="" class="spinner-grow spinner-grow-sm"></span>
+      <svg id="stepAttest1Check"  style="visibility:hidden" width="18" height="16" viewBox="0 0 512 512"  xmlns:svg="http://www.w3.org/2000/svg"> <path d="M243.8 339.8C232.9 350.7 215.1 350.7 204.2 339.8L140.2 275.8C129.3 264.9 129.3 247.1 140.2 236.2C151.1 225.3 168.9 225.3 179.8 236.2L224 280.4L332.2 172.2C343.1 161.3 360.9 161.3 371.8 172.2C382.7 183.1 382.7 200.9 371.8 211.8L243.8 339.8zM512 256C512 397.4 397.4 512 256 512C114.6 512 0 397.4 0 256C0 114.6 114.6 0 256 0C397.4 0 512 114.6 512 256zM256 48C141.1 48 48 141.1 48 256C48 370.9 141.1 464 256 464C370.9 464 464 370.9 464 256C464 141.1 370.9 48 256 48z" style="fill:#00ff00"/>
+      </svg> </h5>`;
+      document.getElementById("cancelAttesting").disabled = true;
+
    // add loading
    console.log('start loading ...')
   document.querySelector('#submit_button').innerHTML =` <span class="spinner-grow spinner-grow-sm"></span> Loading.. `;
@@ -274,46 +358,166 @@ if(!taskInput.value){
   console.log('name: ',name);
 
   
-let newStr = name.replace(/\s/g, ""); // Removes all spaces
+// let newStr = name.replace(/\s/g, ""); // Removes all spaces
+let newStr = name.replace(/[\s-]/g, "");
+
 console.log('new compresed name: ',newStr);
+
+// V2 UPLOAD ..
 
 
   // UPLOAD TO IPFS
-  // let ipfsGateway = 'https://w3s.link/ipfs/'
-  const files = [
-        new File([data], name,  { type: 'application/pdf' })
-      ]
+  let ipfsGateway = 'https://w3s.link/ipfs/'
+  
+  const files = [ new File([data], name,  { type: 'application/pdf' }) ]
 
     const client = makeStorageClient()
     const cid = await client.put(files, { wrapWithDirectory:false })
     let ipfsLink = `"${ipfsGateway}${cid}/${name}"`
-    // const urlGateway = 'https://dweb.link/api/v0';
+    const urlGateway = 'https://dweb.link/api/v0';
     let listLink  =`${urlGateway}/ls?arg=${cid}`
 
 
-    console.log('stored files with cid:',ipfsGateway+ cid)
+    console.log('stored files with cid:','https://w3s.link/ipfs/'+ cid)
     console.log('file link:',ipfsLink)
     console.log('list link:',listLink)
 
     
 
 
+// -----------------
+// UPLOAD TO IPFS'
+// console.log('UPLOADING TO IPFS...')
+// console.log('DATA:',data)
+// console.log('NAME:',name)
+// const files = [ new File([data], name,  { type: 'application/pdf' }) ]
+// console.log('files:',files)
+// f= files;
 
 
+                     // UPLOAD TO IPFS
+                    //  const client = makeStorageClient()
+                    //  try { CID =  await client.put(files, { wrapWithDirectory:false })}
+                    //  catch (error) { 
+                    //   console.log(error.message); 
+                    //   return }
+                    //  let ipfsLink = `${ipfsGateway}${CID}`
+                    //  console.log('IPFS STORED FILE AT :',ipfsLink)
+                    //  console.log('cid:' ,CID);
+                    //  localStorage.setItem('lastIpfsDistroCID', ipfsLink);
+
+
+
+    // const client = makeStorageClient()
+    // const cid = await client.put(files, { wrapWithDirectory:false })
+    // let ipfsLink = `"${ipfsGateway}${cid}/${name}"`
+    // let listLink  =`${urlGateway}/ls?arg=${cid}`
+    // console.log('stored files with cid:',ipfsGateway+ cid)
+    // console.log('file link:',ipfsLink)
+    // console.log('list link:',listLink)
+
+    // SUCCESS UPLOAD
+    document.getElementById('stepAttest1Spinner').style.display= 'none'
+    document.getElementById('stepAttest1Check').style.visibility= 'visible'
+    document.querySelector('#stepAttest2').innerHTML =`File uploaded to IPFS: ${cid} <br> <a target="_blank" href="${'https://w3s.link/ipfs/'+ cid}">view</a>`;
+    document.getElementById('stepAttest3').innerHTML= `<h5>3- ATTESTING 
+    <span id="stepAttest3Spinner" style="" class="spinner-grow spinner-grow-sm"></span>
+    <svg id="stepAttest3Check"  style="visibility:hidden" width="18" height="16" viewBox="0 0 512 512"  xmlns:svg="http://www.w3.org/2000/svg"> <path d="M243.8 339.8C232.9 350.7 215.1 350.7 204.2 339.8L140.2 275.8C129.3 264.9 129.3 247.1 140.2 236.2C151.1 225.3 168.9 225.3 179.8 236.2L224 280.4L332.2 172.2C343.1 161.3 360.9 161.3 371.8 172.2C382.7 183.1 382.7 200.9 371.8 211.8L243.8 339.8zM512 256C512 397.4 397.4 512 256 512C114.6 512 0 397.4 0 256C0 114.6 114.6 0 256 0C397.4 0 512 114.6 512 256zM256 48C141.1 48 48 141.1 48 256C48 370.9 141.1 464 256 464C370.9 464 464 370.9 464 256C464 141.1 370.9 48 256 48z" style="fill:#00ff00"/>
+    </svg> </h5>`;
   
-  // success
-  document.querySelector('#submit_button').classList.replace('btn-primary', 'btn-success');
-  document.querySelector('#submit_button').innerHTML =` <i class="fa-solid fa-circle-check"></i>`;
-  
+
+    // ATTEST STUFF
+     //   GET PROVIDER
+      let provider = new ethers.providers.JsonRpcProvider(`${optionsList[0].API}`);
+      console.log('JsonRpcProvider', optionsList[0].API);
+
+      //   GET NETWORK
+      try{ network = await provider.getNetwork(); }
+      catch (error) { console.log(error.message); 
+      fixedToast.fire( 'Error',error.message, "error"); 
+      mode.innerHTML = 'OFFCHAIN';
+      mode.style.border = '1px solid red';
+      mode.style.color = 'red';
+      }
+
+      // GET SIGNER
+      const signer = localWallet.connect(provider)
+      const address = await signer.getAddress();
+      balance = await signer.getBalance();
+      console.log('address and balance:', address,  parseInt( balance, 16))
+
+
+      //TIMESTAMP IN UNIXTIME
+      const timestamp = Math.floor(new Date().getTime() / 1000);
+      console.log(timestamp);
+
+        // ATTEST
+      console.log(' ATTEST document');
+      const EASContractAddress = "0xC2679fBD37d54388Ce493F1DB75320D236e1815e"; // Sepolia Testnet v0.26
+      let eas= new EAS(EASContractAddress);
+      console.log('provider: ', provider);
+      eas.connect(provider);
+      eas.connect(signer);
+      
+      const offchain = await eas.getOffchain();
+      
+      // PREAPARE DATA
+      console.log('offchainIAM')
+      let inputString = localStorage.getItem('iamcode')
+      const bytes32Value = stringToBytes32(inputString);
+      console.log(bytes32Value);
+                        
+    // ATTEST FOR DOCUMENT
+  // https://sepolia.easscan.org/schema/view/0x5e9a817ef4acf13c8e2dba0944586660292e02e169a2da473530e6709c502338
+  const schemaEncoder = new SchemaEncoder("bytes32 IAMcode,string IAMdocument");
+  const encodedData = schemaEncoder.encodeData([
+      { name: "IAMcode", value: bytes32Value, type: "bytes32" },
+      { name: "IAMdocument", value: cid, type: "string" }
+  ]);
+
+
+  let referencedUID = localStorage.getItem('iamcodeUID');
+  console.log('referencedUID: ', referencedUID)
+
+  const offchainAttestation = await offchain.signOffchainAttestation({
+  recipient: signer.address,
+  expirationTime: 0,
+  time: timestamp,
+  revocable: true,
+  version: 1,
+  nonce: 0,
+  schema: "0x5e9a817ef4acf13c8e2dba0944586660292e02e169a2da473530e6709c502338",
+  refUID: referencedUID,// here reference Iam code
+  data: encodedData,
+  }, signer);
+  console.log('offchainAttestation:' ,offchainAttestation)
+  o = offchainAttestation;
+  y= JSON.stringify(o)
+  let offchainobject  = {sig: offchainAttestation, signer: signer.address}
+
+  const url = createOffchainURL(offchainobject);
+  console.log('URL:','https://sepolia.easscan.org'+url )
+  const documentAttestLink = 'https://sepolia.easscan.org'+url;
+
+      // SUCCESS ATTESTATION
+      document.getElementById('stepAttest3Spinner').style.display= 'none'
+      document.getElementById('stepAttest3Check').style.visibility= 'visible'
+      document.querySelector('#stepAttest4').innerHTML =`${  dictionary[globalLang]["attestationsigned"]} <br> <a target="_blank" href="${documentAttestLink}">view</a>`;
+  // END... -------------------------------------------------------------
+
   // hide file input and title input
   taskInput.style.display= 'none';
   document.querySelector(".input-group").style.display= 'none';
   
   // SHOW OPERATION DETAILS;
-  document.querySelector('#success_message').innerHTML =`File uploaded to IPFS: ${cid} <br> <a target="_blank" href="${'https://w3s.link/ipfs/'+ cid}">view</a>`;
-  document.querySelector('#success_message').style.display= 'block';
-  Toast.fire( 'Success','File uploaded to IPFS!', "success");
+  // document.querySelector('#stepAttest2').innerHTML =`File uploaded to IPFS: ${cid} <br> <a target="_blank" href="${'https://w3s.link/ipfs/'+ cid}">view</a>`;
+
   
+  // document.querySelector('#success_message').style.display= 'block';
+  // Toast.fire( 'Success','File uploaded to IPFS!', "success");
+  // fileuploaded
+  Toast.fire( dictionary[globalLang]["fileuploaded"],'', "success");
+
   
   // 1-ADD TO UI(table)
   let cid2ui = addCidToUI(title,cid)
@@ -330,21 +534,57 @@ console.log('new compresed name: ',newStr);
   taskInput.value = "";
   document.querySelector('#addAnother_button').style.display= 'block';
   
-  
   // 2-ADDS TO LOCALSTORAGE (store)
-  // sanitize cid befor saving
   let scid = cid.trim()
   let ct= [];
-  let doc = { title: title, cid: scid, courtesy_translations: ct }
+
+  // let doc = { title: title, cid: scid, courtesy_translations: ct }
+  let doc = { title: title, cid: scid, courtesy_translations: ct, attestation: documentAttestLink }//NEW
+
   console.log('doc:', doc)
   SaveDocToLocalStorage(doc);
   
   // activate envoi button
   console.log('ACTIVA BOTON ENVOI')
   document.getElementById('createIPFSDelivery').disabled = false;// DESACTIVAR BOTON createIPFSDelivery
+  document.querySelector('#cancelAttesting').disabled=false;
 
-    }
-  )
+
+  // FIN DO SOMETHING HERE... -------------------------------------------------------------
+} catch (error) {
+  console.log('ERROR AT LOCALWALLET PROCESSING:', error);
+  // cancelAttesting // uploading 
+  document.getElementById("cancelAttesting").disabled = false;
+  taskInput.value = ''
+  taskInput.classList.remove('is-valid');
+  document.getElementById("submit_button").disabled = false;
+  document.querySelector('#submit_button').innerHTML =`Upload`;
+  reloadTranslations()
+
+
+  // submit_button
+
+}
+})
+.catch((error) => {
+console.log('ERROR AT LOCALWALLET DECRYPTING:', error);
+Toast.fire({ icon: 'error', title: error })
+});
+}
+
+else if (result.isDenied) {
+console.log('NOT DECRYPTED')
+return
+}
+
+})
+}
+}
+  // FINC LAUNCH PASSWORD INPUT----------------------------
+
+
+
+    })
 
 
 
@@ -430,7 +670,6 @@ function addCidToUI(title,cid) {
     console.log('openLink:',link);
     window.open(link, '_blank', 'fullscreen=yes');
     return false;
-
   }
     function viewItem(cid) {
     // let ipfsGateway = 'https://w3s.link/ipfs/';
@@ -492,59 +731,7 @@ function addCidToUI(title,cid) {
   })
   }
 
-
-  async function deleteItem(obj) {
-    Swal.fire({
-        title: 'Are you sure?',
-        text: "You won't be able to revert this!",
-        icon: 'warning',
-        showCancelButton: true,
-        confirmButtonColor: '#3085d6',
-        cancelButtonColor: '#d33',
-        confirmButtonText: 'Yes, delete it!'
-    })
-    .then((result) => {
-    if (result.isConfirmed) {
-    // 1- GET INDEX
-    let rowid = obj.parentNode.getAttribute('data-index');
-    console.log('riwid: ', rowid)
-
-    // 2- DELETE FROM LOCALSTORAGE
-    let docs = Array.from(document.getElementById('uploadedDocuments').children);//HECHO GLOBAL TEMPORALMENTE. 
-    let docNames = [];
-    docs.forEach(function(docs, index) {
-    let t =  docs.children[0].innerText;//title
-    let c = docs.children[1].innerText.trim();// cid
-    let ctc = docs.children[2].children;// courtesy translations
-    let ct= [];
-    var newArray = Array.from(ctc)
-    .filter(function (item) {
-            let x =  item.hasAttribute('data-cid');
-        if(  item.hasAttribute('data-cid')){
-            let y = item.dataset.lang; // lang
-            let z = item.dataset.cid.trim(); //cid
-            let courtesytranslations = { lang: y, cid: z }
-            ct.push(courtesytranslations)
-        }
-    });
-    let doc = { title: t, cid: c, courtesy_translations: ct }
-    docNames.push(doc);
-    });
-
-    //  let docNames[rowid]
-    let updatedDocNames = docNames.filter(item => item !== docNames[rowid])
-    localStorage.setItem('documents', JSON.stringify(updatedDocNames));
-
-    // 3- UPDATE TABLE
-    $('#table').bootstrapTable('remove', { field: '$index', values: [Number(rowid)] });
-
-    // 4- SEND SWEET MESSAGE 
-    Toast.fire( 'document deleted','', "success");
-    }
-})
-    
-}
-
+ 
 function editTitle (title,event){
   console.log(title,event,event.target, event.target.parentNode)
   Swal.fire({
@@ -784,3 +971,60 @@ console.log('stored file :',`${ipfsGateway}${cid}`)
   
   }
   
+
+  async function deleteItem(obj) {
+    Swal.fire({
+    title: dictionary[globalLang]["sure"],
+    text: dictionary[globalLang]["wontbeabletorevertthis"],
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: dictionary[globalLang]["yes"]
+    })
+    .then((result) => {
+    if (result.isConfirmed) {
+    // 1- GET INDEX
+    let rowid = obj.parentNode.getAttribute('data-index');
+    console.log('riwid: ', rowid)
+
+    // 2- DELETE FROM LOCALSTORAGE
+    let docs = Array.from(document.getElementById('uploadedDocuments').children);//HECHO GLOBAL TEMPORALMENTE. 
+    let docNames = [];
+    docs.forEach(function(docs, index) {
+    let t =  docs.children[0].innerText;//title
+    let c = docs.children[1].innerText.trim();// cid
+    let ctc = docs.children[2].children;// courtesy translations
+    
+          let att = docs.children[3].children;// attestation
+
+    let ct= [];
+    var newArray = Array.from(ctc)
+    .filter(function (item) {
+            let x =  item.hasAttribute('data-cid');
+        if(  item.hasAttribute('data-cid')){
+            let y = item.dataset.lang; // lang
+            let z = item.dataset.cid.trim(); //cid
+            let courtesytranslations = { lang: y, cid: z }
+            ct.push(courtesytranslations)
+        }
+    });
+    let doc = { title: t, cid: c, courtesy_translations: ct }
+    docNames.push(doc);
+    });
+
+    //  let docNames[rowid]
+    let updatedDocNames = docNames.filter(item => item !== docNames[rowid])
+    localStorage.setItem('documents', JSON.stringify(updatedDocNames));
+
+    // 3- UPDATE TABLE
+    $('#table').bootstrapTable('remove', { field: '$index', values: [Number(rowid)] });
+
+    // 4- SEND SWEET MESSAGE 
+    // Toast.fire( 'document deleted','', "success");
+    Toast.fire( dictionary[globalLang]["documentdeleted"],'', "success");
+    // title: dictionary[globalLang]["createpasswordtoencryptwallet"],
+
+    }
+})
+}

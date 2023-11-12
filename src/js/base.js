@@ -3,7 +3,8 @@ const apiKey = "06VYM1TUuOg9XABK7QnpSiaFwFckZuR9PdgNaU5CWW2kKL5CoqnelNFqU8E7w3Tj
 let ipfsGateway = 'https://w3s.link/ipfs/';
 let ipfsGatewayCID = 'https://bafybeicdigz6bzpgv4zx5newdfggjm7l73e5urhlzqin567ol3raf5icaq.ipfs.w3s.link/';
 const urlGateway = 'https://dweb.link/api/v0';
-  
+const we3storageapi = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJkaWQ6ZXRocjoweENlMmYyOWNkN2ZFRTA0YTkyMzIyNTY5ZDI5MzZmMkFiOTk5NjI2QjIiLCJpc3MiOiJ3ZWIzLXN0b3JhZ2UiLCJpYXQiOjE2OTE4OTc2NTMzOTQsIm5hbWUiOiJpdXJpc25hdHVyYWxpcyJ9.YdrpLXpE7Hcz91Oa75zro0Rztq3fNG0aS0AbiqGUfew';
+
 
 window.optionsList =[
     {

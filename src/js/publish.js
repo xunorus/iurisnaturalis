@@ -238,8 +238,6 @@
                         // DO SOMETHING HERE... -------------------------------------------------------------
 
                         //TIMESTAMP IN UNIXTIME
-                        // let timestamp = Date.now();
-                        // unixTimestampInSeconds Unix timestamp in seconds
                         const timestamp = Math.floor(new Date().getTime() / 1000);
                         console.log(timestamp);
 
@@ -251,13 +249,14 @@
                         console.log('provider: ', provider);
                         eas.connect(provider);
                         
+                        // PREAPARE DATA
                         console.log('offchainIAM')
                         let inputString = localStorage.getItem('iamcode')
                         const bytes32Value = stringToBytes32(inputString);
                         console.log(bytes32Value);
                         const offchain = await eas.getOffchain();
                         
-
+                        // ATTEST FOR PUBLIC DOCUMENTS
                         const schemaEncoder = new SchemaEncoder("bytes32 IAMcode,address IAMaddress,string CID");
                         const encodedData = schemaEncoder.encodeData([
                             { name: "IAMcode", value: bytes32Value, type: "bytes32" },
@@ -383,10 +382,7 @@
       <html><head>      
       <meta http-equiv="Content-Security-Policy" content="
       img-src 'self' data: ${ipfsurl} ;
-      style-src-elem 'self'  'unsafe-inline' ${ipfsurl} ${fontsurl};
-      ">
-
-
+      style-src-elem 'self'  'unsafe-inline' ${ipfsurl} ${fontsurl};">
       <meta charset="utf-8"><meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"><link rel="icon" href="${ipfsGatewayCID}favicon.55e17813.ico" type="image/x-icon"><title></title><link rel="stylesheet" href="${ipfsGatewayCID}jsonVerifyCID.cf7b0304.css"><style> #head{height: 145px;}@media (max-width: 768px) { #head{font-size: 15vw;} } </style></head><body> <nav class=" navbar navbar-expand-sm"> <div class="container-fluid justify-content-center"> <a class="navbar-brand" href="#"> <img src="https://bafkreic75qivovknpkz2sp2nwhxjyhshiuibtgvtjstp4cnxtywxhwgrue.ipfs.w3s.link/" alt="Avatar Logo" style="width:40px" class="rounded-pill"> </a> </div> </nav> <div type="application/json" id="signed">${signedjson}</div> <div type="application/json" id="signature">${signature}</div> 
       <div id="content" class="container" style="display:none"> <div id="head"> <div id="iamInfo"> <h1 id="iamCode"></h1> 
       <h3 id="iamTokenId" style="font-size: 1.4rem;"> <code><a id="attestationLink" href="" target="_blank" rel="noopener noreferrer"> attestation</a>    </code></h3> </div> <img id="iamTokenImg" src=${iamphoto}></div> 
@@ -518,17 +514,17 @@ document.getElementById('soveraindocs').setAttribute('style', 'display:inline!im
     
     </code></p>
 
-    <p class="card-text">IAM code Attestation: <code>
-    <i class="fas fa-eye cursor" aria-hidden="true" onclick="event.stopPropagation();openLink('${fulliamAttestation}')"></i> 
-    <button class='linktypebuton' onclick="event.stopPropagation();makeIAMOnchain()">make public</button>
-    </code></p>
-
-    <p class="card-text">Full Attestation: <code>
+    <p class="card-text">Public Documents Attestation: <code>
     <i class="fas fa-eye cursor" aria-hidden="true" onclick="event.stopPropagation();openLink('${fulloffchainAttestation}')"></i> 
     <a href="${fulloffchainAttestation}" style='display:none'  target="_blank" rel="noopener noreferrer">
     <i class="fas fa-eye cursor" aria-hidden="true" ></i> 
     </a>
     <button class='linktypebuton' onclick="event.stopPropagation();makeOnchain()">make public</button>
+    </code></p>
+
+    <p class="card-text">IAM code Attestation: <code>
+    <i class="fas fa-eye cursor" aria-hidden="true" onclick="event.stopPropagation();openLink('${fulliamAttestation}')"></i> 
+    <button class='linktypebuton' onclick="event.stopPropagation();makeIAMOnchain()">make public</button>
     </code></p>
 
 
@@ -586,7 +582,7 @@ document.getElementById('soveraindocs').setAttribute('style', 'display:inline!im
           <thead> <tr> 
           <th data-card-title="">Title</th> 
           <th data-card-action-links="">CID</th> 
-       <th data-card-footer="">Attestation</th> 
+       <th data-card-footer="">Actions</th> 
        
           
           </tr> </thead> <tbody id="tbody"> </tbody> 

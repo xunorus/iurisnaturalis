@@ -64,7 +64,20 @@
     cancel: "Cancel",
     updatenft:"Update NFT",
     addAttests:"MAKE ATESTATION",
-    attestations:"Attestations"
+    attestations:"Attestations",
+    log1:"You are revoking your IAMcode attestation as you delete it!. Would you like to continue?(you need gas to pay for the transaction)",
+    quest1:"Delete IAM attestation?",
+    yes:"Yes",
+    connected:"Connected!",
+    revoke:  "Yes, revoke it!",
+    attestation:"Attestation",
+    documentdeleted:"document deleted!",
+    orderupdated:"Order updated",
+    wontbeabletorevertthis: "You won't be able to revert this!",
+    sure:"Are you sure?",
+    fileuploaded: "File uploaded to IPFS",
+    attestationsigned:"Attestation signed! ",
+    uploadandattest:"Processus de téléchargement et d’attestation"
   },
   fr: {
     IAMDescription:'IAM-(Les initiales de vos noms )-(Votre date de naissance )',
@@ -120,7 +133,20 @@
     cancel: "Annuler",
     updatenft:"Mettre à jour NFT",
     addAttests:"FAIRE L'ATTESTATION",
-    attestations:"Attestations"
+    attestations:"Attestations",
+    log1:"Vous révoquez votre attestation IAMcode en la supprimant!. Voulez-vous continuer? (vous devez payer la transaction) ",
+    quest1:"Supprimer l'attestation IAMcode?",
+    yes:"Oui",
+    connected:"Connected!",
+    revoke:  "Oui, révoque-le",
+    attestation:"Attestation",
+    documentdeleted:"document supprimé!",
+    orderupdated:"Order updated",
+    wontbeabletorevertthis: "Vous ne pourrez pas revenir en arrière!",
+    sure:"Êtes-vous sûr?",
+    fileuploaded: "Fichier téléchargé sur IPFS",
+    attestationsigned:"Attestation signée! ",
+    uploadandattest:"Subir y attestar"
   },
   es: {
     IAMDescription:'IAM-(Las iniciales de su nombre )-(fecha de nacimiento )',
@@ -176,7 +202,20 @@
     cancel: "Cancelar",
     updatenft:"Actualizar NFT",
     addAttests:"DAR TESTIMONIO",
-    attestations:"Atestaciones"
+    attestations:"Atestaciones",
+    log1:"Estás revocando tu certificación de IAMcode al eliminarla!. Deseas continuar? (debes para pagar por la transacción)",
+    quest1:"¿Eliminar la atestacion del codigo IAM?",
+    yes:"Sí",
+    connected:"Conectado!",
+    revoke:  "Si, revócalo!",
+    attestation:"Atestación",
+    documentdeleted:"Documento borrado",
+    orderupdated:"Orden actualizado",
+    wontbeabletorevertthis: "¡No podrás revertir esto!",
+    sure:"¿Está seguro?",
+    fileuploaded: "Archivo subido a IPFS",
+    attestationsigned:"¡Atestación firmada! ",
+    uploadandattest:"Subir y attestar"
   }
   };
   

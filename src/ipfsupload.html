@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IPFS UPLOAD</title>
+
+    <style>
+        body{
+            color: green;
+            background-color: black;
+        }
+    </style>
+</head>
+
+<body>
+
+	<!-- Modal addDocument -->
+    <div class="modal fade" data-bs-backdrop="static"   id="addDocument" tabindex="-1" role="dialog" aria-labelledby="uplodad2ipfs" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" data-translate="title" id="uplodad2ipfs">Upload to IPFS</h5>
+            </div>
+            <div class="modal-body">
+
+              <div id="headModal"></div>
+              <div class="input-group">
+                <label class="input-group-btn">
+            <span class="btn btn-primary">
+                    Browse
+            <input type="file" style="display: none;" name="Upload" class="form-control" accept="application/pdf"
+                      id="input_image">
+                  </span>
+                </label>
+
+                <input type="text" id="fileToUpload" class="form-control " readonly>
+              </div>
+              <input type="text" class="form-control taskInput " id="taskInput" placeholder="Title" aria-describedby="inputGroupPrepend3" required autocomplete="off">
+          
+              <div id="success_message" class="alert alert-success" role="alert" style="display: none;"></div>
+
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-outline-secondary  " data-bs-dismiss="modal" data-translate="close">Close</button>
+              <button type="button" class="btn btn-outline-primary  " id="submit_button" data-translate="upload">Upload</button>
+          <button style='display: none;' type="button" class="btn btn-primary" data-translate="addanother" id="addAnother_button"  >Add another</button>
+
+            </div>
+          </div>
+        </div>
+      </div>
+    <!-- fin MODAL -->
+    <!-- <div class="input-group">
+        <label class="input-group-btn">
+            <span class="btn btn-primary">
+                Browse
+                <input type="file" style="display: none;" name="Upload" class="form-control" accept="application/pdf"
+                    id="input_image">
+            </span>
+        </label>
+
+        <input type="text" id="fileToUpload" class="form-control " readonly>
+    </div>
+
+    <input type="text" class="form-control taskInput " id="taskInput" placeholder="Title" aria-describedby="inputGroupPrepend3" required autocomplete="off">
+
+
+
+    <button type="button" class="btn btn-outline-primary  " id="submit_button" data-translate="upload">Upload</button> -->
+
+
+
+
+
+
+
+
+    <script type="module">
+
+        import { Web3Storage } from 'web3.storage/dist/bundle.esm.min'
+        window.Web3Storage = Web3Storage;
+
+        function getAccessToken() {
+            return 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJkaWQ6ZXRocjoweENlMmYyOWNkN2ZFRTA0YTkyMzIyNTY5ZDI5MzZmMkFiOTk5NjI2QjIiLCJpc3MiOiJ3ZWIzLXN0b3JhZ2UiLCJpYXQiOjE2OTE4OTc2NTMzOTQsIm5hbWUiOiJpdXJpc25hdHVyYWxpcyJ9.YdrpLXpE7Hcz91Oa75zro0Rztq3fNG0aS0AbiqGUfew'
+        }
+
+
+        window.makeStorageClient = function () {
+            return new Web3Storage({ token: getAccessToken() })
+        }
+
+
+
+
+
+        document.getElementById('submit_button').addEventListener('click', async e => {
+            console.log('uploading to ipfs!')
+
+            // AGREGA EL TITULO AUTOMATICAMENTE A PARTIR DEL ARCHIVO
+            if (!taskInput.value) {
+                console.log('give this file a title first...');
+                taskInput.classList.add("is-invalid");
+                return
+            } else {
+                taskInput.classList.remove("is-invalid");
+                taskInput.classList.add("is-valid");
+
+            }
+
+            if (!input_image.files[0]) {
+                console.log('you have to select a pdf first!')
+                Toast.fire("", dictionary[globalLang]["selPDFfirst"], "info");
+                return
+            }
+
+
+            // add loading
+            console.log('start loading ...')
+            document.querySelector('#submit_button').innerHTML = ` <span class="spinner-grow spinner-grow-sm"></span> Loading.. `;
+            submit_button.disabled = true;
+
+            // SANITIZER
+            const title = taskInput.value
+            const data = input_image.files[0]
+            let name = data.name;// funciona...
+            console.log('titple: ', title);
+            console.log('name: ', name);
+
+
+
+
+            // UPLOAD TO IPFS
+            let ipfsGateway = 'https://w3s.link/ipfs/'
+
+            const files = [new File([data], name, { type: 'application/pdf' })]
+
+            const client = makeStorageClient()
+            const cid = await client.put(files, { wrapWithDirectory: false })
+            let ipfsLink = `"${ipfsGateway}${cid}/${name}"`
+            const urlGateway = 'https://dweb.link/api/v0';
+            let listLink = `${urlGateway}/ls?arg=${cid}`
+
+
+            console.log('stored files with cid:', 'https://w3s.link/ipfs/' + cid)
+            console.log('file link:', ipfsLink)
+            console.log('list link:', listLink)
+
+
+
+        }
+        )
+
+
+
+
+    </script>
+</body>
+
+</html>

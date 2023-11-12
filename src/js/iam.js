@@ -267,7 +267,7 @@ function loadIAMinfo(){
       
         }else{
           console.log('add iamcode to localstorage')
-          createIAMCODE()
+          // createIAMCODE()
         //   document.getElementById('edit').setAttribute('style', 'display:none !important');
         }
       
@@ -343,13 +343,14 @@ function loadIAMinfo(){
         console.log('EDIT IAM CODE')
 
         Swal.fire({
-          title: 'Delete IAM attestation?',
-          text: "You need to revoke your current IAM attestation in order to edit your IAM code!",
+          title: dictionary[globalLang]["quest1"],
+          text: dictionary[globalLang]["log1"],
           icon: 'warning',
           showCancelButton: true,
           confirmButtonColor: '#3085d6',
           cancelButtonColor: '#d33',
-          confirmButtonText: 'Yes, revoke it!'
+          confirmButtonText: dictionary[globalLang]["revoke"]
+
         }).then(async (result)  => {
           if (result.isConfirmed) {
          
@@ -365,18 +366,9 @@ function loadIAMinfo(){
           await revokeOffchain(uid)
 
         }
-        // console.log('iamAttestation REVOKED!')
-
-        // Toast.fire({ icon: 'error', title: 'iam code and attetation deleted!' })
-
 
           }
         })
-
-
-
-
-
       }
     
 
@@ -384,7 +376,10 @@ function loadIAMinfo(){
         console.log('CHECKING IF checkIfIAMCode')
 
         let loadIAM = localStorage.getItem('iamcode')
-        if(!loadIAM){
+        let offchainAttestation = localStorage.getItem('iamAttestation')
+        // let loadIAMattestation = localStorage.getItem('iamcodeattestation')
+        if(!loadIAM || !offchainAttestation){
+          // if(!loadIAM ){
             
             console.log('THERE IS NO IAM CODE')
             
@@ -392,6 +387,7 @@ function loadIAMinfo(){
             document.getElementById('iam').setAttribute('style', 'display:flex !important');
             document.getElementById('splash').setAttribute('style', 'display:none !important');
             document.getElementById('soveraindocs').setAttribute('style', 'display:none !important');
+            // soveraindocspremint
             // document.getElementById('mint').setAttribute('style', 'display:none !important');
     
         } else{
@@ -410,10 +406,10 @@ function loadIAMinfo(){
       <img src="${JSON.parse(loadIAMIMG)}" alt="Rounded circle Image" class="rounded rounded-circle img-thumbnail" width='40px'>
       <strong>${loadIAM}</strong> 
 
-      <a href="${offchainAttestation}" target="_blank" rel="noopener noreferrer">offchain attestation</a>
+      <a href="${offchainAttestation}" target="_blank" rel="noopener noreferrer"> attestation</a>
+      <i class="fas fa-trash cursor" aria-hidden="true" onclick="event.stopPropagation();editIAMcode()"></i> 
 
-      <button type="button" class="btn-edit" onclick="event.stopPropagation();editIAMcode()" >
-      </button> 
+  
 
       </div>`
     }

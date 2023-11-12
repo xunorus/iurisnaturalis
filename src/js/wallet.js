@@ -206,7 +206,8 @@ function writepassword (f){
           userAddress  = formattedAddress;
   
         // SWEETALERT SUCCESS
-        Toast.fire({ icon: 'success', title: 'Logged in!' })
+        // Toast.fire({ icon: 'success', title: 'Logged in!' })
+       console.log('CONNECTED!' )
   
          shortAddr = userAddress.substring(0, 6) + "..."+ userAddress.substring(38, 42);
     // console.log('ADDED ADDRESS')
@@ -331,15 +332,18 @@ function writepassword (f){
               
 // 2.  CHECK IF THERE IS IAMCODE , then check documents
           let loadIAM = localStorage.getItem('iamcode')
-          if(!loadIAM){
+          let offchainAttestation = localStorage.getItem('iamAttestation')
+          // let loadIAMattestation = localStorage.getItem('iamcodeattestation')
+          if(!loadIAM || !offchainAttestation){
+          // if(!loadIAM){
               console.log('THERE IS NO IAMCODE')
               
               // UPDATE UI
             document.getElementById('loader').style.display='none'
-            document.getElementById('splash').setAttribute('style', 'display:flex !important');
-            headMessages.innerHTML =`  <div class="alert alert-warning alert-dismissible fade show">
-            <button type="button" class="btn btn-warning" onclick="event.stopPropagation();createIAMcode();">CREATE IAM CODE</button>
-            </div>`
+            // document.getElementById('splash').setAttribute('style', 'display:flex !important');
+            // headMessages.innerHTML =`  <div class="alert alert-warning alert-dismissible fade show">
+            // <button type="button" class="btn btn-warning" onclick="event.stopPropagation();createIAMcode();">CREATE IAM CODE</button>
+            // </div>`
 
           }  else{
               
@@ -363,9 +367,9 @@ function writepassword (f){
             headMessages.innerHTML = `<div class="alert alert-primary alert-dismissible fade show"> 
             <img src="${JSON.parse(loadIAMIMG)}" alt="Rounded circle Image" class="rounded rounded-circle img-thumbnail" width='40px'>
             <strong>${loadIAM}</strong> 
-            <a href="${offchainAttestation}" target="_blank" rel="noopener noreferrer">offchain attestation</a>
-            <button type="button" class="btn-edit" onclick="event.stopPropagation();editIAMcode()" >
-            </button> 
+          
+            <a href="${offchainAttestation}" target="_blank" rel="noopener noreferrer"> attestation (offchain)</a>
+            <i class="fas fa-trash cursor" aria-hidden="true" onclick="event.stopPropagation();editIAMcode()"></i> 
       
             </div>`
   
@@ -418,7 +422,7 @@ function writepassword (f){
   
   
         // SWEETALERT SUCCESS
-        Toast.fire({ icon: 'success', title: 'Logged in!' })
+        Toast.fire({ icon: 'success', title: 'Logged in!'})
           
           // SET ADDRESS
           var shortAddr = account.substring(0, 6) + "..."+ account.substring(38, 42);
@@ -473,7 +477,7 @@ function writepassword (f){
 
 
           }  else{
-            console.log('THERE IS IAM CODE')
+            console.log('THERE IS IAM CODE, CHECKIN IF THERE IS ATTESTATION... ')
 
                 // 1. save attestation link in localstorage
                 let offchainAttestation = localStorage.getItem('iamAttestation')
@@ -602,6 +606,9 @@ async function restoreWallet(){
             // You can add additional code here that you want to execute when decryption is complete.
             document.getElementById('stepAttest0Spinner').style.display= 'none'
             document.getElementById('stepAttest0Check').style.visibility= 'visible'
+            document.getElementById('stepAttest0Progress').style.display= 'none'
+
+            
         }
             };
 

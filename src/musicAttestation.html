@@ -20,7 +20,10 @@
         input::placeholder, textarea::placeholder{
             background-color: transparent!important;
             color: darkgreen!important;
+            
         }
+        input, textarea   {color: #ff07da!important;
+}
         /* Custom styles */
 #previewModal {
     z-index: 1050;
@@ -104,8 +107,6 @@
             <div class="col-md-6 mb-3">
                 <button class="btn btn-primary btn-block" id="attestButton">FIRMA (atestador)</button>
 
-            <!-- <button type="button" class="btn btn-primary" id="attestButton">Attest</button> -->
-
             </div>
             <div class="col-md-6 mb-3">
                 <button class="btn btn-secondary btn-block">FIRMA (atestatario)</button>
@@ -115,30 +116,7 @@
     </div>
 </div>
     
-<!-----------------------------
-  MODAL
---------------------------->
-<!-- <div class="container mt-5">
-    <div class="row">
-        <div class="col-md-6">
-            <textarea id="content" class="form-control" rows="5"></textarea>
-            <button id="previewBtn" class="btn btn-primary mt-3">Preview</button>
-        </div>
-        <div id="previewModal" class="modal fade">
-            <div class="modal-dialog modal-fullscreen">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title">Preview</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-                    </div>
-                    <div class="modal-body">
-                        <div id="previewContent"></div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</div> -->
+ 
 
     <!-- Agrega el enlace al archivo JavaScript de Bootstrap si es necesario -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
@@ -165,7 +143,7 @@ import { EAS, Offchain, SchemaEncoder, SchemaRegistry, createOffchainURL, Attest
 </script>
 
 <script>
-    const input1 = document.getElementById('iamcode');
+    // const input1 = document.getElementById('iamcode');
     const input2 = document.getElementById('iamaddress');
     const textarea = document.getElementById('iamdeclaration');
         
@@ -368,7 +346,7 @@ let declaration = `{
 
 // let localstorageDeclaration = localStorage.getItem('jsondeclaration');
 
-document.getElementById('iamaddress').value = signer.address;
+  document.getElementById('iamaddress').value = signer.address;
 document.getElementById('iamcode').value = iamcode1;
 document.getElementById('iamdeclaration').value = declaration;
  
@@ -469,27 +447,17 @@ document.getElementById('attestButton').addEventListener('click', async function
 console.log('ATTESTING!')
     // Get values from input fields
     var IAMcode = document.getElementById('iamcode').value;
-    var IAMaddress = document.getElementById('iamaddress').value;
     var IAMhash = document.getElementById('iamhash').value;
+    var IAMaddress = document.getElementById('iamaddress').value;
     var IAMdeclaration = document.getElementById('iamdeclaration').value;
-
-
     const jsonString = JSON.stringify(IAMdeclaration);
 
-    // Create a hash of the JSON string using keccak256 algorithm (Ethereum's standard hash function)
-    const hash = ethers.utils.keccak256(jsonString);
-
-    console.log('JSON Hash:', hash);
-
-
-
-
+    
     // Your custom logic here...
     console.log('Ethereum Address:', IAMaddress);
     console.log('IAM Code:', IAMcode);
     console.log('IAM Hash:', IAMhash);
-    console.log('IAM declaration:', hash);
-
+    
     // ATTEST!
     const EASContractAddress = "0xC2679fBD37d54388Ce493F1DB75320D236e1815e"; // Sepolia Testnet v0.26
     const provider = new ethers.providers.JsonRpcProvider("https://endpoints.omniatech.io/v1/eth/sepolia/public");
@@ -499,15 +467,31 @@ console.log('ATTESTING!')
     let eas= new EAS(EASContractAddress);
     console.log('provider: ', provider);
     eas.connect(provider);
+    
+    // Create a hash of the JSON string using keccak256 algorithm (Ethereum's standard hash function)
+    // console.log('jsonString to hash:', jsonString);
+    // const hash = ethers.utils.keccak256(jsonString);
+    // console.log('IAM declaration:', hash);
+    
+    const utf8EncodedContent = ethers.utils.toUtf8Bytes(jsonString);
+    const hashValue = ethers.utils.keccak256(utf8EncodedContent).toString();
+    console.log('IAM declaration:', hashValue);
 
-console.log('offchainIAM')
+
+// console.log('offchainIAM')
 const iamcb32 = stringToBytes32(IAMcode);
+console.log('iamcb32:', iamcb32);
+
+a = iamcb32;
+b = IAMhash;
+c= hashValue;
+
 const offchain = await eas.getOffchain();
 const schemaEncoder = new SchemaEncoder("bytes32 IAMcode,bytes32 IAMhash,bytes32 IAMdeclaration");
 const encodedData = schemaEncoder.encodeData([
 { name: "IAMcode", value: iamcb32, type: "bytes32" },
 { name: "IAMhash", value: IAMhash, type: "bytes32" },
-{ name: "IAMdeclaration", value: hash, type: "bytes32" },
+{ name: "IAMdeclaration", value: hashValue, type: "bytes32" },
 ]);
 
 const offchainAttestation = await offchain.signOffchainAttestation({
@@ -529,16 +513,7 @@ const url = createOffchainURL(offchainobject);
 console.log('URL:','https://sepolia.easscan.org'+url )
 
 
-// document.getElementById('previewBtn').addEventListener('click', function () {
-// console.log('PREVIEW')
-// const content = document.getElementById('content').value;
-// const previewContent = document.getElementById('previewContent');
-// stringInput.innerHTML = content;
-
-// // Show the preview modal
-// const previewModal = new bootstrap.Modal(document.getElementById('previewModal'));
-// previewModal.show();
-// });
+ 
 
 });
 
@@ -556,7 +531,8 @@ console.log('URL:','https://sepolia.easscan.org'+url )
         // const combinedContent = textarea.value + input1.value + input2.value;
         // const hashValue = ethers.utils.keccak256(combinedContent).toString();
         // combinedHash.textContent = hashValue;
-        const combinedContent = textarea.value + input1.value + input2.value;
+        // const combinedContent = textarea.value + input1.value + input2.value;
+        const combinedContent = textarea.value +  input2.value;
         const utf8EncodedContent = ethers.utils.toUtf8Bytes(combinedContent);
         const hashValue = ethers.utils.keccak256(utf8EncodedContent).toString();
 
