@@ -39,7 +39,7 @@ https://sepolia.easscan.org/schema/view/0x5e9a817ef4acf13c8e2dba0944586660292e02
 
 # Private Off-Chain Attestations records
 This example off-chain attestation record is for "Making a Statement". The difference between the on-chain record and this off-chain attestation is that this attestation is public. The server doesn't even know about it. You can easily share this attestation URL with others who can then decode the attestation data, publish it to IPFS, and more. If this attestation were to be published or pinned to IPFS, the status icon will change to "public".
-
+<!-- 
 # Off-chain Attestations with private data
 An off-chain attestation is an attestation that is not stored in the blockchain. An off-chain attestation can be public or private. Off-chain attestations carry the entire attestation data and digital signature required to verify and validate the authenticity of itself. 
 You can also timestamp and revoke off-chain attestations on-chain giving them additional superpowers.
@@ -96,7 +96,7 @@ Storing JSON wallets offline, such as on an air-gapped machine or a hardware wal
 Physical Security: 
 If an attacker gains access to the unencrypted JSON wallet file, they can easily compromise the associated account. Physical security of your devices is important.
 
-Backup and Recovery: Always keep secure backups of your JSON wallet, preferably in multiple physical locations. However, this should be balanced with the risk of someone else discovering your backup.
+Backup and Recovery: Always keep secure backups of your JSON wallet, preferably in multiple physical locations. However, this should be balanced with the risk of someone else discovering your backup. -->
 
 
 # github
