@@ -3,6 +3,10 @@
 yarn parcel src/index.html  --port 3333 
 ```
 
+# To deploy
+```
+yarn parcel src/index.html --dist-dir pages  --public-url ./
+```
 
 # IURIS NATURALIS
 A proof of personhood’s honor experiment based on honorable human interactions under natural law
@@ -102,5 +106,8 @@ Backup and Recovery: Always keep secure backups of your JSON wallet, preferably 
 # github
 https://github.com/xunorus/iurisnaturalis
 
+
 # Demo
-https://iurisnaturalis.web.app/
+https://xunorus.github.io/iurisnaturalis/
+
+
