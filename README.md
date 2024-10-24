@@ -1,3 +1,18 @@
+
+# IUS NATURALIS
+# ⚠️ Project Moved to a New Repository
+
+This project has been moved to [https://github.com/energiasonora/iusdappv2](https://github.com/energiasonora/iusdappv2).
+
+Please visit the new repository for the latest updates and developments. This repository is now **archived** and will no longer be maintained.
+
+
+## demo 
+new demo https://iusnaturalis.web.app/
+old demo https://iuris.web.app/
+
+
+
 # Run
 ```
 yarn parcel src/index.html  --port 3333 
